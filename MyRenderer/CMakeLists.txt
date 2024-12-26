@@ -3,7 +3,8 @@
 #
 
 # 将源代码添加到此项目的可执行文件。
-add_executable (MyRenderer "MyRenderer.cpp" "MyRenderer.h" "core/math.h" "core/math.cpp" "core/vector.h" "core/matrix.h")
+include_directories("lib")
+add_executable (MyRenderer "MyRenderer.cpp" "MyRenderer.h" "core/math.h" "core/math.cpp" "core/vector.h" "core/matrix.h" "resources/utility.h" "resources/texture.h" "resources/model.h" "resources/texture.cpp" "core/windows.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET MyRenderer PROPERTY CXX_STANDARD 20)
