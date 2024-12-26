@@ -12,7 +12,8 @@ public:
 int main()
 {
 	//cout << "Hello CMake." << endl;
-	std::cout<<Saturate(1.2f);
+	Mat3x3f m = {0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+	std::cout<<m<<Saturate(1.2f);
 	return 0;
 
 }
