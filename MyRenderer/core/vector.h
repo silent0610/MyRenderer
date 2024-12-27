@@ -60,7 +60,7 @@ template<typename T> struct Vector<3, T> {
 
 	inline Vector<2, T> xy() const { return Vector<2, T>(x, y); } //返回x,y
 	inline Vector<3, T> xyz() const { return *this; } //返回自身
-	inline Vector<4, T> xy11() const { return Vector<4, T>(x, y, z, 1); } //返回x,y,z,1
+	inline Vector<4, T> xyz1() const { return Vector<4, T>(x, y, z, 1); } //返回x,y,z,1
 };
 //4维向量模板 特化
 template<typename T> struct Vector<4, T> {
@@ -81,7 +81,7 @@ template<typename T> struct Vector<4, T> {
 
 	inline Vector<2, T> xy() const { return Vector<2, T>(x, y); } //返回x,y
 	inline Vector<3, T> xyz() const { return Vector<3, T>(x, y,z);} //返回x,y,z
-	inline Vector<4, T> xy11() const { return *this; } //返回自身
+	inline Vector<4, T> xyzw() const { return *this; } //返回自身
 };
 
 #pragma endregion
