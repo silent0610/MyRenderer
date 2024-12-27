@@ -62,10 +62,10 @@ public:
 	~CubeMap();
 
 	Vec3f Sample(Vec3f& direction)const;
-	static CubeMapUV CalculateCubeMapUV(const Vec3f& direction);
+	static CubeMapUV& CalculateCubeMapUV(const Vec3f& direction);
 
-	Texture* cubmap[6]; // 6个面的贴图
-	CubeMapType cube_map_type;
+	Texture* cubemap_[6]; // 6个面的贴图,指针数组
+	CubeMapType cube_map_type_;
 
 };
 
