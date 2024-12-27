@@ -3,17 +3,14 @@
 
 #include "MyRenderer.h"
 #include "core/math.h"
+#include "resources/utility.h"
 using namespace std;
 
-class matrix {
-public:
-	int m;
-};
+
 int main()
 {
 	//cout << "Hello CMake." << endl;
-	Mat3x3f m = {0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
-	std::cout<<m<<Saturate(1.2f);
+	GenerateCubeMap("C:/Users/ak/Desktop/all/Projects/Codes/MyRenderer/test");
 	return 0;
 
 }
