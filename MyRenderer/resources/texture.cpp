@@ -1,4 +1,8 @@
 #include "texture.h"
+#include "utility.h"
+//lib 
+#include "stb_image.h"
+#include "stb_image_write.h"
 
 #pragma region Texture
 
@@ -15,7 +19,8 @@ Vec4f Texture::Sample2D(float u, float v) const
 {
 	if (!has_data_) return { 1.0f };
 
-	//求余数, 同时保证u,v在[0,1]之间,超过1的部分 循环截断
+	//mark 加载模型时已截断
+	////求余数, 同时保证u,v在[0,1]之间,超过1的部分 循环截断
 	u = fmod(u, 1); 
 	v = fmod(v, 1);
 
@@ -23,6 +28,7 @@ Vec4f Texture::Sample2D(float u, float v) const
 }
 Vec4f Texture::Sample2D(Vec2f uv) const {
 	if (!has_data_) return { 1.0f };
+	//mark 加载模型时已截断
 	uv.x = fmod(uv.x, 1);
 	uv.y = fmod(uv.y, 1);
 

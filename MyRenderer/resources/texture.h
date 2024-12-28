@@ -1,11 +1,8 @@
 #pragma once
 #include "../core/math.h"
 #include <string>
-#include "utility.h"
-//lib 
-#include "stb_image.h"
-#include "stb_image_write.h"
-#include "utility.h"
+
+
 // 贴图类的声明
 // 单张纹理贴图，立方体贴图，预过滤的环境贴图，IBL贴图等等
 
