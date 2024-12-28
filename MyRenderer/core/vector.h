@@ -250,7 +250,7 @@ inline float vector_length(const Vector<N, float>& a) {
 
 // a / |a| 向量除以模长，从而归一化
 template<size_t N, typename T>
-inline Vector<N, T> vector_normalize(const Vector<N, T>& a) {
+inline Vector<N, T> NormalizeVector(const Vector<N, T>& a) {
 	return a / vector_length(a);
 }
 

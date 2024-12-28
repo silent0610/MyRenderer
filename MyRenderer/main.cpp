@@ -1,7 +1,7 @@
-ï»¿// MyRenderer.cpp: å®šä¹‰åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
+// main.cpp: ¶¨ÒåÓ¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
 //
 
-#include "MyRenderer.h"
+
 #include "core/math.h"
 #include "resources/utility.h"
 using namespace std;

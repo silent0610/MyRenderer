@@ -85,7 +85,7 @@ void Model::LoadModel(const std::string& model_name)
 				normal_indices.push_back(n_indices[i] - 1);
 			}
 		}
-		else if (strncmp(line, "# ext.tangent ", 14) == 0) //ÇÐÏß
+		else if (strncmp(line, "# ext.tangent ", 14) == 0) //ÇÐÏßÌùÍ¼..
 		{
 			Vec4f tangent;
 			sscanf(line, "# ext.tangent %f %f %f %f", &tangent.x, &tangent.y, &tangent.z, &tangent.w);

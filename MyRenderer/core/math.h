@@ -107,7 +107,7 @@ inline static Mat4x4f matrix_set_rotate(float x, float y, float z, float theta) 
 	float qsin = (float)sin(theta * 0.5f);
 	float qcos = (float)cos(theta * 0.5f);
 	float w = qcos;
-	Vec3f vec = vector_normalize(Vec3f(x, y, z));
+	Vec3f vec = NormalizeVector(Vec3f(x, y, z));
 	x = vec.x * qsin;
 	y = vec.y * qsin;
 	z = vec.z * qsin;
@@ -133,8 +133,8 @@ inline static Mat4x4f matrix_set_rotate(float x, float y, float z, float theta) 
 //2. 旋转矩阵,看向相机当前方向
 //3. 求逆
 inline static Mat4x4f matrix_look_at(const Vec3f& camera_position, const Vec3f& target, const Vec3f& up) {
-	const Vec3f axis_v = vector_normalize(target - camera_position);	// 相机视角朝向
-	const Vec3f axis_r = vector_normalize(vector_cross(axis_v, up));	// 相机右侧
+	const Vec3f axis_v = NormalizeVector(target - camera_position);	// 相机视角朝向
+	const Vec3f axis_r = NormalizeVector(vector_cross(axis_v, up));	// 相机右侧
 	const Vec3f axis_u = vector_cross(axis_r, axis_v);					// 相机上方
 	const Vec3f translate = -camera_position;							// 平移向量
 
@@ -201,6 +201,7 @@ inline static Mat4x4f matrix_set_perspective(float fov, const float aspect, cons
 
 
 /*
+* 别管原理
 	根据TBN矩阵计算扰动法线
 	t.x		t.y		t.z		0
 	b.x		b.y		b.z		0
@@ -211,11 +212,10 @@ inline static Mat4x4f matrix_set_perspective(float fov, const float aspect, cons
 	TBN * tangent_ws = tangent_os
 	tangent_ws = matrix_invert(TBN) * tangent_os
 */
-
 inline static Vec3f calculate_normal(const Vec3f& normal_ws, const Vec4f& tangent_ws, const Vec3f& perturb_normal)
 {
-	const Vec3f n = vector_normalize(normal_ws);
-	const Vec3f t = vector_normalize(tangent_ws.xyz());
+	const Vec3f n = NormalizeVector(normal_ws);
+	const Vec3f t = NormalizeVector(tangent_ws.xyz());
 	const Vec3f b = vector_cross(n, t);
 
 	Mat4x4f tbn = matrix_set_zero();

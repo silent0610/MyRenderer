@@ -45,10 +45,10 @@ public:
 
 	bool has_tangent_ = false;
 
-	static string GetTexturetype(TextureType texture_type);
+	static std::string GetTextureType(TextureType texture_type);
 
 	//根据路径,文件名, 纹理类型, 纹理格式生成对应的纹理文件名
-	static string GetTextureFileName(const std::string& file_path, const std::string& file_name, TextureType texture_type, const std::string& texture_format);
+	static std::string GetTextureFileName(const std::string& file_path, const std::string& file_name, TextureType texture_type, const std::string& texture_format);
 
 private: 
 	void LoadModel(const std::string& model_name);
