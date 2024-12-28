@@ -219,8 +219,10 @@ SpecularCubeMap::SpecularCubeMap(const std::string& file_folder, CubeMap::CubeMa
 IBLMap::IBLMap(const std::string& skybox_path)
 {
 	skybox_name_ = GetFileNameWithoutExtension(skybox_path);//获取路径的天空盒名字
-	skybox_folder_ = GetFileFolder(skybox_path) + "/" + skybox_name_ + "/"; //在天空盒路径下的以天空盒名字为名的文件夹  天空盒路径/天空盒名字/
 	//folder存放调用cmgen生成的文件
+	//在天空盒路径下的以天空盒名字为名的文件夹  天空盒路径/天空盒名字/
+	skybox_folder_ = GetFileFolder(skybox_path) + "/" + skybox_name_ + "/"; 
+	
 	// 检查并生成IBL
 	if (!CheckFileExist(skybox_folder_ + "brdf_lut.hdr"))
 	{
