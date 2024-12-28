@@ -73,7 +73,8 @@ public:
 	SpecularCubeMap(const std::string& file_folder, CubeMap::CubeMapType cube_map_type);
 
 	static constexpr int max_mipmap_level_ = 10;
-	CubeMap* prefilter_maps_[max_mipmap_level_];
+	
+	CubeMap* prefilter_maps_[max_mipmap_level_];//Êı×éÖ¸Õë
 
 };
 
