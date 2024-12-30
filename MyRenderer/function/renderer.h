@@ -85,7 +85,7 @@ public:
 
 	};
 
-	static Vertex& VertexLerp(Vertex& vertex_p0, Vertex& vertex_p1, float ratio);
+	static Vertex& VertexLerp(Vertex& vertex_p0, Vertex& vertex_p1, const float ratio);
 
 	// 边缘方程e(x, y)（详见RTR4 章节23.1）
 	struct EdgeEquation
@@ -97,6 +97,11 @@ public:
 
 		float w_reciprocal;	// 对顶点w分量的倒数
 
+		/// @brief 
+		/// @param p0 
+		/// @param p1 
+		/// @param bottom_left_point 三角形bbx的左下角
+		/// @param w_reciprocal 
 		void Initialize(const Vec2i& p0, const Vec2i& p1, const Vec2i& bottom_left_point, float w_reciprocal)
 		{
 			// 详见RTR4 方程23.2
@@ -171,8 +176,9 @@ public:
 	void DrawLine(int x1, int y1, int x2, int y2, const Vec4f& color) const;
 
 public:
-	uint8_t* color_buffer_;			// 颜色缓冲
-	float** depth_buffer_;			// 深度缓存
+	
+	uint8_t* color_buffer_;			/// @brief uint8_t 一维数组, 4个一组// 颜色缓冲
+	float** depth_buffer_;			// 二维 flaot 深度缓存
 
 	int frame_buffer_width_;		// frame buffer 宽度
 	int frame_buffer_height_;		// frame buffer 高度

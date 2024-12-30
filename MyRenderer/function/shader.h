@@ -157,8 +157,8 @@ class PBRShader final :public Shader
 		//
 		use_lut_ = false;
 	}
-	Vec4f VertexShaderFunction(int index, Varings& output)const override;
-	Vec4f PixelShaderFunction(Varings& input) const override;
+	Vec4f VertexShaderFunction(int index, Varyings& output)const override;
+	Vec4f PixelShaderFunction(Varyings& input) const override;
 	void HandleKeyEvents()override;
 
 	enum VaryingAttributes

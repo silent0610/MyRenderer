@@ -56,6 +56,8 @@ inline static uint32_t vector_to_color(const Vec4f& color) {
 	const auto a = static_cast<uint32_t>(Between(0, 255, static_cast<int>(color.a * 255.0f)));
 	return (r << 16) | (g << 8) | b | (a << 24); // argb  ´Ó¸ßµ½µÍ
 }
+
+
 inline static ColorRGBA32Bit vector_to_32bit_color(const Vec4f& color) {
 	const auto r = static_cast<uint8_t>(Between(0, 255, static_cast<int>(color.r * 255.0f)));
 	const auto g = static_cast<uint8_t>(Between(0, 255, static_cast<int>(color.g * 255.0f)));
