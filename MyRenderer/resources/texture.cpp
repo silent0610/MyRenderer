@@ -1,8 +1,12 @@
 #include "texture.h"
 #include "utility.h"
-//lib 
-#include "stb_image.h"
-#include "stb_image_write.h"
+// lib 
+// 这里因为stb_image.h 包含了声明和定义, 但是默认情况下宏 STB_IMAGE_IMPLEMENTATION 未定义, 
+// 所以其 实现 在预处理阶段被抛弃,没有被编译, 需要手动编译
+#define STB_IMAGE_IMPLEMENTATION	
+#include "../lib/stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "../lib/stb_image_write.h"
 
 #pragma region Texture
 

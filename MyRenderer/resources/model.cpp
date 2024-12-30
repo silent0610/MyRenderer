@@ -1,5 +1,7 @@
 #include "model.h"
 #include "utility.h"
+
+#define TINYOBJLOADER_IMPLEMENTATION // ¿Ì”…º˚texture.cpp
 #include <tiny_obj_loader.h>
 
 
