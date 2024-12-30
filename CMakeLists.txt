@@ -13,6 +13,11 @@ project ("MyRenderer")
 message(STATUS "Project Source Directory: ${PROJECT_SOURCE_DIR}")
 message(STATUS "CMake Binary Directory: ${CMAKE_BINARY_DIR}")
 
+
+# 复制asset文件夹到输出路径
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy_directory 
+${PROJECT_SOURCE_DIR}/assets
+${CMAKE_BINARY_DIR}/assets)
 # 将 tools 目录复制到构建目录
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy_directory 
 ${PROJECT_SOURCE_DIR}/tools

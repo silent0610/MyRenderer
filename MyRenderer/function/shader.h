@@ -149,6 +149,7 @@ public:
 /// final 表示这个类 不能被继承
 class PBRShader final :public Shader
 {
+public:
 	PBRShader(UniformBuffer*uniform_buffer):Shader(uniform_buffer){
 		// 非金属的F0值默认为 0.04 , 我记得最低设置为0.04
 		dielectric_f0_ = Vec3f(0.04f);
