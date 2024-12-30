@@ -184,7 +184,7 @@ public:
 
 	// 渲染中使用的临时数据
 	Vertex vertex_[3];				// 三角形的输入顶点
-	Vertex* clip_vertex_[4];			// 经过clip之后的顶点
+	Vertex* clip_vertex_[4];			// 经过clip之后的顶点, 指针数组 ,裁剪完最多4个顶点
 
 	EdgeEquation edge_equation_[3];
 	Varyings current_varyings_;
