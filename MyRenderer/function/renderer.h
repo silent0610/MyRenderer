@@ -57,6 +57,11 @@ public:
 		buffer[x][y] = color;
 	}
 
+	/// @brief 颜色缓冲
+	/// @param buffer 
+	/// @param x 
+	/// @param y 
+	/// @param color 
 	void SetBuffer(uint8_t* buffer, const int x, const  int  y, const Vec4f& color) const;
 
 
@@ -109,12 +114,18 @@ public:
 			 * 上边缘：边缘方程中的a=0, b<0
 			 * 左边缘：边缘方程中的a>0
 			 *
+			 * 此时e = 0
 			 */
-			is_top_left = (NearEqual(a, 0.0f, 0.00001f) && b > 0) || a > 0;
-
+			//bug b>0
+			is_top_left = (NearEqual(a, 0.0f, 0.00001f) && b < 0) || a > 0;
+			
 			this->w_reciprocal = w_reciprocal;
 		}
 
+		/// @brief 计算边缘方程,利用角点
+		/// @param x 相对于角点的x
+		/// @param y 相对于角点的y
+		/// @return 边缘方程e`
 		float Evaluate(const int x, const int y) const
 		{
 			return origin + x * a + y * b;
@@ -160,7 +171,7 @@ public:
 	void DrawLine(int x1, int y1, int x2, int y2, const Vec4f& color) const;
 
 public:
-	uint8_t* color_buffer_;			// 颜色缓存
+	uint8_t* color_buffer_;			// 颜色缓冲
 	float** depth_buffer_;			// 深度缓存
 
 	int frame_buffer_width_;		// frame buffer 宽度
@@ -176,7 +187,7 @@ public:
 	Vertex* clip_vertex_[4];			// 经过clip之后的顶点
 
 	EdgeEquation edge_equation_[3];
-	Varyings current_varings_;
+	Varyings current_varyings_;
 
 	VertexShader vertex_shader_;
 	PixelShader pixel_shader_;
