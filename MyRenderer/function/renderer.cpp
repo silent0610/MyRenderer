@@ -36,7 +36,7 @@ bool IsInsidePlane(Renderer::ClipPlane clip_plane, const Vec4f& vertex)
 	case Renderer::ClipPlane::Y_TOP:
 		result = vertex.y <= vertex.w;
 		break;
-	case Renderer:ClipPlane:: : Y_BOTTOM :
+	case Renderer::ClipPlane::Y_BOTTOM:
 		result = vertex.y >= -vertex.w;
 		break;
 	case Renderer::ClipPlane::Z_Near:
@@ -560,9 +560,9 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 
 			// 准备为当前像素的各项 varying 进行插值
 
-			Varings& context_p0 = vertex[0]->context;
-			Varings& context_p1 = vertex[1]->context;
-			Varings& context_p2 = vertex[2]->context;
+			Varyings& context_p0 = vertex[0]->context;
+			Varyings& context_p1 = vertex[1]->context;
+			Varyings& context_p2 = vertex[2]->context;
 
 			// 插值各项 varying
 			if (!context_p0.varying_float.empty())
@@ -572,7 +572,7 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 					float f0 = context_p0.varying_float[key];
 					float f1 = context_p1.varying_float[key];
 					float f2 = context_p2.varying_float[key];
-					current_varings_.varying_float[key] = bc_correct_p0 * f0 + bc_correct_p1 * f1 + bc_correct_p2 * f2;
+					current_varyings_.varying_float[key] = bc_correct_p0 * f0 + bc_correct_p1 * f1 + bc_correct_p2 * f2;
 				}
 			}
 
@@ -583,7 +583,7 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 					const Vec2f& f0 = context_p0.varying_vec2f[key];
 					const Vec2f& f1 = context_p1.varying_vec2f[key];
 					const Vec2f& f2 = context_p2.varying_vec2f[key];
-					current_varings_.varying_vec2f[key] = bc_correct_p0 * f0 + bc_correct_p1 * f1 + bc_correct_p2 * f2;
+					current_varyings_.varying_vec2f[key] = bc_correct_p0 * f0 + bc_correct_p1 * f1 + bc_correct_p2 * f2;
 				}
 			}
 
@@ -595,7 +595,7 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 					const Vec3f& f0 = context_p0.varying_vec3f[key];
 					const Vec3f& f1 = context_p1.varying_vec3f[key];
 					const Vec3f& f2 = context_p2.varying_vec3f[key];
-					current_varings_.varying_vec3f[key] = bc_correct_p0 * f0 + bc_correct_p1 * f1 + bc_correct_p2 * f2;
+					current_varyings_.varying_vec3f[key] = bc_correct_p0 * f0 + bc_correct_p1 * f1 + bc_correct_p2 * f2;
 				}
 			}
 
@@ -607,7 +607,7 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 					const Vec4f& f0 = context_p0.varying_vec4f[key];
 					const Vec4f& f1 = context_p1.varying_vec4f[key];
 					const Vec4f& f2 = context_p2.varying_vec4f[key];
-					current_varings_.varying_vec4f[key] = bc_correct_p0 * f0 + bc_correct_p1 * f1 + bc_correct_p2 * f2;
+					current_varyings_.varying_vec4f[key] = bc_correct_p0 * f0 + bc_correct_p1 * f1 + bc_correct_p2 * f2;
 				}
 			}
 
@@ -615,7 +615,7 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 			Vec4f color = { 1.0f };
 			if (pixel_shader_ != nullptr)
 			{
-				color = pixel_shader_(current_varings_);
+				color = pixel_shader_(current_varyings_);
 			}
 			SetPixel(x, y, color);
 		}

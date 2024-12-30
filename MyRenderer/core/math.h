@@ -129,6 +129,7 @@ inline static Mat4x4f matrix_set_rotate(float x, float y, float z, float theta) 
 	return m;
 }
 
+//似乎多次计算了?
 //使用右手坐标系
 //观察变换矩阵
 //1. 从原点移到相机位置
@@ -138,13 +139,13 @@ inline static Mat4x4f matrix_look_at(const Vec3f& camera_position, const Vec3f& 
 	const Vec3f axis_v = NormalizeVector(target - camera_position);	// 相机视角朝向
 	const Vec3f axis_r = NormalizeVector(vector_cross(axis_v, up));	// 相机右侧
 	const Vec3f axis_u = vector_cross(axis_r, axis_v);					// 相机上方
-	const Vec3f translate = -camera_position;							// 平移向量
+	const Vec3f translate = camera_position;							// 平移向量
 
 	Mat4x4f m;
 
-	m.SetRow(0, Vec4f(axis_r.x, axis_r.y, axis_r.z, vector_dot(translate, axis_r)));
-	m.SetRow(1, Vec4f(axis_u.x, axis_u.y, axis_u.z, vector_dot(translate, axis_u)));
-	m.SetRow(2, Vec4f(-axis_v.x, -axis_v.y, -axis_v.z, -vector_dot(translate, axis_v)));
+	m.SetRow(0, Vec4f(axis_r.x, axis_r.y, axis_r.z, -vector_dot(translate, axis_r)));
+	m.SetRow(1, Vec4f(axis_u.x, axis_u.y, axis_u.z, -vector_dot(translate, axis_u)));
+	m.SetRow(2, Vec4f(-axis_v.x, -axis_v.y, -axis_v.z, vector_dot(translate, axis_v)));
 	m.SetRow(3, Vec4f(0.0f, 0.0f, 0.0f, 1.0f));
 	return m;
 }

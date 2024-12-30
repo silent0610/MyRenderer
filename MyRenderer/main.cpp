@@ -4,6 +4,7 @@
 
 #include "core/math.h"
 #include "resources/utility.h"
+#include "function/camera.h"
 using namespace std;
 
 
