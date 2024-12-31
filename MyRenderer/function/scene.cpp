@@ -25,11 +25,11 @@ Scene::Scene()
 	current_iblmap_index_ = 0;
 	current_iblmap_ = iblmaps_[current_iblmap_index_];
 
-	current_shader_type_ = kPbrShader;
+	current_shader_type_ = kBlinnPhongShader;
 	window_ = Window::GetInstance();
 	window_->SetLogMessage("Shading Model", "Shading Model: PBR + IBL");
 }
-void Scene::HandleKeyEvents(PBRShader* pbr_shader, BlinnPhongShader* blinn_phong_shader)
+void Scene::HandleKeyEvents(BlinnPhongShader* blinn_phong_shader, PBRShader* pbr_shader)
 {
 	if (window_->keys_['P'])
 	{

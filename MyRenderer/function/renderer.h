@@ -40,7 +40,10 @@ public:
 	void SetBackgroundColor(const Vec4f& color) { color_background_ = color; }
 	void SetForegroundColor(const Vec4f& color) { color_foreground_ = color; }
 
-	// 设置渲染状态，是否显示线框图，是否填充三角形
+
+	/// @brief 设置渲染状态
+	/// @param frame 是否显示线框图
+	/// @param pixel 是否填充三角形
 	void SetRenderState(const bool frame, const bool pixel)
 	{
 		render_frame_ = frame;
@@ -174,7 +177,7 @@ public:
 	void DrawWireFrame(Vertex* vertex[3]) const;
 	// 绘制一条线
 	void DrawLine(int x1, int y1, int x2, int y2, const Vec4f& color) const;
-
+	void DrawLineDDA(int x1, int y1, int x2, int y2, const Vec4f& color) const;
 public:
 	
 	uint8_t* color_buffer_;			/// @brief uint8_t 一维数组, 4个一组// 颜色缓冲

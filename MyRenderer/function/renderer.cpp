@@ -255,6 +255,7 @@ Renderer::Vertex& Renderer::VertexLerp(Vertex& vertex_p0, Vertex& vertex_p1, con
 	return  *vertex;
 }
 
+
 void Renderer::DrawWireFrame(Vertex* vertex[3]) const
 {
 	DrawLine(vertex[0]->screen_position_i.x, vertex[0]->screen_position_i.y, vertex[1]->screen_position_i.x, vertex[1]->screen_position_i.y);
@@ -291,7 +292,8 @@ void Renderer::DrawLine(int x1, int y1, int x2, int y2, const Vec4f& color) cons
 		for (x = x1; x != x2; x += dir) SetPixel(x, y1, color);
 		SetPixel(x2, y2, color);
 	}
-	else{
+	else
+	{
 		const int dx = (x1 < x2) ? x2 - x1 : x1 - x2;
 		const int dy = (y1 < y2) ? y2 - y1 : y1 - y2;
 		int rem = 0;
@@ -302,12 +304,13 @@ void Renderer::DrawLine(int x1, int y1, int x2, int y2, const Vec4f& color) cons
 				std::swap(x1, x2);
 				std::swap(y1, y2);
 			}
+			int dir = y2 - y1 > 0 ? 1 : -1;
 			rem = 2 * dy - dx;
 			SetPixel(x1, y1, color);
 			for(x=x1,y=y1;x<=x2;++x){
 				if (rem > 0)
 				{
-					y += 1;
+					y += dir;
 					rem += 2 * (dy - dx);
 				}
 				else
@@ -324,12 +327,13 @@ void Renderer::DrawLine(int x1, int y1, int x2, int y2, const Vec4f& color) cons
 				std::swap(x1, x2);
 				std::swap(y1, y2);
 			}
+			int dir = x2 - x1 > 0 ? 1 : -1;
 			rem = 2 * dx - dy;
 			SetPixel(x1, y1, color);
 			for(y=y1,x=x1;y<=y2;++y){
 				if (rem > 0)
 				{
-					x += 1;
+					x += dir;
 					rem += 2 * (dx - dy);
 				}
 				else
@@ -411,7 +415,7 @@ void Renderer::DrawMesh()
 	* 顶点顺序：
 	* obj格式中默认的顶点顺序是逆时针，即顶点v1，v2，v3按照逆时针顺序排列
 	*/
-	// 计算三角形法线, 这里存在问题 mark
+	//// 计算三角形法线, 这里存在问题 mark
 	const Vec4f vector_01 = vertex_[1].position - vertex_[0].position;
 	const Vec4f vector_02 = vertex_[2].position - vertex_[0].position;
 	const Vec4f normal = vector_cross(vector_01, vector_02);
@@ -628,3 +632,73 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 	}
 }
 
+void Renderer::DrawLineDDA(int x1, int y1, int x2, int y2, const Vec4f& color) const
+{
+	int x, y;
+	if (x1 == x2 && y1 == y2)
+	{
+		SetPixel(x1, y1, color);
+		return;
+	}
+	else if (x1 == x2)
+	{
+		const int dir = (y1 <= y2) ? 1 : -1;
+		for (y = y1; y != y2; y += dir) SetPixel(x1, y, color);
+		SetPixel(x2, y2, color);
+	}
+	else if (y1 == y2)
+	{
+		const int dir = (x1 <= x2) ? 1 : -1;
+		for (x = x1; x != x2; x += dir) SetPixel(x, y1, color);
+		SetPixel(x2, y2, color);
+	}
+	else
+	{
+		// 选择绘制的主轴，沿着跨度较大的轴进行绘制
+		const int dx = (x1 < x2) ? x2 - x1 : x1 - x2;
+		const int dy = (y1 < y2) ? y2 - y1 : y1 - y2;
+		int rem = 0;
+		if (dx >= dy)
+		{
+			// 交换(x1, y1)和(x2, y2)，使得x1较小
+			if (x2 < x1)
+			{
+				std::swap(x1, x2);
+				std::swap(y1, y2);
+				x = x1; y = y1;
+			}
+			for (x = x1, y = y1; x <= x2; x++)
+			{
+				SetPixel(x, y, color);
+				rem += dy;
+				if (rem >= dx)
+				{
+					rem -= dx;
+					y += (y2 >= y1) ? 1 : -1; SetPixel(x, y, color);
+				}
+			}
+			SetPixel(x2, y2, color);
+		}
+		else
+		{
+			// 交换(x1, y2)和(x1, y2)，使得y1较小
+			if (y2 < y1)
+			{
+				std::swap(x1, x2);
+				std::swap(y1, y2);
+				x = x1; y = y1;
+			}
+			for (x = x1, y = y1; y <= y2; y++)
+			{
+				SetPixel(x, y, color);
+				rem += dx;
+				if (rem >= dy)
+				{
+					rem -= dy;
+					x += (x2 >= x1) ? 1 : -1; SetPixel(x, y, color);
+				}
+			}
+			SetPixel(x2, y2, color);
+		}
+	}
+}

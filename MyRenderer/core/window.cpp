@@ -7,6 +7,8 @@
 
 Window* Window::window_ = nullptr;
 
+/// @brief window 类有一个静态window对象, 检测window是否存在, 不存在生成再返回, 存在返回window
+/// @return 
 Window* Window::GetInstance()
 {
 	if (window_ == nullptr) {

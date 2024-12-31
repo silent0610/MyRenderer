@@ -1,19 +1,19 @@
 ﻿#include "camera.h"
 
-Camera::Camera(const Vec3f& position, const Vec3f& target, const Vec3f& up, float fov, float aspect) :
-	position_(position), target_(target), up_(up), fov_(fov), aspect_(aspect)
-{
-	near_plane_ = 0.4f;
-	//near_plane_ = 1.5f;
-	far_plane_ = 1000.0f;
+//Camera::Camera(const Vec3f& position, const Vec3f& target, const Vec3f& up, float fov, float aspect) :
+//	position_(position), target_(target), up_(up), fov_(fov), aspect_(aspect)
+//{
+//	near_plane_ = 0.4f;
+//	//near_plane_ = 1.5f;
+//	far_plane_ = 1000.0f;
+//
+//	origin_position_ = position_;
+//	origin_target_ = target_;
+//
+//	window_ = Window::GetInstance();
+//}
 
-	origin_position_ = position_;
-	origin_target_ = target_;
-
-	window_ = Window::GetInstance();
-}
-
-Camera::~Camera() = default;
+//Camera::~Camera() = default;
 
 void Camera::UpdateCameraPose(){
 	// 观察向量：从相机位置指向目标位置
@@ -69,9 +69,9 @@ void Camera::HandleInputEvents()
 		axis_r：正方向指向屏幕右侧
 		axis_u：正方向指向屏幕上侧
 	*/
-	axis_v_ = vector_normalize(target_ - position_);
-	axis_r_ = vector_normalize(vector_cross(axis_v_, up_));
-	axis_u_ = vector_normalize(vector_cross(axis_r_, axis_v_));
+	axis_v_ = NormalizeVector(target_ - position_);
+	axis_r_ = NormalizeVector(vector_cross(axis_v_, up_));
+	axis_u_ = NormalizeVector(vector_cross(axis_r_, axis_v_));
 
 	// 处理输入事件
 	HandleMouseEvents();
@@ -82,8 +82,8 @@ void Camera::HandleMouseEvents()
 	if (window_->mouse_buttons_[0] || window_->mouse_buttons_[1] || window_->mouse_buttons_[2])
 	{
 		const Vec2f mouse_position = window_->GetMousePosition();
-		window_->mouse_info_.mouse_delta = window_->mouse_info_.mouse_position - mouse_position;
-		window_->mouse_info_.mouse_position = mouse_position;
+		window_->mouse_info_.mouse_delta = window_->mouse_info_.mouse_pos - mouse_position;
+		window_->mouse_info_.mouse_pos = mouse_position;
 
 		UpdateCameraPose();
 	}

@@ -37,7 +37,7 @@ public:
 	/// @brief 负责shader的切换
 	/// @param pbr_shader 
 	/// @param blinn_phong_shader 
-	void HandleKeyEvents(PBRShader* pbr_shader, BlinnPhongShader* blinn_phong_shader);
+	void HandleKeyEvents( BlinnPhongShader* blinn_phong_shader, PBRShader* pbr_shader = nullptr );
 
 	void UpdateShaderInfo(Shader* shader) const;
 
