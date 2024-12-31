@@ -7,6 +7,7 @@
 #include "../lib/stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../lib/stb_image_write.h"
+#include <stdexcept>
 
 #pragma region Texture
 
@@ -222,7 +223,12 @@ SpecularCubeMap::SpecularCubeMap(const std::string& file_folder, CubeMap::CubeMa
 
 IBLMap::IBLMap(const std::string& skybox_path)
 {
-	skybox_name_ = GetFileNameWithoutExtension(skybox_path);//获取路径的天空盒名字
+	if (!CheckFileExist(skybox_path))
+	{
+		std::cout <<"天空盒本体文件不存在, 去下载一个先"<<std::endl;
+		exit(0);
+	}
+	skybox_name_ = GetFileNameWithoutExtension(skybox_path);//获取路径的天空盒的名字, 这里需要额外的天空盒文件
 	//folder存放调用cmgen生成的文件
 	//在天空盒路径下的以天空盒名字为名的文件夹  天空盒路径/天空盒名字/
 	skybox_folder_ = GetFileFolder(skybox_path) + "/" + skybox_name_ + "/"; 
