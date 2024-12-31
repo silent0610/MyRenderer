@@ -1,4 +1,4 @@
-#include "window.h"
+ï»¿#include "window.h"
 
 #include <cassert>
 #include <cstdio>
@@ -22,54 +22,54 @@ void Window::WindowInit(const int width, const int height, const char* title)
 	LPVOID frame_buffer_ptr;
 	BITMAPINFOHEADER bitmap_info_header;
 
-	// ×¢²á´°¿ÚÀà
+	// æ³¨å†Œçª—å£ç±»
 	RegisterWindowClass(title);
 
-	// ´´½¨´°¿Ú
+	// åˆ›å»ºçª—å£
 	hwnd_ = CreateWindow(title, title,
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		0, 0, 0, 0, NULL, NULL, GetModuleHandle(NULL), NULL);
 
-	// ³õÊ¼»¯Î»Í¼Í·¸ñÊ½
+	// åˆå§‹åŒ–ä½å›¾å¤´æ ¼å¼
 	InitBitmapHeader(bitmap_info_header, width, height);
 
-	// »ñµÃ¼æÈİĞÔDC
+	// è·å¾—å…¼å®¹æ€§DC
 	const HDC hdc = GetDC(hwnd_);
 	memory_dc_ = CreateCompatibleDC(hdc);
 	ReleaseDC(hwnd_, hdc);
 
-	// ´´½¨Î»Í¼
+	// åˆ›å»ºä½å›¾
 	bitmap_dib_ = CreateDIBSection(memory_dc_, reinterpret_cast<BITMAPINFO*>(&bitmap_info_header),
-		DIB_RGB_COLORS, &frame_buffer_ptr, nullptr, 0); //´´½¨Éè±¸ÎŞ¹Ø¾ä±ú
+		DIB_RGB_COLORS, &frame_buffer_ptr, nullptr, 0); //åˆ›å»ºè®¾å¤‡æ— å…³å¥æŸ„
 
-	bitmap_old_ = static_cast<HBITMAP>(SelectObject(memory_dc_, bitmap_dib_));//°ÑĞÂ´´½¨µÄÎ»Í¼¾ä±úĞ´Èëmemory_dc_
+	bitmap_old_ = static_cast<HBITMAP>(SelectObject(memory_dc_, bitmap_dib_));//æŠŠæ–°åˆ›å»ºçš„ä½å›¾å¥æŸ„å†™å…¥memory_dc_
 	frame_buffer_ = static_cast<unsigned char*>(frame_buffer_ptr);
 
 	width_ = width;
 	height_ = height;
 
-	// Ò»¸ö¾ØĞÎ·¶Î§ ×óÉÏÓÒÏÂ
+	// ä¸€ä¸ªçŸ©å½¢èŒƒå›´ å·¦ä¸Šå³ä¸‹
 	RECT rect = { 0, 0, width, height };
-	AdjustWindowRect(&rect, GetWindowLong(hwnd_, GWL_STYLE), 0);//µ÷Õû´°¿Ú´óĞ¡
+	AdjustWindowRect(&rect, GetWindowLong(hwnd_, GWL_STYLE), 0);//è°ƒæ•´çª—å£å¤§å°
 	const int wx = rect.right - rect.left;
 	const int wy = rect.bottom - rect.top;
-	const int sx = (GetSystemMetrics(SM_CXSCREEN) - wx) / 2;	// GetSystemMetrics(SM_CXSCREEN)»ñÈ¡ÄãÆÁÄ»µÄ·Ö±æÂÊ
-	int sy = (GetSystemMetrics(SM_CYSCREEN) - wy) / 2;		// ¼ÆËã³öÖĞĞÄÎ»ÖÃ
+	const int sx = (GetSystemMetrics(SM_CXSCREEN) - wx) / 2;	// GetSystemMetrics(SM_CXSCREEN)è·å–ä½ å±å¹•çš„åˆ†è¾¨ç‡
+	int sy = (GetSystemMetrics(SM_CYSCREEN) - wy) / 2;		// è®¡ç®—å‡ºä¸­å¿ƒä½ç½®
 	if (sy < 0) sy = 0;
 
 	SetWindowPos(hwnd_, nullptr, sx, sy, wx, wy, (SWP_NOCOPYBITS | SWP_NOZORDER | SWP_SHOWWINDOW));
 	SetForegroundWindow(hwnd_);
 	ShowWindow(hwnd_, SW_NORMAL);
 
-	// ÏûÏ¢·ÖÅÉ
+	// æ¶ˆæ¯åˆ†æ´¾
 	MessageDispatch();
 
-	// ³õÊ¼»¯keys, window_fbÈ«Îª0
+	// åˆå§‹åŒ–keys, window_fbå…¨ä¸º0
 	memset(frame_buffer_, 0, width_ * height_ * 4);
 	memset(keys_, 0, sizeof(char) * 512);
 
 
-	// ³õÊ¼»¯LOGĞÅÏ¢
+	// åˆå§‹åŒ–LOGä¿¡æ¯
 	num_frames_per_second_ = 0;
 	current_frame_time_ = PlatformGetTime();
 	can_press_keyboard_ = false;
@@ -81,7 +81,7 @@ void Window::WindowDestroy()
 	{
 		if (bitmap_old_)
 		{
-			SelectObject(memory_dc_, bitmap_old_); // Ğ´ÈëÔ­À´µÄbitmap£¬²ÅÄÜÊÍ·ÅDC£¡
+			SelectObject(memory_dc_, bitmap_old_); // å†™å…¥åŸæ¥çš„bitmapï¼Œæ‰èƒ½é‡Šæ”¾DCï¼
 			bitmap_old_ = nullptr;
 		}
 		DeleteDC(memory_dc_);
@@ -98,16 +98,16 @@ void Window::WindowDestroy()
 		hwnd_ = nullptr;
 	}
 
-	free(window_); // ÊÍ·Åwindow_ÊµÀı
+	free(window_); // é‡Šæ”¾window_å®ä¾‹
 }
 
 void Window::WindowDisplay(const uint8_t* frame_buffer)
 {
-    // ¸üĞÂFPSÊı¾İ
+    // æ›´æ–°FPSæ•°æ®
     UpdateFpsData();
-    // »æÖÆµ±Ç°Ö¡
+    // ç»˜åˆ¶å½“å‰å¸§
     WindowDrawFrame(frame_buffer);
-    // ·Ö·¢ÏûÏ¢
+    // åˆ†å‘æ¶ˆæ¯
     MessageDispatch();
 }
 
@@ -117,43 +117,43 @@ LRESULT MessageCallback(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_CLOSE:
-		// ´¦Àí´°¿Ú¹Ø±ÕÏûÏ¢
+		// å¤„ç†çª—å£å…³é—­æ¶ˆæ¯
 		window->is_close_ = TRUE;
 		break;
 	case WM_KEYDOWN:
-		// ´¦Àí¼üÅÌ°´ÏÂÏûÏ¢
+		// å¤„ç†é”®ç›˜æŒ‰ä¸‹æ¶ˆæ¯
 		window->keys_[wParam & 511] = 1;
 		break;
 	case WM_KEYUP:
-		// ´¦Àí¼üÅÌËÉ¿ªÏûÏ¢
+		// å¤„ç†é”®ç›˜æ¾å¼€æ¶ˆæ¯
 		window->keys_[wParam & 511] = 0;
 		break;
 	case WM_LBUTTONDOWN:
-		// ´¦ÀíÊó±ê×ó¼ü°´ÏÂÏûÏ¢
+		// å¤„ç†é¼ æ ‡å·¦é”®æŒ‰ä¸‹æ¶ˆæ¯
 		window->mouse_info_.mouse_pos = window->GetMousePosition();
 		window->mouse_buttons_[0] = 1;
 		break;
 	case WM_LBUTTONUP:
-		// ´¦ÀíÊó±ê×ó¼üËÉ¿ªÏûÏ¢
+		// å¤„ç†é¼ æ ‡å·¦é”®æ¾å¼€æ¶ˆæ¯
 		window->mouse_buttons_[0] = 0;
 		break;
 	case WM_RBUTTONDOWN:
-		// ´¦ÀíÊó±êÓÒ¼ü°´ÏÂÏûÏ¢
+		// å¤„ç†é¼ æ ‡å³é”®æŒ‰ä¸‹æ¶ˆæ¯
 		window->mouse_info_.mouse_pos = window->GetMousePosition();
 		window->mouse_buttons_[1] = 1;
 		break;
 	case WM_RBUTTONUP:
-		// ´¦ÀíÊó±êÓÒ¼üËÉ¿ªÏûÏ¢
+		// å¤„ç†é¼ æ ‡å³é”®æ¾å¼€æ¶ˆæ¯
 		window->mouse_buttons_[1] = 0;
 		break;
 	case WM_MOUSEWHEEL:
-		// ´¦ÀíÊó±ê¹öÂÖÏûÏ¢
+		// å¤„ç†é¼ æ ‡æ»šè½®æ¶ˆæ¯
 		window->mouse_buttons_[2] = 1;
 		window->mouse_info_.mouse_wheel_delta = GET_WHEEL_DELTA_WPARAM(wParam) / static_cast<float>(WHEEL_DELTA);
 		break;
 
 	default: 
-		// Ä¬ÈÏ´¦Àí
+		// é»˜è®¤å¤„ç†
 		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
 	return 0;
@@ -162,20 +162,20 @@ LRESULT MessageCallback(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Window::RegisterWindowClass(const char* title)
 {
-	//³õÊ¼»¯½á¹¹Ìå
+	//åˆå§‹åŒ–ç»“æ„ä½“
 	WNDCLASS wc;
-	wc.style = CS_BYTEALIGNCLIENT;											//´°¿Ú·ç¸ñ
-	wc.lpfnWndProc = static_cast<WNDPROC>(MessageCallback);					//»Øµ÷º¯Êı
-	wc.cbClsExtra = 0;														//½ô¸úÔÚ´°¿ÚÀàÎ²²¿µÄÒ»¿é¶îÍâ¿Õ¼ä£¬²»ÓÃÔòÉèÎª0
-	wc.cbWndExtra = 0;														//½ô¸úÔÚ´°¿ÚÊµÀıÎ²²¿µÄÒ»¿é¶îÍâ¿Õ¼ä£¬²»ÓÃÔòÉèÎª0
-	wc.hInstance = GetModuleHandle(nullptr);								//µ±Ç°ÊµÀı¾ä±ú
-	wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);					//ÈÎÎñÀ¸Í¼±ê
-	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);					//¹â±êÑùÊ½
-	wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));	//±³¾°ÑùÊ½
-	wc.lpszMenuName = nullptr;												//²Ëµ¥
-	wc.lpszClassName = title;												//¸Ã´°¿ÚÀàµÄÃû×Ö
+	wc.style = CS_BYTEALIGNCLIENT;											//çª—å£é£æ ¼
+	wc.lpfnWndProc = static_cast<WNDPROC>(MessageCallback);					//å›è°ƒå‡½æ•°
+	wc.cbClsExtra = 0;														//ç´§è·Ÿåœ¨çª—å£ç±»å°¾éƒ¨çš„ä¸€å—é¢å¤–ç©ºé—´ï¼Œä¸ç”¨åˆ™è®¾ä¸º0
+	wc.cbWndExtra = 0;														//ç´§è·Ÿåœ¨çª—å£å®ä¾‹å°¾éƒ¨çš„ä¸€å—é¢å¤–ç©ºé—´ï¼Œä¸ç”¨åˆ™è®¾ä¸º0
+	wc.hInstance = GetModuleHandle(nullptr);								//å½“å‰å®ä¾‹å¥æŸ„
+	wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);					//ä»»åŠ¡æ å›¾æ ‡
+	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);					//å…‰æ ‡æ ·å¼
+	wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));	//èƒŒæ™¯æ ·å¼
+	wc.lpszMenuName = nullptr;												//èœå•
+	wc.lpszClassName = title;												//è¯¥çª—å£ç±»çš„åå­—
 
-	ATOM atom = RegisterClass(&wc);											//×¢²á´°¿ÚÀà
+	ATOM atom = RegisterClass(&wc);											//æ³¨å†Œçª—å£ç±»
 	assert(atom != 0);
 }
 
@@ -183,13 +183,13 @@ void Window::RegisterWindowClass(const char* title)
 void Window::InitBitmapHeader(BITMAPINFOHEADER& bitmap, const int width, const int height)
 {
 	memset(&bitmap, 0, sizeof(BITMAPINFOHEADER));
-	bitmap.biSize = sizeof(BITMAPINFOHEADER);		//±¾½á¹¹ËùÕ¼ÓÃµÄ×Ö½ÚÊı
-	bitmap.biWidth = width;							//bitmap¿í¶È
-	bitmap.biHeight = height;						//bitmap¸ß¶È£¬Ô­µãÎ»ÓÚ×óÏÂ½Ç
-	bitmap.biPlanes = 1;							//Ä¿±êÉè±¸¼¶±ğ
-	bitmap.biBitCount = 32;							//bitmapÖĞÒ»¸öÑÕÉ«ËùÕ¼¾İµÄbitÊı
-	bitmap.biCompression = BI_RGB;					//ÊÇ·ñÑ¹Ëõ£¬BI_RGBÎª²»Ñ¹Ëõ
-	bitmap.biSizeImage = width * height * 4;		//Õû¸öbitmapËùÕ¼¾İµÄ×Ö½ÚÊı
+	bitmap.biSize = sizeof(BITMAPINFOHEADER);		//æœ¬ç»“æ„æ‰€å ç”¨çš„å­—èŠ‚æ•°
+	bitmap.biWidth = width;							//bitmapå®½åº¦
+	bitmap.biHeight = height;						//bitmapé«˜åº¦ï¼ŒåŸç‚¹ä½äºå·¦ä¸‹è§’
+	bitmap.biPlanes = 1;							//ç›®æ ‡è®¾å¤‡çº§åˆ«
+	bitmap.biBitCount = 32;							//bitmapä¸­ä¸€ä¸ªé¢œè‰²æ‰€å æ®çš„bitæ•°
+	bitmap.biCompression = BI_RGB;					//æ˜¯å¦å‹ç¼©ï¼ŒBI_RGBä¸ºä¸å‹ç¼©
+	bitmap.biSizeImage = width * height * 4;		//æ•´ä¸ªbitmapæ‰€å æ®çš„å­—èŠ‚æ•°
 }
 
 
@@ -197,12 +197,12 @@ void Window::MessageDispatch()
 {
 	MSG message;
 	while (true) {
-		// Peek²»×èÈû£¬Get»á×èÈû£¬PM_NOREMOVE±íÊ¾Èç¹ûÓĞÏûÏ¢²»´¦Àí£¨Áô¸ø½ÓÏÂÀ´µÄGet´¦Àí£©
+		// Peekä¸é˜»å¡ï¼ŒGetä¼šé˜»å¡ï¼ŒPM_NOREMOVEè¡¨ç¤ºå¦‚æœæœ‰æ¶ˆæ¯ä¸å¤„ç†ï¼ˆç•™ç»™æ¥ä¸‹æ¥çš„Getå¤„ç†ï¼‰
 		if (!PeekMessage(&message, nullptr, 0, 0, PM_NOREMOVE)) break;
 		if (!GetMessage(&message, nullptr, 0, 0)) break;
 
-		TranslateMessage(&message);	 //×ª»»ÏûÏ¢ ĞéÄâ°´¼ü->×Ö·û
-		DispatchMessage(&message); //´«ËÍÏûÏ¢¸ø»Øµ÷
+		TranslateMessage(&message);	 //è½¬æ¢æ¶ˆæ¯ è™šæ‹ŸæŒ‰é”®->å­—ç¬¦
+		DispatchMessage(&message); //ä¼ é€æ¶ˆæ¯ç»™å›è°ƒ
 	}
 }
 
@@ -210,15 +210,15 @@ void Window::WindowDrawFrame(const uint8_t* frame_buffer) const
 {
 	memcpy(frame_buffer_, frame_buffer, width_ * height_ * 4);
 
-	//ÏÔÊ¾LogĞÅÏ¢
+	//æ˜¾ç¤ºLogä¿¡æ¯
 	if (!log_messages_.empty()) {
-		LOGFONT log_font;								//¸Ä±äÊä³ö×ÖÌå
+		LOGFONT log_font;								//æ”¹å˜è¾“å‡ºå­—ä½“
 		ZeroMemory(&log_font, sizeof(LOGFONT));
 		log_font.lfCharSet = ANSI_CHARSET;
-		log_font.lfHeight = 20;							//ÉèÖÃ×ÖÌåµÄ´óĞ¡
+		log_font.lfHeight = 20;							//è®¾ç½®å­—ä½“çš„å¤§å°
 		const HFONT h_font = CreateFontIndirect(&log_font);
 
-		//Ä¿±ê¾ØĞÎµÄ×óÉÏ½Ç(x,y), ¿í¶È£¬¸ß¶È£¬ÉÏÏÂÎÄÖ¸Õë
+		//ç›®æ ‡çŸ©å½¢çš„å·¦ä¸Šè§’(x,y), å®½åº¦ï¼Œé«˜åº¦ï¼Œä¸Šä¸‹æ–‡æŒ‡é’ˆ
 		SelectObject(memory_dc_, h_font);
 		SetTextColor(memory_dc_, RGB(190, 190, 190));
 		SetBkColor(memory_dc_, RGB(80, 80, 80));
@@ -232,9 +232,9 @@ void Window::WindowDrawFrame(const uint8_t* frame_buffer) const
 		}
 	}
 
-	//»æÖÆframe buffer
+	//ç»˜åˆ¶frame buffer
 	const HDC hdc = GetDC(hwnd_);
-	// °Ñ¼æÈİĞÔDCµÄÊı¾İ´«µ½ÕæÕıµÄDCÉÏ
+	// æŠŠå…¼å®¹æ€§DCçš„æ•°æ®ä¼ åˆ°çœŸæ­£çš„DCä¸Š
 	BitBlt(hdc, 0, 0, width_, height_, memory_dc_, 0, 0, SRCCOPY);
 	ReleaseDC(hwnd_, hdc);
 }
@@ -244,7 +244,7 @@ Vec2f Window::GetMousePosition() const
 	POINT mouse_point;
 	GetCursorPos(&mouse_point);
 
-	// ½«Êó±êÎ»ÖÃ´ÓÆÁÄ»¿Õ¼ä×ªµ½´°¿Ú¿Õ¼ä
+	// å°†é¼ æ ‡ä½ç½®ä»å±å¹•ç©ºé—´è½¬åˆ°çª—å£ç©ºé—´
 	ScreenToClient(hwnd_, &mouse_point);
 	auto mouse_position = Vec2f(static_cast<float>(mouse_point.x), static_cast<float>(mouse_point.y));
 	return mouse_position;
@@ -263,28 +263,28 @@ void Window::RemoveLogMessage(const std::string& log_type)
 
 void Window::UpdateFpsData()
 {
-    // Ôö¼ÓÖ¡Êı¼ÆÊı
+    // å¢åŠ å¸§æ•°è®¡æ•°
     num_frames_per_second_ += 1;
-    // »ñÈ¡µ±Ç°Ö¡Ê±¼ä
+    // è·å–å½“å‰å¸§æ—¶é—´
     current_frame_time_ = PlatformGetTime();
-    // Èç¹ûµ±Ç°Ö¡Ê±¼äÓëÉÏ´ÎÖ¡Ê±¼ä²î´óÓÚµÈÓÚ1Ãë
+    // å¦‚æœå½“å‰å¸§æ—¶é—´ä¸ä¸Šæ¬¡å¸§æ—¶é—´å·®å¤§äºç­‰äº1ç§’
     if (current_frame_time_ - last_frame_time_ >= 1) {
-        // ¼ÆËãÖ¡Ê±¼ä£¨ºÁÃë£©
+        // è®¡ç®—å¸§æ—¶é—´ï¼ˆæ¯«ç§’ï¼‰
         const int frame_time_ms = static_cast<int>((current_frame_time_ - last_frame_time_) * 1000);
-        // ¼ÆËãÆ½¾ùÖ¡Ê±¼ä£¨ºÁÃë£©
+        // è®¡ç®—å¹³å‡å¸§æ—¶é—´ï¼ˆæ¯«ç§’ï¼‰
         const int average_frame_time_ms = frame_time_ms / num_frames_per_second_;
 
-        // Éú³ÉFPSĞÅÏ¢×Ö·û´®
+        // ç”ŸæˆFPSä¿¡æ¯å­—ç¬¦ä¸²
         const std::string fps_message = "FPS: " + std::to_string(num_frames_per_second_) + " / time/frame:" + std::to_string(average_frame_time_ms) + " ms";
 
-        // ÉèÖÃÈÕÖ¾ĞÅÏ¢
+        // è®¾ç½®æ—¥å¿—ä¿¡æ¯
         SetLogMessage("fps_message", fps_message);
-        // ÖØÖÃÖ¡Êı¼ÆÊı
+        // é‡ç½®å¸§æ•°è®¡æ•°
         num_frames_per_second_ = 0;
-        // ¸üĞÂÉÏ´ÎÖ¡Ê±¼ä
+        // æ›´æ–°ä¸Šæ¬¡å¸§æ—¶é—´
         last_frame_time_ = current_frame_time_;
 
-        // ÔÊĞí°´¼üÊäÈë
+        // å…è®¸æŒ‰é”®è¾“å…¥
         can_press_keyboard_ = true;
     }
 }
@@ -301,7 +301,7 @@ float Window::GetNativeTime() {
 	return period * counter.QuadPart;
 }
 
-float Window::PlatformGetTime() {//»ñÈ¡³ÌĞòÔËĞĞÊ±¼ä
+float Window::PlatformGetTime() {//è·å–ç¨‹åºè¿è¡Œæ—¶é—´
 	static float initial = -1;
 	if (initial < 0) {
 		initial = GetNativeTime();

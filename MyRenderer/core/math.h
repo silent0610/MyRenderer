@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "matrix.h"
 #include <cmath>
 
@@ -6,7 +6,7 @@
 constexpr float kPi = 3.1415926f;
 constexpr float kEpsilon = 1e-5f;
 
-// ÏòÁ¿ÀàĞÍ±ğÃû
+// å‘é‡ç±»å‹åˆ«å
 typedef Vector<2, float>  Vec2f;
 typedef Vector<2, double> Vec2d;
 typedef Vector<2, int>    Vec2i;
@@ -17,17 +17,17 @@ typedef Vector<4, float>  Vec4f, ColorRGBA;
 typedef Vector<4, double> Vec4d;
 typedef Vector<4, int>    Vec4i;
 
-// Ê¹ÓÃColorRGBAÍê³ÉÑÕÉ«¼ÆËãÊ¹ÓÃColorRGBA_32bitÍê³ÉÍ¼ÏñÊä³ö
-// uint8_t °ËÎ»ÎŞ·ûºÅÕûÊı
+// ä½¿ç”¨ColorRGBAå®Œæˆé¢œè‰²è®¡ç®—ä½¿ç”¨ColorRGBA_32bitå®Œæˆå›¾åƒè¾“å‡º
+// uint8_t å…«ä½æ— ç¬¦å·æ•´æ•°
 typedef Vector<4, uint8_t> ColorRGBA32Bit;
 
-// ¾ØÕóÀàĞÍ±ğÃû
+// çŸ©é˜µç±»å‹åˆ«å
 typedef Matrix<4, 4, float> Mat4x4f;
 typedef Matrix<3, 3, float> Mat3x3f;
 typedef Matrix<4, 3, float> Mat4x3f;
 typedef Matrix<3, 4, float> Mat3x4f;
 
-#pragma region »ù±¾ÊıÑ§º¯Êı
+#pragma region åŸºæœ¬æ•°å­¦å‡½æ•°
 
 template<typename T> inline T Abs(T x) { return (x < 0) ? (-x) : x; }
 template<typename T> inline T Max(T x, T y) { return (x < y) ? y : x; }
@@ -46,15 +46,15 @@ template<typename T> inline T Saturate(T x) {
 }
 #pragma endregion
 
-#pragma region 3D ÊıÑ§ÔËËã
+#pragma region 3D æ•°å­¦è¿ç®—
 
-// ½«[0,1]ÏòÁ¿×ª»»Îª32Î» 4byteµÄÎŞ·ûºÅ ÕûĞÎ£¬ÓÃÀ´±íÊ¾ÑÕÉ«
+// å°†[0,1]å‘é‡è½¬æ¢ä¸º32ä½ 4byteçš„æ— ç¬¦å· æ•´å½¢ï¼Œç”¨æ¥è¡¨ç¤ºé¢œè‰²
 inline static uint32_t vector_to_color(const Vec4f& color) {
 	const auto r = static_cast<uint32_t>(Between(0, 255, static_cast<int>(color.r * 255.0f)));
 	const auto g = static_cast<uint32_t>(Between(0, 255, static_cast<int>(color.g * 255.0f)));
 	const auto b = static_cast<uint32_t>(Between(0, 255, static_cast<int>(color.b * 255.0f)));
 	const auto a = static_cast<uint32_t>(Between(0, 255, static_cast<int>(color.a * 255.0f)));
-	return (r << 16) | (g << 8) | b | (a << 24); // argb  ´Ó¸ßµ½µÍ
+	return (r << 16) | (g << 8) | b | (a << 24); // argb  ä»é«˜åˆ°ä½
 }
 
 
@@ -63,10 +63,10 @@ inline static ColorRGBA32Bit vector_to_32bit_color(const Vec4f& color) {
 	const auto g = static_cast<uint8_t>(Between(0, 255, static_cast<int>(color.g * 255.0f)));
 	const auto b = static_cast<uint8_t>(Between(0, 255, static_cast<int>(color.b * 255.0f)));
 	const auto a = static_cast<uint8_t>(Between(0, 255, static_cast<int>(color.a * 255.0f)));
-	return { r, g, b, a };  //·µ»ØÒ»¸ö Vector<4, uint8_t>
+	return { r, g, b, a };  //è¿”å›ä¸€ä¸ª Vector<4, uint8_t>
 }
 
-// ¾ØÕó¹é0
+// çŸ©é˜µå½’0
 inline static Mat4x4f matrix_set_zero() {
 	Mat4x4f m;
 	m.m[0][0] = m.m[0][1] = m.m[0][2] = m.m[0][3] = 0.0f;
@@ -75,7 +75,7 @@ inline static Mat4x4f matrix_set_zero() {
 	m.m[3][0] = m.m[3][1] = m.m[3][2] = m.m[3][3] = 0.0f;
 	return m;
 }
-// ÉèÖÃÎªµ¥Î»¾ØÕó
+// è®¾ç½®ä¸ºå•ä½çŸ©é˜µ
 inline static Mat4x4f matrix_set_identity() {
 	Mat4x4f m;
 	m.m[0][0] = m.m[1][1] = m.m[2][2] = m.m[3][3] = 1.0f;
@@ -86,7 +86,7 @@ inline static Mat4x4f matrix_set_identity() {
 	return m;
 }
 
-// Æ½ÒÆ±ä»»
+// å¹³ç§»å˜æ¢
 inline static Mat4x4f matrix_set_translate(const float x, const float y, const float z) {
 	Mat4x4f m = matrix_set_identity();
 	m.m[0][3] = x;
@@ -94,7 +94,7 @@ inline static Mat4x4f matrix_set_translate(const float x, const float y, const f
 	m.m[2][3] = z;
 	return m;
 }
-// Ëõ·Å±ä»»
+// ç¼©æ”¾å˜æ¢
 inline static Mat4x4f matrix_set_scale(const float x, const float y, const float z) {
 	Mat4x4f m = matrix_set_identity();
 	m.m[0][0] = x;
@@ -103,8 +103,8 @@ inline static Mat4x4f matrix_set_scale(const float x, const float y, const float
 	return m;
 }
 
-// Ğı×ª±ä»», Î§ÈÆ£¨x,y,z£©Ê¸Á¿Ğı×ªtheta½Ç¶È
-// hamiltonËÄÔªÊı https://blog.csdn.net/gyxx1998/article/details/119636130
+// æ—‹è½¬å˜æ¢, å›´ç»•ï¼ˆx,y,zï¼‰çŸ¢é‡æ—‹è½¬thetaè§’åº¦
+// hamiltonå››å…ƒæ•° https://blog.csdn.net/gyxx1998/article/details/119636130
 inline static Mat4x4f matrix_set_rotate(float x, float y, float z, float theta) {
 	float qsin = (float)sin(theta * 0.5f);
 	float qcos = (float)cos(theta * 0.5f);
@@ -129,17 +129,17 @@ inline static Mat4x4f matrix_set_rotate(float x, float y, float z, float theta) 
 	return m;
 }
 
-//ËÆºõ¶à´Î¼ÆËãÁË?
-//Ê¹ÓÃÓÒÊÖ×ø±êÏµ
-//¹Û²ì±ä»»¾ØÕó
-//1. ´ÓÔ­µãÒÆµ½Ïà»úÎ»ÖÃ
-//2. Ğı×ª¾ØÕó,¿´ÏòÏà»úµ±Ç°·½Ïò
-//3. ÇóÄæ
+//ä¼¼ä¹å¤šæ¬¡è®¡ç®—äº†?
+//ä½¿ç”¨å³æ‰‹åæ ‡ç³»
+//è§‚å¯Ÿå˜æ¢çŸ©é˜µ
+//1. ä»åŸç‚¹ç§»åˆ°ç›¸æœºä½ç½®
+//2. æ—‹è½¬çŸ©é˜µ,çœ‹å‘ç›¸æœºå½“å‰æ–¹å‘
+//3. æ±‚é€†
 inline static Mat4x4f matrix_look_at(const Vec3f& camera_position, const Vec3f& target, const Vec3f& up) {
-	const Vec3f axis_v = NormalizeVector(target - camera_position);	// Ïà»úÊÓ½Ç³¯Ïò
-	const Vec3f axis_r = NormalizeVector(vector_cross(axis_v, up));	// Ïà»úÓÒ²à
-	const Vec3f axis_u = vector_cross(axis_r, axis_v);					// Ïà»úÉÏ·½
-	const Vec3f translate = camera_position;							// Æ½ÒÆÏòÁ¿
+	const Vec3f axis_v = NormalizeVector(target - camera_position);	// ç›¸æœºè§†è§’æœå‘
+	const Vec3f axis_r = NormalizeVector(vector_cross(axis_v, up));	// ç›¸æœºå³ä¾§
+	const Vec3f axis_u = vector_cross(axis_r, axis_v);					// ç›¸æœºä¸Šæ–¹
+	const Vec3f translate = camera_position;							// å¹³ç§»å‘é‡
 
 	Mat4x4f m;
 
@@ -150,10 +150,10 @@ inline static Mat4x4f matrix_look_at(const Vec3f& camera_position, const Vec3f& 
 	return m;
 }
 /*
-	¼ÆËãÕı½»Í¶Ó°¾ØÕó (Ïà»ú¿´Ïò-z·½Ïò£¬ÓÒÊÖ×ø±êÏµ) ÕâÀïÊÇdxµÄÕı½»Í¶Ó°¾ØÕó,Ñ¹Ëõµ½0,1
+	è®¡ç®—æ­£äº¤æŠ•å½±çŸ©é˜µ (ç›¸æœºçœ‹å‘-zæ–¹å‘ï¼Œå³æ‰‹åæ ‡ç³») è¿™é‡Œæ˜¯dxçš„æ­£äº¤æŠ•å½±çŸ©é˜µ,å‹ç¼©åˆ°0,1
 
-	¹Û²â¿Õ¼ä×ó²àÎª×óÆ½ÃæÎªl,ÓÒÆ½ÃæÎªr£¬ÉÏÎªt£¬ÏÂÎªb£¬½üÎªn£¬Ô¶Îªf
-	ÔòÕı½»Í¶Ó°¾ØÕóÎª£º
+	è§‚æµ‹ç©ºé—´å·¦ä¾§ä¸ºå·¦å¹³é¢ä¸ºl,å³å¹³é¢ä¸ºrï¼Œä¸Šä¸ºtï¼Œä¸‹ä¸ºbï¼Œè¿‘ä¸ºnï¼Œè¿œä¸ºf
+	åˆ™æ­£äº¤æŠ•å½±çŸ©é˜µä¸ºï¼š
 	2/(r-l)	0		0			-(r+l)/(r-l)
 	0		2/(t-b)	0			-(t+b)/(t-b)
 	0		0		1/(f-n)		-n/(f-n)
@@ -174,13 +174,13 @@ inline static Mat4x4f matrix_set_orthograhpic(float right, float left, float top
 }
 
 /*
-*	ÕâÀï¼Ù¶¨ÉÏÏÂ×óÓÒ¶Ô³Æ,ËùÒÔºÜ¶àÎ»ÖÃ±äÎª0
-	¼ÆËãÍ¸ÊÓÍ¶Ó°¾ØÕó (Ïà»ú¿´Ïò-z·½Ïò£¬ÓÒÊÖ×ø±êÏµ)
-	ºËĞÄË¼Ïë¼ûGAMES101£¬ÏÈ°ÑÊÓ×µÌåÑ¹Ëõ³ÉÒ»¸ö³¤·½Ìå£¬È»ºóÔÙ¿´³ÉÕı½»Í¶Ó°
+*	è¿™é‡Œå‡å®šä¸Šä¸‹å·¦å³å¯¹ç§°,æ‰€ä»¥å¾ˆå¤šä½ç½®å˜ä¸º0
+	è®¡ç®—é€è§†æŠ•å½±çŸ©é˜µ (ç›¸æœºçœ‹å‘-zæ–¹å‘ï¼Œå³æ‰‹åæ ‡ç³»)
+	æ ¸å¿ƒæ€æƒ³è§GAMES101ï¼Œå…ˆæŠŠè§†æ¤ä½“å‹ç¼©æˆä¸€ä¸ªé•¿æ–¹ä½“ï¼Œç„¶åå†çœ‹æˆæ­£äº¤æŠ•å½±
 	M_persp = M_ortho * T
-	fovÊÇ½Ç¶È£¬Í¨³£±íÊ¾ÉÏÏÂµÄ¼Ğ½Ç¡£
-	ÁíÍâĞèÒª×¢ÒâµÄÊÇ£¬Ê¹ÓÃ·´Ïòzbuffer£¬²ÉÓÃDirectXÖĞµÄÉèÖÃ£¬½«zÓ³Éäµ½[0,1]ÖĞ
-	ÔòÍ¸ÊÓÍ¶Ó°¾ØÕóÎª£º
+	fovæ˜¯è§’åº¦ï¼Œé€šå¸¸è¡¨ç¤ºä¸Šä¸‹çš„å¤¹è§’ã€‚
+	å¦å¤–éœ€è¦æ³¨æ„çš„æ˜¯ï¼Œä½¿ç”¨åå‘zbufferï¼Œé‡‡ç”¨DirectXä¸­çš„è®¾ç½®ï¼Œå°†zæ˜ å°„åˆ°[0,1]ä¸­
+	åˆ™é€è§†æŠ•å½±çŸ©é˜µä¸ºï¼š
   1/(aspect*tan(fovy/2))              0             0           0
 					   0  1/tan(fovy/2)             0           0
 					   0              0		  f/(n-f)     fn/(n-f)
@@ -204,14 +204,14 @@ inline static Mat4x4f matrix_set_perspective(float fov, const float aspect, cons
 
 
 /*
-* ±ğ¹ÜÔ­Àí
-	¸ù¾İTBN¾ØÕó¼ÆËãÈÅ¶¯·¨Ïß
+* åˆ«ç®¡åŸç†
+	æ ¹æ®TBNçŸ©é˜µè®¡ç®—æ‰°åŠ¨æ³•çº¿
 	t.x		t.y		t.z		0
 	b.x		b.y		b.z		0
 	n.x		n.y		n.z		0
 	0		0		0		1
 
-	TBN¾ØÕóÊÇÕı½»¾ØÕó£ºÄæ¾ØÕó = ×ªÖÃ¾ØÕó
+	TBNçŸ©é˜µæ˜¯æ­£äº¤çŸ©é˜µï¼šé€†çŸ©é˜µ = è½¬ç½®çŸ©é˜µ
 	TBN * tangent_ws = tangent_os
 	tangent_ws = matrix_invert(TBN) * tangent_os
 */

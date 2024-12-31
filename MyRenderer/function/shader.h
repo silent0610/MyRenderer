@@ -1,49 +1,49 @@
-#pragma once
+ï»¿#pragma once
 #include  <map>
 #include  <functional>
 #include "../core/window.h"
 #include "../resources/model.h"
 
-/// @brief ±£´æÁËäÖÈ¾µ¥¸öÄ£ĞÍËùĞèµÄÊı¾İ, Èç¹ûÒªÊÊÓ¦¶àÎïÌåĞèÒªÒ»¶¨ĞŞ¸Ä
+/// @brief ä¿å­˜äº†æ¸²æŸ“å•ä¸ªæ¨¡å‹æ‰€éœ€çš„æ•°æ®, å¦‚æœè¦é€‚åº”å¤šç‰©ä½“éœ€è¦ä¸€å®šä¿®æ”¹
 struct UniformBuffer
 {
-	Mat4x4f model_matrix;		// Ä£ĞÍ±ä»»¾ØÕó
-	Mat4x4f view_matrix;		// ¹Û²ì±ä»»¾ØÕó
-	Mat4x4f proj_matrix;		// Í¶Ó°±ä»»¾ØÕó
-	Mat4x4f mvp_matrix;			// MVP±ä»»¾ØÕó
-	Mat4x4f normal_matrix;		// ·¨Ïß±ä»»¾ØÕó
+	Mat4x4f model_matrix;		// æ¨¡å‹å˜æ¢çŸ©é˜µ
+	Mat4x4f view_matrix;		// è§‚å¯Ÿå˜æ¢çŸ©é˜µ
+	Mat4x4f proj_matrix;		// æŠ•å½±å˜æ¢çŸ©é˜µ
+	Mat4x4f mvp_matrix;			// MVPå˜æ¢çŸ©é˜µ
+	Mat4x4f normal_matrix;		// æ³•çº¿å˜æ¢çŸ©é˜µ
 
-	/// @brief ¼ÆËã¾ØÕó ,°üÀ¨mvp¾ØÕó,
+	/// @brief è®¡ç®—çŸ©é˜µ ,åŒ…æ‹¬mvpçŸ©é˜µ,
 	void CalculateRestMatrix()
 	{
 		mvp_matrix = proj_matrix * view_matrix * model_matrix;
 
-		// ÓÃÓÚ½«·¨Ïß´ÓÄ£ĞÍ¿Õ¼ä±ä»»µ½ÊÀ½ç¿Õ¼ä
-		// Ê¹ÓÃÔ­Ê¼±ä»»¾ØÕóµÄÄæ×ªÖÃ¾ØÕó
-		// ¹«Ê½ÍÆµ¼ https://blog.csdn.net/weixin_44350205/article/details/105804964
+		// ç”¨äºå°†æ³•çº¿ä»æ¨¡å‹ç©ºé—´å˜æ¢åˆ°ä¸–ç•Œç©ºé—´
+		// ä½¿ç”¨åŸå§‹å˜æ¢çŸ©é˜µçš„é€†è½¬ç½®çŸ©é˜µ
+		// å…¬å¼æ¨å¯¼ https://blog.csdn.net/weixin_44350205/article/details/105804964
 		normal_matrix = matrix_invert(model_matrix).Transpose();
 	}
 
-	// ¹âÕÕÊı¾İ
-	Vec3f light_direction;		// ¹âÕÕ·½Ïò£¬´Ó×ÅÉ«µãÖ¸Ïò¹âÔ´
-	Vec3f light_color;			// ¹âÕÕÑÕÉ«
-	Vec3f camera_position;		// Ïà»ú·½Ïò
+	// å…‰ç…§æ•°æ®
+	Vec3f light_direction;		// å…‰ç…§æ–¹å‘ï¼Œä»ç€è‰²ç‚¹æŒ‡å‘å…‰æº
+	Vec3f light_color;			// å…‰ç…§é¢œè‰²
+	Vec3f camera_position;		// ç›¸æœºæ–¹å‘
 
 };
 
 
-/// @brief Ä£·Â¶¥µã×ÅÉ«Æ÷ºÍÏñËØ×ÅÉ«Æ÷, ¶¥µã×ÅÉ«Êä³ö¶¥µã, ¾­¹ı¹âÕ¤»¯²åÖµ, ÊäÈëÏñËØ×ÅÉ«Æ÷Êä³öÏñËØ
-/// ÕâÀïÕâÃ´Éè¼ÆÊÇÒòÎª¶àÌ¬, vertexshaderÊÇĞéº¯Êı, Ã¿¸öshaderÀàµÄoutputÄÚÈİ²»Í¬,
-/// ÕâÑù¿ÉÒÔÍ³Ò»Ê¹ÓÃÏàÍ¬µÄVarings½á¹¹Ìå
+/// @brief æ¨¡ä»¿é¡¶ç‚¹ç€è‰²å™¨å’Œåƒç´ ç€è‰²å™¨, é¡¶ç‚¹ç€è‰²è¾“å‡ºé¡¶ç‚¹, ç»è¿‡å…‰æ …åŒ–æ’å€¼, è¾“å…¥åƒç´ ç€è‰²å™¨è¾“å‡ºåƒç´ 
+/// è¿™é‡Œè¿™ä¹ˆè®¾è®¡æ˜¯å› ä¸ºå¤šæ€, vertexshaderæ˜¯è™šå‡½æ•°, æ¯ä¸ªshaderç±»çš„outputå†…å®¹ä¸åŒ,
+/// è¿™æ ·å¯ä»¥ç»Ÿä¸€ä½¿ç”¨ç›¸åŒçš„Varingsç»“æ„ä½“
 struct Varyings
 {
-	std::map<int, float> varying_float;    // ¸¡µãÊı varying ÁĞ±í
-	std::map<int, Vec2f> varying_vec2f;    // ¶şÎ¬Ê¸Á¿ varying ÁĞ±í
-	std::map<int, Vec3f> varying_vec3f;    // ÈıÎ¬Ê¸Á¿ varying ÁĞ±í
-	std::map<int, Vec4f> varying_vec4f;    // ËÄÎ¬Ê¸Á¿ varying ÁĞ±í
+	std::map<int, float> varying_float;    // æµ®ç‚¹æ•° varying åˆ—è¡¨
+	std::map<int, Vec2f> varying_vec2f;    // äºŒç»´çŸ¢é‡ varying åˆ—è¡¨
+	std::map<int, Vec3f> varying_vec3f;    // ä¸‰ç»´çŸ¢é‡ varying åˆ—è¡¨
+	std::map<int, Vec4f> varying_vec4f;    // å››ç»´çŸ¢é‡ varying åˆ—è¡¨
 };
 
-/// @brief ×ÅÉ«Æ÷ÀàĞÍ
+/// @brief ç€è‰²å™¨ç±»å‹
 enum ShaderType
 {
 	kBlinnPhongShader,
@@ -52,16 +52,16 @@ enum ShaderType
 };
 
 
-/// @brief ¶¥µã×ÅÉ«Æ÷£º·µ»Ø¶¥µãµÄ²Ã¼ô¿Õ¼ä×ø±ê 
-/// VertexShader ÊÇÒ»¸öÀàĞÍ£¬´ú±íÒ»¸ö½ÓÊÜÁ½¸ö²ÎÊı²¢·µ»ØÒ»¸ö Vec4f ÀàĞÍµÄº¯Êı¡£
+/// @brief é¡¶ç‚¹ç€è‰²å™¨ï¼šè¿”å›é¡¶ç‚¹çš„è£å‰ªç©ºé—´åæ ‡ 
+/// VertexShader æ˜¯ä¸€ä¸ªç±»å‹ï¼Œä»£è¡¨ä¸€ä¸ªæ¥å—ä¸¤ä¸ªå‚æ•°å¹¶è¿”å›ä¸€ä¸ª Vec4f ç±»å‹çš„å‡½æ•°ã€‚
 typedef std::function<Vec4f(int index, Varyings& output)> VertexShader;
 
-// ÏñËØ×ÅÉ«Æ÷£º·µ»ØÏñËØµÄÑÕÉ«
+// åƒç´ ç€è‰²å™¨ï¼šè¿”å›åƒç´ çš„é¢œè‰²
 typedef std::function<Vec4f(Varyings& input)> PixelShader;
 
-/// Ñ§³¤ÎÒÏëÎÊÒ»ÏÂ, ÎÒ¸ÕĞ´µ½shaderÕâÀï, ²»ÊÇºÜÇå³şÕâÀïÎªÊ²Ã´ÒªÕâÃ´Éè¼ÆÒ»¸öº¯ÊıÖ¸Õë, 
-/// ÎªÊ²Ã´Òª¶à·â×°Ò»²ã, ÊÇ¿ÉÒÔ·½±ãÇĞ»»ShaderÂğ(²»ÄÜÖ±½Óµ÷ÓÃĞéº¯Êı)?
-//×ÅÉ«Ä£ĞÍ
+/// å­¦é•¿æˆ‘æƒ³é—®ä¸€ä¸‹, æˆ‘åˆšå†™åˆ°shaderè¿™é‡Œ, ä¸æ˜¯å¾ˆæ¸…æ¥šè¿™é‡Œä¸ºä»€ä¹ˆè¦è¿™ä¹ˆè®¾è®¡ä¸€ä¸ªå‡½æ•°æŒ‡é’ˆ, 
+/// ä¸ºä»€ä¹ˆè¦å¤šå°è£…ä¸€å±‚, æ˜¯å¯ä»¥æ–¹ä¾¿åˆ‡æ¢Shaderå—(ä¸èƒ½ç›´æ¥è°ƒç”¨è™šå‡½æ•°)?
+//ç€è‰²æ¨¡å‹
 class Shader
 {
 public:
@@ -72,9 +72,9 @@ public:
 	VertexShader vertex_shader_;
 	PixelShader pixel_shader_;
 
-	Window* window_;				// ÓÃÓÚ»ñÈ¡°´¼üÊÂ¼ş£¬Õ¹Ê¾²ÄÖÊÃæ°å?
+	Window* window_;				// ç”¨äºè·å–æŒ‰é”®äº‹ä»¶ï¼Œå±•ç¤ºæè´¨é¢æ¿?
 
-	/// @brief ÓÉ×ÓÀàÊµÏÖ,µ½Ê±ºòÊ¹ÓÃShaderµÄÖ¸ÕëÖ¸Ïò¸÷¸ö×ÓÀà,·½±ãshaderÇĞ»»?
+	/// @brief ç”±å­ç±»å®ç°,åˆ°æ—¶å€™ä½¿ç”¨Shaderçš„æŒ‡é’ˆæŒ‡å‘å„ä¸ªå­ç±»,æ–¹ä¾¿shaderåˆ‡æ¢?
 	/// @param index 
 	/// @param output 
 	/// @return 
@@ -89,7 +89,7 @@ public:
 		attributes_ = new Attribute[3];
 		window_ = Window::GetInstance();
 
-		// lambda º¯Êı, µ÷ÓÃ×ÓÀà¸÷×ÔÊµÏÖµÄ¶¥µã×ÅÉ«Æ÷ºÍÏñËØ×ÅÉ«Æ÷
+		// lambda å‡½æ•°, è°ƒç”¨å­ç±»å„è‡ªå®ç°çš„é¡¶ç‚¹ç€è‰²å™¨å’Œåƒç´ ç€è‰²å™¨
 		vertex_shader_ = [&](const int index, Varyings& output)->Vec4f
 			{
 				return VertexShaderFunction(index, output);
@@ -107,22 +107,22 @@ public:
 	BlinnPhongShader(UniformBuffer* uniform_buffer) : Shader(uniform_buffer) {};
 	Vec4f VertexShaderFunction(int index, Varyings& output) const override;
 	Vec4f PixelShaderFunction(Varyings& input) const override;
-	/// @brief ´¦ÀíÊÂ¼ş
+	/// @brief å¤„ç†äº‹ä»¶
 	void HandleKeyEvents() override;
 
-	/// @brief ÌØ¶¨ÊôĞÔµÄÃ¶¾ÙÀàĞÍ,ĞèÒª½áºÏ varying½á¹¹ÌåÀ´Àí½â, ÎªÁË¶àÌ¬
+	/// @brief ç‰¹å®šå±æ€§çš„æšä¸¾ç±»å‹,éœ€è¦ç»“åˆ varyingç»“æ„ä½“æ¥ç†è§£, ä¸ºäº†å¤šæ€
 	enum VaryingAttributes
 	{
-		VARYING_TEXCOORD = 0,			// ÎÆÀí×ø±ê
-		VARYING_POSITION_WS = 1,		// ÊÀ½ç¿Õ¼ä×ø±ê
-		VARYING_NORMAL_WS = 2,			// ÊÀ½ç¿Õ¼ä·¨Ïß
-		VARYING_TANGENT_WS = 3			// ÊÀ½ç¿Õ¼äÇĞÏß
+		VARYING_TEXCOORD = 0,			// çº¹ç†åæ ‡
+		VARYING_POSITION_WS = 1,		// ä¸–ç•Œç©ºé—´åæ ‡
+		VARYING_NORMAL_WS = 2,			// ä¸–ç•Œç©ºé—´æ³•çº¿
+		VARYING_TANGENT_WS = 3			// ä¸–ç•Œç©ºé—´åˆ‡çº¿
 	};
 
-	/// @brief ÓÃÓÚÇĞ»»ÑÕÉ«Ä£Ê½, ¼üÅÌÊäÈë
+	/// @brief ç”¨äºåˆ‡æ¢é¢œè‰²æ¨¡å¼, é”®ç›˜è¾“å…¥
 	enum MaterialInspector
 	{
-		kMaterialInspectorShaded = '1',//¼üÅÌµÄ1
+		kMaterialInspectorShaded = '1',//é”®ç›˜çš„1
 		kMaterialInspectorBaseColor,
 		kMaterialInspectorNormal,
 		kMaterialInspectorWorldPosition,
@@ -141,17 +141,17 @@ public:
 		"Diffuse",
 		"Specular"
 	};
-	/// @brief ²»Çå³ş×÷ÓÃ
+	/// @brief ä¸æ¸…æ¥šä½œç”¨
 	MaterialInspector material_inspector_;
 };
 
-/// @brief PBR¹âÕÕÄ£ĞÍ£¬Ê¹ÓÃmetallic¹¤×÷Á÷
-/// final ±íÊ¾Õâ¸öÀà ²»ÄÜ±»¼Ì³Ğ
+/// @brief PBRå…‰ç…§æ¨¡å‹ï¼Œä½¿ç”¨metallicå·¥ä½œæµ
+/// final è¡¨ç¤ºè¿™ä¸ªç±» ä¸èƒ½è¢«ç»§æ‰¿
 class PBRShader final :public Shader
 {
 public:
 	PBRShader(UniformBuffer*uniform_buffer):Shader(uniform_buffer){
-		// ·Ç½ğÊôµÄF0ÖµÄ¬ÈÏÎª 0.04 , ÎÒ¼ÇµÃ×îµÍÉèÖÃÎª0.04
+		// éé‡‘å±çš„F0å€¼é»˜è®¤ä¸º 0.04 , æˆ‘è®°å¾—æœ€ä½è®¾ç½®ä¸º0.04
 		dielectric_f0_ = Vec3f(0.04f);
 		material_inspector_ = kMaterialInspectorShaded;
 
@@ -164,10 +164,10 @@ public:
 
 	enum VaryingAttributes
 	{
-		VARYING_TEXCOORD = 0,			// ÎÆÀí×ø±ê
-		VARYING_POSITION_WS = 1,		// ÊÀ½ç¿Õ¼ä×ø±ê
-		VARYING_NORMAL_WS = 2,			// ÊÀ½ç¿Õ¼ä·¨Ïß
-		VARYING_TANGENT_WS = 3			// ÊÀ½ç¿Õ¼äÇĞÏß
+		VARYING_TEXCOORD = 0,			// çº¹ç†åæ ‡
+		VARYING_POSITION_WS = 1,		// ä¸–ç•Œç©ºé—´åæ ‡
+		VARYING_NORMAL_WS = 2,			// ä¸–ç•Œç©ºé—´æ³•çº¿
+		VARYING_TANGENT_WS = 3			// ä¸–ç•Œç©ºé—´åˆ‡çº¿
 	};
 
 	enum MaterialInspector
@@ -213,17 +213,17 @@ public:
 
 	enum VaryingAttributes
 	{
-		VARYING_POSITION_WS = 0,		// ÊÀ½ç¿Õ¼ä×ø±ê
+		VARYING_POSITION_WS = 0,		// ä¸–ç•Œç©ºé—´åæ ‡
 	};
 
 	CubeMap* skybox_cubemap_;
 
 	/// @brief ???
 	std::vector<Vec3f> plane_vertex_ = {
-		{0.5f,0.5f,0.5f},			// ÓÒÉÏ½Ç
-		{-0.5f,0.5f,0.5f},			// ×óÉÏ½Ç
-		{-0.5f,-0.5f,0.5f},		// ×óÏÂ½Ç
-		{0.5f,-0.5f,0.5f} };		// ÓÒÏÂ½Ç
+		{0.5f,0.5f,0.5f},			// å³ä¸Šè§’
+		{-0.5f,0.5f,0.5f},			// å·¦ä¸Šè§’
+		{-0.5f,-0.5f,0.5f},		// å·¦ä¸‹è§’
+		{0.5f,-0.5f,0.5f} };		// å³ä¸‹è§’
 
 	std::vector<int> plane_index_ = { 0,1,2,     0,2,3 };
 };

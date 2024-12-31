@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <tchar.h>   
 #include <iostream>
@@ -13,37 +13,37 @@
 using std::string;
 using std::ifstream;
 
-#pragma region ÎÄ¼ş²Ù×÷
+#pragma region æ–‡ä»¶æ“ä½œ
 
-//»ñÈ¡ÎÄ¼şºó×º ´ø'.' ÀıÈç'.txt'
+//è·å–æ–‡ä»¶åç¼€ å¸¦'.' ä¾‹å¦‚'.txt'
 inline std::string GetFileExtension(const std::string& file_name)
 {
-    //file_name.substr(k)£º´ÓÕÒµ½µÄkÎ»ÖÃ¿ªÊ¼£¬ÌáÈ¡×Ó×Ö·û´®£¬Õâ¸ö×Ó×Ö·û´®¾ÍÊÇÎÄ¼şµÄºó×º
+    //file_name.substr(k)ï¼šä»æ‰¾åˆ°çš„kä½ç½®å¼€å§‹ï¼Œæå–å­å­—ç¬¦ä¸²ï¼Œè¿™ä¸ªå­å­—ç¬¦ä¸²å°±æ˜¯æ–‡ä»¶çš„åç¼€
     string suffix_str = file_name.substr(file_name.find_last_of('.'));
     return suffix_str;
 }
-// »ñÈ¡ÎÄ¼şµÄÃû³Æ£¬Ã»ÓĞºó×ººÍÂ·¾¶
+// è·å–æ–‡ä»¶çš„åç§°ï¼Œæ²¡æœ‰åç¼€å’Œè·¯å¾„
 inline std::string GetFileNameWithoutExtension(const std::string& file_name)
 {
-    const std::string::size_type i_pos = file_name.find_last_of('/') + 1; //È¥µôÂ·¾¶ ÕÒµ½×îºóÒ»¸ö/µÄÎ»ÖÃ+1,¼´ÎÄ¼şÃûµÄÆğÊ¼Î»ÖÃ
-    std::string file_name_with_extension = file_name.substr(i_pos, file_name.length() - i_pos);//ÌáÈ¡ÎÄ¼şÃû,´øºó×º
-    std::string suffix_str = file_name_with_extension.substr(0, file_name_with_extension.rfind("."));;//È¥µôºó×º ´ÓÓÒÍù×órfindÕÒµ½µÚÒ»¸ö'.'
+    const std::string::size_type i_pos = file_name.find_last_of('/') + 1; //å»æ‰è·¯å¾„ æ‰¾åˆ°æœ€åä¸€ä¸ª/çš„ä½ç½®+1,å³æ–‡ä»¶åçš„èµ·å§‹ä½ç½®
+    std::string file_name_with_extension = file_name.substr(i_pos, file_name.length() - i_pos);//æå–æ–‡ä»¶å,å¸¦åç¼€
+    std::string suffix_str = file_name_with_extension.substr(0, file_name_with_extension.rfind("."));;//å»æ‰åç¼€ ä»å³å¾€å·¦rfindæ‰¾åˆ°ç¬¬ä¸€ä¸ª'.'
     return  suffix_str;
 }
-// »ñÈ¡ÎÄ¼şËùÔÚµÄÎÄ¼ş¼Ğ£¬½áÎ²Ã»ÓĞ"/"
+// è·å–æ–‡ä»¶æ‰€åœ¨çš„æ–‡ä»¶å¤¹ï¼Œç»“å°¾æ²¡æœ‰"/"
 inline std::string GetFileFolder(const std::string& file_name)
 {
-    const std::string::size_type i_pos = file_name.find_last_of('/');//ÕÒµ½×îºóÒ»¸ö'/'µÄÎ»ÖÃ
+    const std::string::size_type i_pos = file_name.find_last_of('/');//æ‰¾åˆ°æœ€åä¸€ä¸ª'/'çš„ä½ç½®
     std::string file_folder = file_name.substr(0, i_pos);
     return  file_folder;
 }
 
-// ÔÚÖ¸¶¨ÎÄ¼ş¼ĞÖĞ¼ìË÷Ãû×ÖÖĞ°üº¬file_nameµÄÎÄ¼ş£¬²¢·µ»ØÍêÕûÂ·¾¶
+// åœ¨æŒ‡å®šæ–‡ä»¶å¤¹ä¸­æ£€ç´¢åå­—ä¸­åŒ…å«file_nameçš„æ–‡ä»¶ï¼Œå¹¶è¿”å›å®Œæ•´è·¯å¾„
 inline std::string GetFilePathByFileName(const std::string& file_folder, const std::string& file_name)
 {
-    //ÎÄ¼ş¾ä±ú    
+    //æ–‡ä»¶å¥æŸ„    
     long long h_file;
-    //ÎÄ¼şĞÅÏ¢    
+    //æ–‡ä»¶ä¿¡æ¯    
     struct _finddata_t file_info;
 
     std::string file_full_path;
@@ -66,7 +66,7 @@ inline std::string GetFilePathByFileName(const std::string& file_folder, const s
     return  file_full_path;
 }
 
-// ÅĞ¶ÏÎÄ¼şÊÇ·ñ´æÔÚ
+// åˆ¤æ–­æ–‡ä»¶æ˜¯å¦å­˜åœ¨
 inline bool CheckFileExist(const std::string& file_name)
 {
     std::ifstream f(file_name.c_str());
@@ -75,7 +75,7 @@ inline bool CheckFileExist(const std::string& file_name)
 #pragma  endregion
 
 #pragma  region cmgen 
-//cmgenÓÃÓÚÉú³ÉÌì¿ÕºĞºÍIBLµÈ
+//cmgenç”¨äºç”Ÿæˆå¤©ç©ºç›’å’ŒIBLç­‰
 inline void ExecuteProcess(const std::string& command_str)
 {
     STARTUPINFO si;
@@ -98,7 +98,7 @@ inline void ExecuteProcess(const std::string& command_str)
         &pi)			// Pointer to PROCESS_INFORMATION structure
         )
     {
-        std::cout << "Ö´ĞĞÃüÁîÊ§°Ü£º" + command_str << std::endl;
+        std::cout << "æ‰§è¡Œå‘½ä»¤å¤±è´¥ï¼š" + command_str << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -111,7 +111,7 @@ inline void ExecuteProcess(const std::string& command_str)
 }
 
 
-/// @brief µ÷ÓÃcmgenÉú³ÉÌì¿ÕºĞµÄÌùÍ¼,°üÀ¨irradianceºÍspecularºÍlut
+/// @brief è°ƒç”¨cmgenç”Ÿæˆå¤©ç©ºç›’çš„è´´å›¾,åŒ…æ‹¬irradianceå’Œspecularå’Œlut
 /// @param skybox_path 
 inline void GenerateCubeMap(std::string skybox_path)
 {
@@ -120,7 +120,7 @@ inline void GenerateCubeMap(std::string skybox_path)
     std::string output_path = GetFileFolder(skybox_path);
     std::string skybox_file_name = GetFileNameWithoutExtension(skybox_path);
 
-    //ÈıÌõÃüÁî
+    //ä¸‰æ¡å‘½ä»¤
     std::string irradiance_command = cmgen_path + " --format=hdr --ibl-irradiance=" + output_path + " " + skybox_path;
     std::string specular_command = cmgen_path + " --format=hdr --size=512 --ibl-ld=" + output_path + " " + skybox_path;
     std::string lut_command = cmgen_path + " --ibl-dfg=" + output_path + "/" + skybox_file_name + "/brdf_lut.hdr";

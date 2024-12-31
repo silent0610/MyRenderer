@@ -1,19 +1,19 @@
-#pragma once
+ï»¿#pragma once
 #include "../core/math.h"
 #include <string>
 
 
-// ÌùÍ¼ÀàµÄÉùÃ÷
-// µ¥ÕÅÎÆÀíÌùÍ¼£¬Á¢·½ÌåÌùÍ¼£¬Ô¤¹ıÂËµÄ»·¾³ÌùÍ¼£¬IBLÌùÍ¼µÈµÈ
+// è´´å›¾ç±»çš„å£°æ˜
+// å•å¼ çº¹ç†è´´å›¾ï¼Œç«‹æ–¹ä½“è´´å›¾ï¼Œé¢„è¿‡æ»¤çš„ç¯å¢ƒè´´å›¾ï¼ŒIBLè´´å›¾ç­‰ç­‰
 
 enum TextureType
 {
-	kTextureTypeBaseColor, // »ù´¡ÑÕÉ«ÌùÍ¼
-	kTextureTypeNormal, // ·¨ÏßÌùÍ¼
-	kTextureTypeRoughness, // ´Ö²Ú¶ÈÌùÍ¼
-	kTextureTypeMetallic, // ½ğÊô¶ÈÌùÍ¼
-	kTextureTypeOcclusion, // ÕÚµ²ÌùÍ¼
-	kTextureTypeEmission // ×Ô·¢¹âÌùÍ¼
+	kTextureTypeBaseColor, // åŸºç¡€é¢œè‰²è´´å›¾
+	kTextureTypeNormal, // æ³•çº¿è´´å›¾
+	kTextureTypeRoughness, // ç²—ç³™åº¦è´´å›¾
+	kTextureTypeMetallic, // é‡‘å±åº¦è´´å›¾
+	kTextureTypeOcclusion, // é®æŒ¡è´´å›¾
+	kTextureTypeEmission // è‡ªå‘å…‰è´´å›¾
 };
 
 class Texture
@@ -22,21 +22,21 @@ public:
 	Texture(const std::string& file_name);
 	~Texture();
 
-	// ²ÉÑùº¯Êı
+	// é‡‡æ ·å‡½æ•°
 	Vec4f Sample2D(float u, float v)const;
 	Vec4f Sample2D(Vec2f uv) const;
 	
-	int texture_width_;					// ÎÆÀí¿í¶È
-	int texture_height_;				// ÎÆÀí¸ß¶È
-	int texture_channels_;				// ÎÆÀíÍ¨µÀÊı
+	int texture_width_;					// çº¹ç†å®½åº¦
+	int texture_height_;				// çº¹ç†é«˜åº¦
+	int texture_channels_;				// çº¹ç†é€šé“æ•°
 
-	bool has_data_;						// ÊÇ·ñ´æÔÚÊı¾İ£¬¼´ÊÇ·ñ³É¹¦¼ÓÔØÌùÍ¼
-	unsigned char* texture_data_;		// Êµ¼ÊµÄÍ¼ÏñÊı¾İ
+	bool has_data_;						// æ˜¯å¦å­˜åœ¨æ•°æ®ï¼Œå³æ˜¯å¦æˆåŠŸåŠ è½½è´´å›¾
+	unsigned char* texture_data_;		// å®é™…çš„å›¾åƒæ•°æ®
 private:
 	ColorRGBA GetPixelColor(int x, int y) const;
-	ColorRGBA SampleBilinear(float x, float y) const;// Ë«ÏßĞÔ²ÉÑù,Ê¹ÓÃË«ÏßĞÔ²åÖµº¯Êı
+	ColorRGBA SampleBilinear(float x, float y) const;// åŒçº¿æ€§é‡‡æ ·,ä½¿ç”¨åŒçº¿æ€§æ’å€¼å‡½æ•°
 	
-	// Ë«ÏßĞÔ²åÖµ
+	// åŒçº¿æ€§æ’å€¼
 	static ColorRGBA BilinearInterpolation(const ColorRGBA& color00, const ColorRGBA& color01, const ColorRGBA& color10, const ColorRGBA& color11, float t_x, float t_y);
 
 };
@@ -50,9 +50,9 @@ public:
 	};
 
 	enum CubeMapType {
-		kSkyBox, // Ìì¿ÕºĞ
+		kSkyBox, // å¤©ç©ºç›’
 		kIrradianceMap, // irradiance
-		kSpecularMap, // ¾µÃæ·´Éä
+		kSpecularMap, // é•œé¢åå°„
 	};
 
 	CubeMap(const std::string& file_name, CubeMapType cube_map_type, int mipmap_level=0);
@@ -61,12 +61,12 @@ public:
 	Vec3f Sample(Vec3f& direction)const;
 	static CubeMapUV& CalculateCubeMapUV(const Vec3f& direction);
 
-	Texture* cubemap_[6]; // 6¸öÃæµÄÌùÍ¼,Ö¸ÕëÊı×é
+	Texture* cubemap_[6]; // 6ä¸ªé¢çš„è´´å›¾,æŒ‡é’ˆæ•°ç»„
 	CubeMapType cube_map_type_;
 
 };
 
-// Ô¤¹ıÂËµÄ»·¾³ÌùÍ¼ ¸ß¹â?
+// é¢„è¿‡æ»¤çš„ç¯å¢ƒè´´å›¾ é«˜å…‰?
 class SpecularCubeMap
 {
 public:
@@ -74,11 +74,11 @@ public:
 
 	static constexpr int max_mipmap_level_ = 10;
 	
-	CubeMap* prefilter_maps_[max_mipmap_level_];//Êı×éÖ¸Õë
+	CubeMap* prefilter_maps_[max_mipmap_level_];//æ•°ç»„æŒ‡é’ˆ
 
 };
 
-// ÓÃIBL ÊµÏÖÌì¿ÕºĞ£¬Ìì¿ÕºĞ»á°üÀ¨skyboxÁ¢·½ÌåÌùÍ¼£¬irradianceÁ¢·½ÌåÌùÍ¼£¬ºÍspecularÁ¢·½ÌåÌùÍ¼
+// ç”¨IBL å®ç°å¤©ç©ºç›’ï¼Œå¤©ç©ºç›’ä¼šåŒ…æ‹¬skyboxç«‹æ–¹ä½“è´´å›¾ï¼Œirradianceç«‹æ–¹ä½“è´´å›¾ï¼Œå’Œspecularç«‹æ–¹ä½“è´´å›¾
 class IBLMap
 {
 

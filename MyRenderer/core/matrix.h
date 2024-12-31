@@ -1,14 +1,14 @@
-#pragma once
+ï»¿#pragma once
 
 #include "vector.h"
 
-#pragma region ¾ØÕó¶¨Òå
+#pragma region çŸ©é˜µå®šä¹‰
 
 template<size_t ROW, size_t COL, typename T>struct Matrix {
 	T m[ROW][COL];
-	inline Matrix() {}; //´ËÊ±Ã¿¸öÔªËØÎ´±»³õÊ¼»¯
+	inline Matrix() {}; //æ­¤æ—¶æ¯ä¸ªå…ƒç´ æœªè¢«åˆå§‹åŒ–
 
-	//ÏàÍ¬´óĞ¡µÄ¾ØÕó³õÊ¼»¯
+	//ç›¸åŒå¤§å°çš„çŸ©é˜µåˆå§‹åŒ–
 	inline Matrix(const Matrix<ROW, COL, T>& src) {
 		for (size_t i = 0; i < ROW; i++)
 			for (size_t j = 0; j < COL; j++)
@@ -17,7 +17,7 @@ template<size_t ROW, size_t COL, typename T>struct Matrix {
 
 	inline Matrix(const std::initializer_list<Vector<COL, T>>& matrix) {
 		auto it = matrix.begin();
-		for (size_t i = 0; i < ROW; i++) SetRow(i, *it++);  //ÓÃinitializer_list³õÊ¼»¯Ã¿Ò»ĞĞ
+		for (size_t i = 0; i < ROW; i++) SetRow(i, *it++);  //ç”¨initializer_liståˆå§‹åŒ–æ¯ä¸€è¡Œ
 	}
 
 	inline const T* operator[](size_t row)const { assert(row < ROW); return m[row]; }
@@ -46,7 +46,7 @@ template<size_t ROW, size_t COL, typename T>struct Matrix {
 		for (size_t i = 0; i < ROW; i++) m[i][col] = v[i];
 	}
 
-	// È¡µÃÉ¾³ıÄ³ĞĞºÍÄ³ÁĞµÄ×Ó¾ØÕó£º×ÓÊ½
+	// å–å¾—åˆ é™¤æŸè¡Œå’ŒæŸåˆ—çš„å­çŸ©é˜µï¼šå­å¼
 	inline Matrix<ROW - 1, COL - 1, T> GetMinor(size_t row, size_t col) const {
 		Matrix<ROW - 1, COL - 1, T> ret;
 		for (size_t r = 0; r < ROW - 1; r++) {
@@ -57,7 +57,7 @@ template<size_t ROW, size_t COL, typename T>struct Matrix {
 		return ret;
 	}
 
-	// È¡µÃ×ªÖÃ¾ØÕó
+	// å–å¾—è½¬ç½®çŸ©é˜µ
 	inline Matrix<COL, ROW, T> Transpose() const {
 		Matrix<COL, ROW, T> ret;
 		for (size_t r = 0; r < ROW; r++) {
@@ -67,7 +67,7 @@ template<size_t ROW, size_t COL, typename T>struct Matrix {
 		return ret;
 	}
 
-	// È«0¾ØÕó£¬¾²Ì¬·½·¨
+	// å…¨0çŸ©é˜µï¼Œé™æ€æ–¹æ³•
 	inline static Matrix<ROW, COL, T> GetZero() {
 		Matrix<ROW, COL, T> ret;
 		for (size_t r = 0; r < ROW; r++) {
@@ -77,7 +77,7 @@ template<size_t ROW, size_t COL, typename T>struct Matrix {
 		return ret;
 	}
 
-	// ¾²Ì¬ µ¥Î»£¨È«1£©¾ØÕó£¬ÓÉÓÚ¶şÎ¬Êı×é²»»á×Ô¼º³õÊ¼»¯,ĞèÒªÊÖ¶¯³õÊ¼»¯
+	// é™æ€ å•ä½ï¼ˆå…¨1ï¼‰çŸ©é˜µï¼Œç”±äºäºŒç»´æ•°ç»„ä¸ä¼šè‡ªå·±åˆå§‹åŒ–,éœ€è¦æ‰‹åŠ¨åˆå§‹åŒ–
 	inline static Matrix<ROW, COL, T> GetIdentity() {
 		Matrix<ROW, COL, T> ret;
 		for (size_t r = 0; r < ROW; r++) {
@@ -88,10 +88,10 @@ template<size_t ROW, size_t COL, typename T>struct Matrix {
 	}
 };
 #pragma endregion
-#pragma region ¾ØÕóÔËËã
-// ¾ØÕó²ÉÓÃĞĞÖ÷Ğò£¬¾ØÕó³Ë·¨Ê¹ÓÃ"×ó³Ë"
+#pragma region çŸ©é˜µè¿ç®—
+// çŸ©é˜µé‡‡ç”¨è¡Œä¸»åºï¼ŒçŸ©é˜µä¹˜æ³•ä½¿ç”¨"å·¦ä¹˜"
 
-// ÅĞ¶ÏÁ½¸ö¾ØÕóÊÇ·ñÏàµÈ
+// åˆ¤æ–­ä¸¤ä¸ªçŸ©é˜µæ˜¯å¦ç›¸ç­‰
 template<size_t ROW, size_t COL, typename T>
 inline bool operator == (const Matrix<ROW, COL, T>& a, const Matrix<ROW, COL, T>& b) {
 	for (size_t r = 0; r < ROW; r++)
@@ -100,7 +100,7 @@ inline bool operator == (const Matrix<ROW, COL, T>& a, const Matrix<ROW, COL, T>
 
 	return true;
 }
-// ÅĞ¶ÏÁ½¸ö¾ØÕóÊÇ·ñ²»µÈ
+// åˆ¤æ–­ä¸¤ä¸ªçŸ©é˜µæ˜¯å¦ä¸ç­‰
 template<size_t ROW, size_t COL, typename T>
 inline bool operator != (const Matrix<ROW, COL, T>& a, const Matrix<ROW, COL, T>& b) {
 	for (size_t r = 0; r < ROW; r++)
@@ -110,13 +110,13 @@ inline bool operator != (const Matrix<ROW, COL, T>& a, const Matrix<ROW, COL, T>
 	return false;
 }
 
-// ÕıºÅ
+// æ­£å·
 template<size_t ROW, size_t COL, typename T>
 inline Matrix<ROW, COL, T> operator + (const Matrix<ROW, COL, T>& src) {
 	return src;
 }
 
-// ¸ººÅ
+// è´Ÿå·
 template<size_t ROW, size_t COL, typename T>
 inline Matrix<ROW, COL, T> operator - (const Matrix<ROW, COL, T>& src) {
 	Matrix<ROW, COL, T> out;
@@ -127,7 +127,7 @@ inline Matrix<ROW, COL, T> operator - (const Matrix<ROW, COL, T>& src) {
 	return out;
 }
 
-// Á½¸öÏàÍ¬´óĞ¡µÄ¾ØÕóÏà¼Ó
+// ä¸¤ä¸ªç›¸åŒå¤§å°çš„çŸ©é˜µç›¸åŠ 
 template<size_t ROW, size_t COL, typename T>
 inline Matrix<ROW, COL, T> operator + (const Matrix<ROW, COL, T>& a, const Matrix<ROW, COL, T>& b) {
 	Matrix<ROW, COL, T> ans;
@@ -138,7 +138,7 @@ inline Matrix<ROW, COL, T> operator + (const Matrix<ROW, COL, T>& a, const Matri
 	return ans;
 }
 
-// Á½¸öÏàÍ¬´óĞ¡µÄ¾ØÕóÏà¼õ
+// ä¸¤ä¸ªç›¸åŒå¤§å°çš„çŸ©é˜µç›¸å‡
 template<size_t ROW, size_t COL, typename T>
 inline Matrix<ROW, COL, T> operator - (const Matrix<ROW, COL, T>& a, const Matrix<ROW, COL, T>& b) {
 	Matrix<ROW, COL, T> ans;
@@ -149,18 +149,18 @@ inline Matrix<ROW, COL, T> operator - (const Matrix<ROW, COL, T>& a, const Matri
 	return ans;
 }
 
-// Á½¸ö¾ØÕó¶ÔÓ¦ÔªËØÏà³Ë
+// ä¸¤ä¸ªçŸ©é˜µå¯¹åº”å…ƒç´ ç›¸ä¹˜
 template<size_t ROW, size_t COL, size_t NEWCOL, typename T>
 inline Matrix<ROW, NEWCOL, T> operator * (const Matrix<ROW, COL, T>& a, const Matrix<COL, NEWCOL, T>& b) {
 	Matrix<ROW, NEWCOL, T> ans;
 	for (size_t j = 0; j < ROW; j++)
 		for (size_t i = 0; i < NEWCOL; i++)
-			ans.m[j][i] = vector_dot(a.GetRow(j), b.GetCol(i)); // ¶ÔÓ¦ÏòÁ¿µÄµã³Ë
+			ans.m[j][i] = vector_dot(a.GetRow(j), b.GetCol(i)); // å¯¹åº”å‘é‡çš„ç‚¹ä¹˜
 
 	return ans;
 }
 
-// ¾ØÕó³ıÒÔ±êÁ¿
+// çŸ©é˜µé™¤ä»¥æ ‡é‡
 template<size_t ROW, size_t COL, typename T>
 inline Matrix<ROW, COL, T> operator / (const Matrix<ROW, COL, T>& a, T x) {
 	assert(x != 0);
@@ -172,13 +172,13 @@ inline Matrix<ROW, COL, T> operator / (const Matrix<ROW, COL, T>& a, T x) {
 	return ans;
 }
 
-// ¾ØÕó×ó³Ë³£Êı
+// çŸ©é˜µå·¦ä¹˜å¸¸æ•°
 template<size_t ROW, size_t COL, typename T>
 inline Matrix<ROW, COL, T> operator * (T x, const Matrix<ROW, COL, T>& a) {
 	return (a * x);
 }
 
-// ³£Êı³ıÒÔ¾ØÕó
+// å¸¸æ•°é™¤ä»¥çŸ©é˜µ
 template<size_t ROW, size_t COL, typename T>
 inline Matrix<ROW, COL, T> operator / (T x, const Matrix<ROW, COL, T>& a) {
 	Matrix<ROW, COL, T> ans;
@@ -189,7 +189,7 @@ inline Matrix<ROW, COL, T> operator / (T x, const Matrix<ROW, COL, T>& a) {
 	}
 	return ans;
 }
-// ĞĞÏòÁ¿ ³Ë ¾ØÕó µÃµ½ ĞĞÏòÁ¿
+// è¡Œå‘é‡ ä¹˜ çŸ©é˜µ å¾—åˆ° è¡Œå‘é‡
 template<size_t ROW, size_t COL, typename T>
 inline Vector<COL, T> operator * (const Vector<ROW, T>& a, const Matrix<ROW, COL, T>& m) {
 	Vector<COL, T> b;
@@ -198,7 +198,7 @@ inline Vector<COL, T> operator * (const Vector<ROW, T>& a, const Matrix<ROW, COL
 	return b;
 }
 
-// ¾ØÕó ³Ë ÁĞÏòÁ¿ µÃµ½ÁĞÏòÁ¿
+// çŸ©é˜µ ä¹˜ åˆ—å‘é‡ å¾—åˆ°åˆ—å‘é‡
 template<size_t ROW, size_t COL, typename T>
 inline Vector<ROW, T> operator * (const Matrix<ROW, COL, T>& m, const Vector<COL, T>& a) {
 	Vector<ROW, T> b;
@@ -209,22 +209,22 @@ inline Vector<ROW, T> operator * (const Matrix<ROW, COL, T>& m, const Vector<COL
 
 #pragma endregion
 
-#pragma region ¾ØÕóº¯Êı
-// °üÀ¨ÁËÕë¶Ô¾ØÕó½øĞĞµÄ¸÷ÖÖ¼ÆËã£¬ÀıÈçĞĞÁĞÊ½ÇóÖµ£¬Óà×ÓÊ½£¬°éËæ¾ØÕó£¬Äæ¾ØÕóµÈµÈ
+#pragma region çŸ©é˜µå‡½æ•°
+// åŒ…æ‹¬äº†é’ˆå¯¹çŸ©é˜µè¿›è¡Œçš„å„ç§è®¡ç®—ï¼Œä¾‹å¦‚è¡Œåˆ—å¼æ±‚å€¼ï¼Œä½™å­å¼ï¼Œä¼´éšçŸ©é˜µï¼Œé€†çŸ©é˜µç­‰ç­‰
 
-// ĞĞÁĞÊ½ÇóÖµ£ºÒ»½×·½Õó
+// è¡Œåˆ—å¼æ±‚å€¼ï¼šä¸€é˜¶æ–¹é˜µ
 template<typename T>
 inline T matrix_det(const Matrix<1, 1, T>& m) {
 	return m[0][0];
 }
 
-// ĞĞÁĞÊ½ÇóÖµ: ¶ş½×·½Õó
+// è¡Œåˆ—å¼æ±‚å€¼: äºŒé˜¶æ–¹é˜µ
 template<typename T>
 inline T matrix_det(const Matrix<2, 2, T>& m) {
 	return m[0][0] * m[1][1] - m[0][1] * m[1][0];
 }
 
-// ĞĞÁĞÊ½ÇóÖµ£º¶à½×ĞĞÁĞÊ½£¬¼´µÚÒ»ĞĞÍ¬ÆäÓà×ÓÊ½Ïà³ËÇóºÍ
+// è¡Œåˆ—å¼æ±‚å€¼ï¼šå¤šé˜¶è¡Œåˆ—å¼ï¼Œå³ç¬¬ä¸€è¡ŒåŒå…¶ä½™å­å¼ç›¸ä¹˜æ±‚å’Œ
 template<size_t N, typename T>
 inline T matrix_det(const Matrix<N, N, T>& m) {
 	T sum = 0;
@@ -232,19 +232,19 @@ inline T matrix_det(const Matrix<N, N, T>& m) {
 	return sum;
 }
 
-// Óà×ÓÊ½£ºÒ»½×
+// ä½™å­å¼ï¼šä¸€é˜¶
 template<typename T>
 inline T matrix_cofactor(const Matrix<1, 1, T>& m, size_t row, size_t col) {
 	return 0;
 }
 
-// ¶à½×Óà×ÓÊ½£º¼´É¾³ıÌØ¶¨ĞĞÁĞµÄ×ÓÊ½µÄĞĞÁĞÊ½Öµ
+// å¤šé˜¶ä½™å­å¼ï¼šå³åˆ é™¤ç‰¹å®šè¡Œåˆ—çš„å­å¼çš„è¡Œåˆ—å¼å€¼
 template<size_t N, typename T>
 inline T matrix_cofactor(const Matrix<N, N, T>& m, size_t row, size_t col) {
 	return matrix_det(m.GetMinor(row, col)) * (((row + col) % 2) ? -1 : 1); // +-1
 }
 
-// °éËæ¾ØÕó£º¼´Óà×ÓÊ½¾ØÕóµÄ×ªÖÃ
+// ä¼´éšçŸ©é˜µï¼šå³ä½™å­å¼çŸ©é˜µçš„è½¬ç½®
 template<size_t N, typename T>
 inline Matrix<N, N, T> matrix_adjoint(const Matrix<N, N, T>& m) {
 	Matrix<N, N, T> ret;
@@ -255,7 +255,7 @@ inline Matrix<N, N, T> matrix_adjoint(const Matrix<N, N, T>& m) {
 	return ret;
 }
 
-// ÇóÄæ¾ØÕó£ºÊ¹ÓÃ°éËæ¾ØÕó³ıÒÔĞĞÁĞÊ½µÄÖµµÃµ½
+// æ±‚é€†çŸ©é˜µï¼šä½¿ç”¨ä¼´éšçŸ©é˜µé™¤ä»¥è¡Œåˆ—å¼çš„å€¼å¾—åˆ°
 template<size_t N, typename T>
 inline Matrix<N, N, T> matrix_invert(const Matrix<N, N, T>& m) {
 	Matrix<N, N, T> ret = matrix_adjoint(m);
@@ -263,7 +263,7 @@ inline Matrix<N, N, T> matrix_invert(const Matrix<N, N, T>& m) {
 	return ret / det;
 }
 
-// ÎÄ±¾Á÷Êä³ö
+// æ–‡æœ¬æµè¾“å‡º
 template<size_t ROW, size_t COL, typename T>
 inline std::ostream& operator << (std::ostream& os, const Matrix<ROW, COL, T>& m) {
 	for (size_t r = 0; r < ROW; r++) {

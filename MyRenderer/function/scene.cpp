@@ -1,16 +1,16 @@
-#include "scene.h"
+ï»¿#include "scene.h"
 #include "../resources/utility.h"
 
 Scene::Scene()
 {
-	// ¼ÓÔØÄ£ĞÍ
+	// åŠ è½½æ¨¡å‹
 	for (size_t i = 0; i < model_paths.size(); i++)
 	{
 		auto model = new Model(model_paths[i], model_matrices[i]);
 		models_.push_back(model);
 	}
 
-	// ¼ÓÔØIBL×ÊÔ´
+	// åŠ è½½IBLèµ„æº
 	for (size_t i = 0; i < skybox_paths.size(); i++)
 	{
 		auto ibl_map = new IBLMap(skybox_paths[i]);
@@ -51,7 +51,7 @@ void Scene::HandleKeyEvents(PBRShader* pbr_shader, BlinnPhongShader* blinn_phong
 
 void Scene::UpdateShaderInfo(Shader* shader) const
 {
-	// ¼ì²éÊÇ·ñÊÇ BlinnPhongShader ÀàĞÍ
+	// æ£€æŸ¥æ˜¯å¦æ˜¯ BlinnPhongShader ç±»å‹
 	if (const auto blinn_phong_shader = dynamic_cast<BlinnPhongShader*>(shader))
 	{
 		blinn_phong_shader->model_ = current_model_;

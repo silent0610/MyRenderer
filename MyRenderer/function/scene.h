@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../resources/texture.h"
 #include "../resources/model.h"
@@ -34,7 +34,7 @@ public:
 	Scene();
 	~Scene();
 
-	/// @brief ¸ºÔğshaderµÄÇĞ»»
+	/// @brief è´Ÿè´£shaderçš„åˆ‡æ¢
 	/// @param pbr_shader 
 	/// @param blinn_phong_shader 
 	void HandleKeyEvents(PBRShader* pbr_shader, BlinnPhongShader* blinn_phong_shader);

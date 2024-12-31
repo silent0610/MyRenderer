@@ -1,101 +1,101 @@
-#pragma once
+ï»¿#pragma once
 
 #include <assert.h>
 #include <initializer_list>
 #include <iostream>
 
-#pragma region ÏòÁ¿¶¨Òå
+#pragma region å‘é‡å®šä¹‰
 
-//NÎ¬ÏòÁ¿Ä£°å Í¨ÓÃµÄ
+//Nç»´å‘é‡æ¨¡æ¿ é€šç”¨çš„
 template<size_t n, typename T> struct Vector {
-	T m[n]; // nÎ¬ÏòÁ¿ 
-	Vector() { for (size_t i = 0; i < n; ++i) m[i] = T(); } //Ä¬ÈÏ¹¹Ôìº¯Êı ¿Õ
-	explicit Vector(const T* ptr) { for (size_t i = 0; i < n; ++i) m[i] = ptr[i]; } //ÏÔÊ½Ê¹ÓÃÖ¸Õë³õÊ¼»¯, ¼ÓÔØÖ¸Õën¸öÔªËØµ½mÖĞ
-	Vector(const Vector<n, T>& v) { for (size_t i = 0; i < n; ++i)m[i] = v.m[i]; } //¿½±´¹¹Ôì
-	Vector(const std::initializer_list<T>& list) { auto it = list.begin(); for (size_t i = 0; i < n; i++) m[i] = *it++; }//³õÊ¼»¯ÁĞ±í¹¹Ôì
-	const T& operator[](size_t i) const { assert(i < n); return m[i]; } //³£Á¿ÖØÔØ[]ÔËËã·û,Í¬Ê±Ê¹ÓÃassert¼ì²éÊÇ·ñÔ½½ç
-	T& operator[](size_t i) { assert(i < n); return m[i]; } //ÖØÔØ[]ÔËËã·û,Í¬Ê±Ê¹ÓÃassert¼ì²éÊÇ·ñÔ½½ç
-	void load(const T* ptr) { for (size_t i = 0; i < n; i++)m[i] = ptr[i]; }; //Ö÷¶¯¼ÓÔØÖ¸Õën¸öÔªËØµ½mÖĞ
-	void save(T* ptr) { for (size_t i = 0; i < n; i++)ptr[i] = m[i]; }; //Ö÷¶¯±£´æmÖĞn¸öÔªËØµ½Ö¸ÕëÖĞ
+	T m[n]; // nç»´å‘é‡ 
+	Vector() { for (size_t i = 0; i < n; ++i) m[i] = T(); } //é»˜è®¤æ„é€ å‡½æ•° ç©º
+	explicit Vector(const T* ptr) { for (size_t i = 0; i < n; ++i) m[i] = ptr[i]; } //æ˜¾å¼ä½¿ç”¨æŒ‡é’ˆåˆå§‹åŒ–, åŠ è½½æŒ‡é’ˆnä¸ªå…ƒç´ åˆ°mä¸­
+	Vector(const Vector<n, T>& v) { for (size_t i = 0; i < n; ++i)m[i] = v.m[i]; } //æ‹·è´æ„é€ 
+	Vector(const std::initializer_list<T>& list) { auto it = list.begin(); for (size_t i = 0; i < n; i++) m[i] = *it++; }//åˆå§‹åŒ–åˆ—è¡¨æ„é€ 
+	const T& operator[](size_t i) const { assert(i < n); return m[i]; } //å¸¸é‡é‡è½½[]è¿ç®—ç¬¦,åŒæ—¶ä½¿ç”¨assertæ£€æŸ¥æ˜¯å¦è¶Šç•Œ
+	T& operator[](size_t i) { assert(i < n); return m[i]; } //é‡è½½[]è¿ç®—ç¬¦,åŒæ—¶ä½¿ç”¨assertæ£€æŸ¥æ˜¯å¦è¶Šç•Œ
+	void load(const T* ptr) { for (size_t i = 0; i < n; i++)m[i] = ptr[i]; }; //ä¸»åŠ¨åŠ è½½æŒ‡é’ˆnä¸ªå…ƒç´ åˆ°mä¸­
+	void save(T* ptr) { for (size_t i = 0; i < n; i++)ptr[i] = m[i]; }; //ä¸»åŠ¨ä¿å­˜mä¸­nä¸ªå…ƒç´ åˆ°æŒ‡é’ˆä¸­
 };
 
-//2Î¬ÏòÁ¿Ä£°å ÌØ»¯
+//2ç»´å‘é‡æ¨¡æ¿ ç‰¹åŒ–
 template<typename T> struct Vector<2, T> {
 	union {
-		struct { T x, y; };//±ğÃû
+		struct { T x, y; };//åˆ«å
 		struct { T u, v; };
 		T m[2];
 	};
-	inline Vector() :x(T()), y(T()) {} //Ä¬ÈÏ¹¹Ôìº¯Êı ¿Õ
-	inline Vector(T value) : x(value), y(value) {} //¹¹Ôìº¯Êı
-	inline Vector(T x, T y) : x(x), y(y) {} //¹¹Ôìº¯Êı
-	inline Vector(const Vector<2, T>& v) : x(v.x), y(v.y) {} //¿½±´¹¹Ôì
-	inline Vector(const T* ptr) : x(ptr[0]), y(ptr[1]) {} //Ê¹ÓÃÖ¸Õë³õÊ¼»¯, ¼ÓÔØÖ¸Õë2¸öÔªËØµ½mÖĞ
-	inline const T& operator[](size_t i)const { assert(i < 2); return m[i]; } //³£Á¿ÖØÔØ[]ÔËËã·û,Í¬Ê±Ê¹ÓÃassert¼ì²éÊÇ·ñÔ½½ç
-	inline T& operator[](size_t i) { assert(i < 2); return m[i]; } //ÖØÔØ[]ÔËËã·û,Í¬Ê±Ê¹ÓÃassert¼ì²éÊÇ·ñÔ½½ç
-	inline void load(const T* ptr) { x = ptr[0]; y = ptr[1]; } //Ö÷¶¯¼ÓÔØÖ¸Õë2¸öÔªËØµ½mÖĞ
-	inline void save(T* ptr) { ptr[0] = x; ptr[1] = y; } //Ö÷¶¯±£´æmÖĞ2¸öÔªËØµ½Ö¸ÕëÖĞ
+	inline Vector() :x(T()), y(T()) {} //é»˜è®¤æ„é€ å‡½æ•° ç©º
+	inline Vector(T value) : x(value), y(value) {} //æ„é€ å‡½æ•°
+	inline Vector(T x, T y) : x(x), y(y) {} //æ„é€ å‡½æ•°
+	inline Vector(const Vector<2, T>& v) : x(v.x), y(v.y) {} //æ‹·è´æ„é€ 
+	inline Vector(const T* ptr) : x(ptr[0]), y(ptr[1]) {} //ä½¿ç”¨æŒ‡é’ˆåˆå§‹åŒ–, åŠ è½½æŒ‡é’ˆ2ä¸ªå…ƒç´ åˆ°mä¸­
+	inline const T& operator[](size_t i)const { assert(i < 2); return m[i]; } //å¸¸é‡é‡è½½[]è¿ç®—ç¬¦,åŒæ—¶ä½¿ç”¨assertæ£€æŸ¥æ˜¯å¦è¶Šç•Œ
+	inline T& operator[](size_t i) { assert(i < 2); return m[i]; } //é‡è½½[]è¿ç®—ç¬¦,åŒæ—¶ä½¿ç”¨assertæ£€æŸ¥æ˜¯å¦è¶Šç•Œ
+	inline void load(const T* ptr) { x = ptr[0]; y = ptr[1]; } //ä¸»åŠ¨åŠ è½½æŒ‡é’ˆ2ä¸ªå…ƒç´ åˆ°mä¸­
+	inline void save(T* ptr) { ptr[0] = x; ptr[1] = y; } //ä¸»åŠ¨ä¿å­˜mä¸­2ä¸ªå…ƒç´ åˆ°æŒ‡é’ˆä¸­
 
-	inline Vector<2, T> xy() const { return *this; } //·µ»Ø×ÔÉí
-	inline Vector<3, T> xy1() const { return Vector<3, T>(x, y,1); } //·µ»Øx,y,1
-	inline Vector<4, T> xy11() const { return Vector<4, T>(x, y, 1, 1); } //·µ»Øx,y,1,1
+	inline Vector<2, T> xy() const { return *this; } //è¿”å›è‡ªèº«
+	inline Vector<3, T> xy1() const { return Vector<3, T>(x, y,1); } //è¿”å›x,y,1
+	inline Vector<4, T> xy11() const { return Vector<4, T>(x, y, 1, 1); } //è¿”å›x,y,1,1
 };
 
-//3Î¬ÏòÁ¿Ä£°å ÌØ»¯
+//3ç»´å‘é‡æ¨¡æ¿ ç‰¹åŒ–
 template<typename T> struct Vector<3, T> {
 	union {
-		struct { T x, y, z; };//±ğÃû
+		struct { T x, y, z; };//åˆ«å
 		struct { T r, g, b; };
 		T m[3];
 	};
-	inline Vector() :x(T()), y(T()), z(T()) {} //Ä¬ÈÏ¹¹Ôìº¯Êı ¿Õ
-	inline Vector(T value) : x(value), y(value),z(value) {} //¹¹Ôìº¯Êı
-	inline Vector(T x, T y,T z) : x(x), y(y),z(z) {} //¹¹Ôìº¯Êı
-	inline Vector(const Vector<3, T>& v) : x(v.x), y(v.y), z(v.z) {} //¿½±´¹¹Ôì
-	inline Vector(const T* ptr) : x(ptr[0]), y(ptr[1]),z(ptr[2]) {} //Ê¹ÓÃÖ¸Õë³õÊ¼»¯, ¼ÓÔØÖ¸Õë2¸öÔªËØµ½mÖĞ
-	inline const T& operator[](size_t i)const { assert(i < 3); return m[i]; } //³£Á¿ÖØÔØ[]ÔËËã·û,Í¬Ê±Ê¹ÓÃassert¼ì²éÊÇ·ñÔ½½ç
-	inline T& operator[](size_t i) { assert(i < 3); return m[i]; } //ÖØÔØ[]ÔËËã·û,Í¬Ê±Ê¹ÓÃassert¼ì²éÊÇ·ñÔ½½ç
-	inline void load(const T* ptr) { x = ptr[0]; y = ptr[1]; z = ptr[2]; } //Ö÷¶¯¼ÓÔØÖ¸Õë2¸öÔªËØµ½mÖĞ
-	inline void save(T* ptr) { ptr[0] = x; ptr[1] = y; ptr[2] = z; } //Ö÷¶¯±£´æmÖĞ2¸öÔªËØµ½Ö¸ÕëÖĞ
+	inline Vector() :x(T()), y(T()), z(T()) {} //é»˜è®¤æ„é€ å‡½æ•° ç©º
+	inline Vector(T value) : x(value), y(value),z(value) {} //æ„é€ å‡½æ•°
+	inline Vector(T x, T y,T z) : x(x), y(y),z(z) {} //æ„é€ å‡½æ•°
+	inline Vector(const Vector<3, T>& v) : x(v.x), y(v.y), z(v.z) {} //æ‹·è´æ„é€ 
+	inline Vector(const T* ptr) : x(ptr[0]), y(ptr[1]),z(ptr[2]) {} //ä½¿ç”¨æŒ‡é’ˆåˆå§‹åŒ–, åŠ è½½æŒ‡é’ˆ2ä¸ªå…ƒç´ åˆ°mä¸­
+	inline const T& operator[](size_t i)const { assert(i < 3); return m[i]; } //å¸¸é‡é‡è½½[]è¿ç®—ç¬¦,åŒæ—¶ä½¿ç”¨assertæ£€æŸ¥æ˜¯å¦è¶Šç•Œ
+	inline T& operator[](size_t i) { assert(i < 3); return m[i]; } //é‡è½½[]è¿ç®—ç¬¦,åŒæ—¶ä½¿ç”¨assertæ£€æŸ¥æ˜¯å¦è¶Šç•Œ
+	inline void load(const T* ptr) { x = ptr[0]; y = ptr[1]; z = ptr[2]; } //ä¸»åŠ¨åŠ è½½æŒ‡é’ˆ2ä¸ªå…ƒç´ åˆ°mä¸­
+	inline void save(T* ptr) { ptr[0] = x; ptr[1] = y; ptr[2] = z; } //ä¸»åŠ¨ä¿å­˜mä¸­2ä¸ªå…ƒç´ åˆ°æŒ‡é’ˆä¸­
 
-	inline Vector<2, T> xy() const { return Vector<2, T>(x, y); } //·µ»Øx,y
-	inline Vector<3, T> xyz() const { return *this; } //·µ»Ø×ÔÉí
-	inline Vector<4, T> xyz1() const { return Vector<4, T>(x, y, z, 1); } //·µ»Øx,y,z,1
+	inline Vector<2, T> xy() const { return Vector<2, T>(x, y); } //è¿”å›x,y
+	inline Vector<3, T> xyz() const { return *this; } //è¿”å›è‡ªèº«
+	inline Vector<4, T> xyz1() const { return Vector<4, T>(x, y, z, 1); } //è¿”å›x,y,z,1
 };
-//4Î¬ÏòÁ¿Ä£°å ÌØ»¯
+//4ç»´å‘é‡æ¨¡æ¿ ç‰¹åŒ–
 template<typename T> struct Vector<4, T> {
 	union {
-		struct { T x, y, z, w; };//±ğÃû
+		struct { T x, y, z, w; };//åˆ«å
 		struct { T r, g, b, a; };
 		T m[4];
 	};
-	inline Vector() :x(T()), y(T()), z(T()),w(T()) {} //Ä¬ÈÏ¹¹Ôìº¯Êı ¿Õ
-	inline Vector(T value) : x(value), y(value), z(value) ,w(value){} //¹¹Ôìº¯Êı
-	inline Vector(T x, T y, T z,T w) : x(x), y(y), z(z) ,w(w){} //¹¹Ôìº¯Êı
-	inline Vector(const Vector<4, T>& v) : x(v.x), y(v.y), z(v.z), w(v.w) {} //¿½±´¹¹Ôì
-	inline Vector(const T* ptr) : x(ptr[0]), y(ptr[1]), z(ptr[2]) ,w(ptr[3]) {} //Ê¹ÓÃÖ¸Õë³õÊ¼»¯, ¼ÓÔØÖ¸Õë2¸öÔªËØµ½mÖĞ
-	inline const T& operator[](size_t i)const { assert(i < 4); return m[i]; } //³£Á¿ÖØÔØ[]ÔËËã·û,Í¬Ê±Ê¹ÓÃassert¼ì²éÊÇ·ñÔ½½ç
-	inline T& operator[](size_t i) { assert(i < 4); return m[i]; } //ÖØÔØ[]ÔËËã·û,Í¬Ê±Ê¹ÓÃassert¼ì²éÊÇ·ñÔ½½ç
-	inline void load(const T* ptr) { x = ptr[0]; y = ptr[1]; z = ptr[2]; w = ptr[3];	} //Ö÷¶¯¼ÓÔØÖ¸Õë2¸öÔªËØµ½mÖĞ
-	inline void save(T* ptr) { ptr[0] = x; ptr[1] = y; ptr[2] = z; ptr[3] = w;	} //Ö÷¶¯±£´æmÖĞ2¸öÔªËØµ½Ö¸ÕëÖĞ
+	inline Vector() :x(T()), y(T()), z(T()),w(T()) {} //é»˜è®¤æ„é€ å‡½æ•° ç©º
+	inline Vector(T value) : x(value), y(value), z(value) ,w(value){} //æ„é€ å‡½æ•°
+	inline Vector(T x, T y, T z,T w) : x(x), y(y), z(z) ,w(w){} //æ„é€ å‡½æ•°
+	inline Vector(const Vector<4, T>& v) : x(v.x), y(v.y), z(v.z), w(v.w) {} //æ‹·è´æ„é€ 
+	inline Vector(const T* ptr) : x(ptr[0]), y(ptr[1]), z(ptr[2]) ,w(ptr[3]) {} //ä½¿ç”¨æŒ‡é’ˆåˆå§‹åŒ–, åŠ è½½æŒ‡é’ˆ2ä¸ªå…ƒç´ åˆ°mä¸­
+	inline const T& operator[](size_t i)const { assert(i < 4); return m[i]; } //å¸¸é‡é‡è½½[]è¿ç®—ç¬¦,åŒæ—¶ä½¿ç”¨assertæ£€æŸ¥æ˜¯å¦è¶Šç•Œ
+	inline T& operator[](size_t i) { assert(i < 4); return m[i]; } //é‡è½½[]è¿ç®—ç¬¦,åŒæ—¶ä½¿ç”¨assertæ£€æŸ¥æ˜¯å¦è¶Šç•Œ
+	inline void load(const T* ptr) { x = ptr[0]; y = ptr[1]; z = ptr[2]; w = ptr[3];	} //ä¸»åŠ¨åŠ è½½æŒ‡é’ˆ2ä¸ªå…ƒç´ åˆ°mä¸­
+	inline void save(T* ptr) { ptr[0] = x; ptr[1] = y; ptr[2] = z; ptr[3] = w;	} //ä¸»åŠ¨ä¿å­˜mä¸­2ä¸ªå…ƒç´ åˆ°æŒ‡é’ˆä¸­
 
-	inline Vector<2, T> xy() const { return Vector<2, T>(x, y); } //·µ»Øx,y
-	inline Vector<3, T> xyz() const { return Vector<3, T>(x, y,z);} //·µ»Øx,y,z
-	inline Vector<4, T> xyzw() const { return *this; } //·µ»Ø×ÔÉí
+	inline Vector<2, T> xy() const { return Vector<2, T>(x, y); } //è¿”å›x,y
+	inline Vector<3, T> xyz() const { return Vector<3, T>(x, y,z);} //è¿”å›x,y,z
+	inline Vector<4, T> xyzw() const { return *this; } //è¿”å›è‡ªèº«
 };
 
 #pragma endregion
 
-#pragma region ÏòÁ¿ÔËËã
-// ÄÒÀ¨ÁËÏòÁ¿¡¢±êÁ¿Ö®¼ä³£¼ûÔËËã·ûµÄÔËËã¹æÔò
+#pragma region å‘é‡è¿ç®—
+// å›Šæ‹¬äº†å‘é‡ã€æ ‡é‡ä¹‹é—´å¸¸è§è¿ç®—ç¬¦çš„è¿ç®—è§„åˆ™
 
-// (+a) ÕıºÅ
+// (+a) æ­£å·
 template <size_t N, typename T>
 inline Vector<N, T> operator + (const Vector<N, T>& a) {
 	return a;
 }
 
-// (-a) ¸ººÅ
+// (-a) è´Ÿå·
 template <size_t N, typename T>
 inline Vector<N, T> operator - (const Vector<N, T>& a) {
 	Vector<N, T> b;
@@ -103,21 +103,21 @@ inline Vector<N, T> operator - (const Vector<N, T>& a) {
 	return b;
 }
 
-// (a == b)£¿ÅĞ¶ÏÏàµÈ
+// (a == b)ï¼Ÿåˆ¤æ–­ç›¸ç­‰
 template <size_t N, typename T>
 inline bool operator == (const Vector<N, T>& a, const Vector<N, T>& b) {
 	for (size_t i = 0; i < N; i++) if (a[i] != b[i]) return false;
 	return true;
 }
 
-// (a != b)? ÅĞ¶Ï²»µÈ
+// (a != b)? åˆ¤æ–­ä¸ç­‰
 template <size_t N, typename T>
 inline bool operator != (const Vector<N, T>& a, const Vector<N, T>& b) {
 	for (size_t i = 0; i < N; i++) if (a[i] != b[i]) return true;
 	return false;
 }
 
-// (a + b) Ïà¼Ó
+// (a + b) ç›¸åŠ 
 template <size_t N, typename T>
 inline Vector<N, T> operator + (const Vector<N, T>& a, const Vector<N, T>& b) {
 	Vector<N, T> sum;
@@ -125,7 +125,7 @@ inline Vector<N, T> operator + (const Vector<N, T>& a, const Vector<N, T>& b) {
 	return sum;
 }
 
-// (a - b) Ïà¼õ
+// (a - b) ç›¸å‡
 template <size_t N, typename T>
 inline Vector<N, T> operator - (const Vector<N, T>& a, const Vector<N, T>& b) {
 	Vector<N, T> diff;
@@ -133,7 +133,7 @@ inline Vector<N, T> operator - (const Vector<N, T>& a, const Vector<N, T>& b) {
 	return diff;
 }
 
-// (a * b)£¬²»ÊÇµã³ËÒ²²»ÊÇ²æ³Ë£¬¶øÊÇ¸÷¸öÔªËØ·Ö±ğÏà³Ë£¬É«²Ê¼ÆËãÊ±ÓĞÓÃ
+// (a * b)ï¼Œä¸æ˜¯ç‚¹ä¹˜ä¹Ÿä¸æ˜¯å‰ä¹˜ï¼Œè€Œæ˜¯å„ä¸ªå…ƒç´ åˆ†åˆ«ç›¸ä¹˜ï¼Œè‰²å½©è®¡ç®—æ—¶æœ‰ç”¨
 template <size_t N, typename T>
 inline Vector<N, T> operator * (const Vector<N, T>& a, const Vector<N, T>& b) {
 	Vector<N, T> c;
@@ -141,7 +141,7 @@ inline Vector<N, T> operator * (const Vector<N, T>& a, const Vector<N, T>& b) {
 	return c;
 }
 
-// (a / b)£¬¸÷¸öÔªËØÏà³ı
+// (a / b)ï¼Œå„ä¸ªå…ƒç´ ç›¸é™¤
 template <size_t N, typename T>
 inline Vector<N, T> operator / (const Vector<N, T>& a, const Vector<N, T>& b) {
 	Vector<N, T> c;
@@ -149,7 +149,7 @@ inline Vector<N, T> operator / (const Vector<N, T>& a, const Vector<N, T>& b) {
 	return c;
 }
 
-//£¨a * x£© ³ËÒÔÒ»¸ö±êÁ¿, ±êÁ¿ÔÚÓÒ
+//ï¼ˆa * xï¼‰ ä¹˜ä»¥ä¸€ä¸ªæ ‡é‡, æ ‡é‡åœ¨å³
 template <size_t N, typename T>
 inline Vector<N, T> operator * (const Vector<N, T>& a, T x) {
 	Vector<N, T> b;
@@ -157,7 +157,7 @@ inline Vector<N, T> operator * (const Vector<N, T>& a, T x) {
 	return b;
 }
 
-//£¨x * a£©³ËÒÔÒ»¸ö±êÁ¿, ±êÁ¿ÔÚ×ó
+//ï¼ˆx * aï¼‰ä¹˜ä»¥ä¸€ä¸ªæ ‡é‡, æ ‡é‡åœ¨å·¦
 template <size_t N, typename T>
 inline Vector<N, T> operator * (T x, const Vector<N, T>& a) {
 	Vector<N, T> b;
@@ -165,7 +165,7 @@ inline Vector<N, T> operator * (T x, const Vector<N, T>& a) {
 	return b;
 }
 
-//£¨a / x£©±»Ò»¸ö±êÁ¿³ı
+//ï¼ˆa / xï¼‰è¢«ä¸€ä¸ªæ ‡é‡é™¤
 template <size_t N, typename T>
 inline Vector<N, T> operator / (const Vector<N, T>& a, T x) {
 	Vector<N, T> b;
@@ -173,7 +173,7 @@ inline Vector<N, T> operator / (const Vector<N, T>& a, T x) {
 	return b;
 }
 
-//£¨x / a£©³ıÒ»¸ö±êÁ¿
+//ï¼ˆx / aï¼‰é™¤ä¸€ä¸ªæ ‡é‡
 template <size_t N, typename T>
 inline Vector<N, T> operator / (T x, const Vector<N, T>& a) {
 	Vector<N, T> b;
@@ -225,10 +225,10 @@ inline Vector<N, T>& operator /= (Vector<N, T>& a, T x) {
 
 #pragma endregion
 
-#pragma region ÏòÁ¿º¯Êı
-// ÄÒÀ¨ÁË¸÷ÀàÏòÁ¿³£ÓÃµÄº¯Êı
+#pragma region å‘é‡å‡½æ•°
+// å›Šæ‹¬äº†å„ç±»å‘é‡å¸¸ç”¨çš„å‡½æ•°
 
-// = |a| ^ 2 ÏòÁ¿Ä£³¤Æ½·½ºÍ
+// = |a| ^ 2 å‘é‡æ¨¡é•¿å¹³æ–¹å’Œ
 template<size_t N, typename T>
 inline T vector_length_square(const Vector<N, T>& a) {
 	T sum = 0;
@@ -236,25 +236,25 @@ inline T vector_length_square(const Vector<N, T>& a) {
 	return sum;
 }
 
-// |a| ÏòÁ¿Ä£³¤
+// |a| å‘é‡æ¨¡é•¿
 template<size_t N, typename T>
 inline T vector_length(const Vector<N, T>& a) {
 	return sqrt(vector_length_square(a));
 }
 
-// |a| ÏòÁ¿Ä£³¤£¬µ«ÌØ»¯ float ÀàĞÍ£¬Ê¹ÓÃ sqrtf
+// |a| å‘é‡æ¨¡é•¿ï¼Œä½†ç‰¹åŒ– float ç±»å‹ï¼Œä½¿ç”¨ sqrtf
 template<size_t N>
 inline float vector_length(const Vector<N, float>& a) {
 	return sqrtf(vector_length_square(a));
 }
 
-// a / |a| ÏòÁ¿³ıÒÔÄ£³¤£¬´Ó¶ø¹éÒ»»¯
+// a / |a| å‘é‡é™¤ä»¥æ¨¡é•¿ï¼Œä»è€Œå½’ä¸€åŒ–
 template<size_t N, typename T>
 inline Vector<N, T> NormalizeVector(const Vector<N, T>& a) {
 	return a / vector_length(a);
 }
 
-// ÏòÁ¿µã³Ë
+// å‘é‡ç‚¹ä¹˜
 template<size_t N, typename T>
 inline T vector_dot(const Vector<N, T>& a, const Vector<N, T>& b) {
 	T sum = 0;
@@ -262,37 +262,37 @@ inline T vector_dot(const Vector<N, T>& a, const Vector<N, T>& b) {
 	return sum;
 }
 
-// ¶şÎ¬ÏòÁ¿²æ³Ë£¬µÃµ½±êÁ¿
+// äºŒç»´å‘é‡å‰ä¹˜ï¼Œå¾—åˆ°æ ‡é‡
 template<typename T>
 inline T vector_cross(const Vector<2, T>& a, const Vector<2, T>& b) {
 	return a.x * b.y - a.y * b.x;
 }
 
-// ÈıÎ¬ÏòÁ¿²æ³Ë£¬µÃµ½ĞÂÏòÁ¿
+// ä¸‰ç»´å‘é‡å‰ä¹˜ï¼Œå¾—åˆ°æ–°å‘é‡
 template<typename T>
 inline Vector<3, T> vector_cross(const Vector<3, T>& a, const Vector<3, T>& b) {
 	return Vector<3, T>(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
-// ËÄÎ¬ÏòÁ¿²æ³Ë£ºÇ°ÈıÎ¬²æ³Ë£¬ºóÒ»Î»±£Áô
+// å››ç»´å‘é‡å‰ä¹˜ï¼šå‰ä¸‰ç»´å‰ä¹˜ï¼Œåä¸€ä½ä¿ç•™
 template<typename T>
 inline Vector<4, T> vector_cross(const Vector<4, T>& a, const Vector<4, T>& b) {
 	return Vector<4, T>(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x, a.w);
 }
 
-// ¼ÆËã·´ÉäÏòÁ¿, ±íÃæ·¨Ïßn£¬ÈëÉäÏòÁ¿£¬µÃµ½³öÉäÏòÁ¿
+// è®¡ç®—åå°„å‘é‡, è¡¨é¢æ³•çº¿nï¼Œå…¥å°„å‘é‡ï¼Œå¾—åˆ°å‡ºå°„å‘é‡
 template<typename T>
 inline Vector<3, T> vector_reflect(const Vector<3, T>& v, const Vector<3, T>& n) {
 	return 2.0f * vector_dot(v, n) * n - v;
 }
 
-// a + (b - a) * t ÏòÁ¿²åÖµ
+// a + (b - a) * t å‘é‡æ’å€¼
 template<size_t N, typename T>
 inline Vector<N, T> vector_lerp(const Vector<N, T>& a, const Vector<N, T>& b, float t) {
 	return a + (b - a) * t;
 }
 
-// ¸÷¸öÔªËØÈ¡¾ø¶ÔÖµ
+// å„ä¸ªå…ƒç´ å–ç»å¯¹å€¼
 template<size_t N, typename T>
 inline Vector<N, T> vector_abs(const Vector<N, T>& a) {
 	Vector<N, T> c;
@@ -300,14 +300,14 @@ inline Vector<N, T> vector_abs(const Vector<N, T>& a) {
 	return c;
 }
 
-// ¸÷¸öÔªËØÈ¡¶şÕß×î´óÖµ
+// å„ä¸ªå…ƒç´ å–äºŒè€…æœ€å¤§å€¼
 template<size_t N, typename T>
 inline Vector<N, T> vector_max(const Vector<N, T>& a, const Vector<N, T>& b) {
 	Vector<N, T> c;
 	for (size_t i = 0; i < N; i++) c[i] = (a[i] > b[i]) ? a[i] : b[i];
 	return c;
 }
-// ¸÷¸öÔªËØÈ¡¶şÕß×îĞ¡Öµ
+// å„ä¸ªå…ƒç´ å–äºŒè€…æœ€å°å€¼
 template<size_t N, typename T>
 inline Vector<N, T> vector_min(const Vector<N, T>& a, const Vector<N, T>& b) {
 	Vector<N, T> c;
@@ -315,31 +315,31 @@ inline Vector<N, T> vector_min(const Vector<N, T>& a, const Vector<N, T>& b) {
 	return c;
 }
 
-// ½«ÏòÁ¿µÄÖµ¿ØÖÆÔÚ min_x/max_x ·¶Î§ÄÚ
+// å°†å‘é‡çš„å€¼æ§åˆ¶åœ¨ min_x/max_x èŒƒå›´å†…
 template<size_t N, typename T>
 inline Vector<N, T> vector_between(const Vector<N, T>& min_x, const Vector<N, T>& max_x, const Vector<N, T>& x) {
 	return vector_min(vector_max(min_x, x), max_x);
 }
 
-// ÅĞ¶ÏÁ½¸öÏòÁ¿Ö®¼ä¾àÀëÊÇ·ñĞ¡ÓÚdist
+// åˆ¤æ–­ä¸¤ä¸ªå‘é‡ä¹‹é—´è·ç¦»æ˜¯å¦å°äºdist
 template<size_t N, typename T>
 inline bool vector_near(const Vector<N, T>& a, const Vector<N, T>& b, T dist) {
 	return (vector_length_square(a - b) <= dist);
 }
 
-// ÅĞ¶ÏÁ½¸öµ¥¾«¶ÈÏòÁ¿ÊÇ·ñ½üËÆÏàµÈ
+// åˆ¤æ–­ä¸¤ä¸ªå•ç²¾åº¦å‘é‡æ˜¯å¦è¿‘ä¼¼ç›¸ç­‰
 template<size_t N>
 inline bool vector_near_equal(const Vector<N, float>& a, const Vector<N, float>& b, float e = 0.0001) {
 	return vector_near(a, b, e);
 }
 
-// ÅĞ¶ÏÁ½¸öË«¾«¶ÈÏòÁ¿ÊÇ·ñ½üËÆÏàµÈ
+// åˆ¤æ–­ä¸¤ä¸ªåŒç²¾åº¦å‘é‡æ˜¯å¦è¿‘ä¼¼ç›¸ç­‰
 template<size_t N>
 inline bool vector_near_equal(const Vector<N, double>& a, const Vector<N, double>& b, double e = 0.0000001) {
 	return vector_near(a, b, e);
 }
 
-// ÏòÁ¿ÖµÔªËØ·¶Î§²Ã¼ôµ½0ºÍ1
+// å‘é‡å€¼å…ƒç´ èŒƒå›´è£å‰ªåˆ°0å’Œ1
 template<size_t N, typename T>
 inline Vector<N, T> vector_clamp(const Vector<N, T>& a, T min_x = 0, T max_x = 1) {
 	Vector<N, T> b;
@@ -350,7 +350,7 @@ inline Vector<N, T> vector_clamp(const Vector<N, T>& a, T min_x = 0, T max_x = 1
 	return b;
 }
 
-// Êä³öµ½ÎÄ±¾Á÷
+// è¾“å‡ºåˆ°æ–‡æœ¬æµ
 template<size_t N, typename T>
 inline std::ostream& operator << (std::ostream& os, const Vector<N, T>& a) {
 	os << "[";

@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <fstream>
 #include <set>
 
@@ -17,7 +17,7 @@ int main()
 	Window* window = Window::GetInstance();
 	window->WindowInit(width, height, "SoftRenderer");
 
-#pragma region Íâ²¿×ÊÔ´¼ÓÔØ
+#pragma region å¤–éƒ¨èµ„æºåŠ è½½
 	const auto scene = new Scene();
 
 	auto model = scene->current_model_;

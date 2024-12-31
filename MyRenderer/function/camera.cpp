@@ -1,4 +1,4 @@
-#include "camera.h"
+ï»¿#include "camera.h"
 
 Camera::Camera(const Vec3f& position, const Vec3f& target, const Vec3f& up, float fov, float aspect) :
 	position_(position), target_(target), up_(up), fov_(fov), aspect_(aspect)
@@ -16,46 +16,46 @@ Camera::Camera(const Vec3f& position, const Vec3f& target, const Vec3f& up, floa
 Camera::~Camera() = default;
 
 void Camera::UpdateCameraPose(){
-	// ¹Û²ìÏòÁ¿£º´ÓÏà»úÎ»ÖÃÖ¸ÏòÄ¿±êÎ»ÖÃ
+	// è§‚å¯Ÿå‘é‡ï¼šä»ç›¸æœºä½ç½®æŒ‡å‘ç›®æ ‡ä½ç½®
 	Vec3f view = position_ - target_;
 	float radius = vector_length(view);
 
-	float phi = atan2(view[0], view[2]);				// azimuth angle(·½Î»½Ç), zÖáºÍ viewµÄ¼Ğ½Ç[-pi, pi] ?? //×óÓÒ
-	float theta = acos(view[1] / radius);			// zenith angle(Ìì¶¥½Ç), viewºÍ yÖáµÄ¼Ğ½Ç , [0, pi] //ÉÏÏÂ
+	float phi = atan2(view[0], view[2]);				// azimuth angle(æ–¹ä½è§’), zè½´å’Œ viewçš„å¤¹è§’[-pi, pi] ?? //å·¦å³
+	float theta = acos(view[1] / radius);			// zenith angle(å¤©é¡¶è§’), viewå’Œ yè½´çš„å¤¹è§’ , [0, pi] //ä¸Šä¸‹
 	const float mouse_delta_x = window_->mouse_info_.mouse_delta[0] / window_->width_;
 	const float mouse_delta_y = window_->mouse_info_.mouse_delta[1] / window_->height_;
 
-	// Êó±ê×ó¼ü ,Ğı×ª
+	// é¼ æ ‡å·¦é”® ,æ—‹è½¬
 	if (window_->mouse_buttons_[0])
 	{
 		constexpr float factor = 1.5 * kPi;
 
-		phi += mouse_delta_x * factor; //×óÓÒĞı×ª
-		theta += mouse_delta_y * factor; //ÉÏÏÂĞı×ª
+		phi += mouse_delta_x * factor; //å·¦å³æ—‹è½¬
+		theta += mouse_delta_y * factor; //ä¸Šä¸‹æ—‹è½¬
 		if (theta > kPi) theta = kPi - kEpsilon * 100;
 		if (theta < 0)  theta = kEpsilon * 100;
 	}
-	// Æ½ÒÆ
+	// å¹³ç§»
 	if (window_->mouse_buttons_[1])
 	{
-		// Êó±êÓÒ¼ü
-		const float factor = radius * static_cast<float>(tan(60.0 / 360 * kPi)) * 2.2f; //¸ù¾İ¾àÀë(position_ - target_)µ÷ÕûÆ½ÒÆËÙ¶È
+		// é¼ æ ‡å³é”®
+		const float factor = radius * static_cast<float>(tan(60.0 / 360 * kPi)) * 2.2f; //æ ¹æ®è·ç¦»(position_ - target_)è°ƒæ•´å¹³ç§»é€Ÿåº¦
 		
-		const Vec3f right = mouse_delta_x * factor * axis_r_; //x·½ÏòµÄÆ½ÒÆÏòÁ¿
-		const Vec3f up = mouse_delta_y * factor * axis_u_; // y·½ÏòµÄÆ½ÒÆÏòÁ¿
+		const Vec3f right = mouse_delta_x * factor * axis_r_; //xæ–¹å‘çš„å¹³ç§»å‘é‡
+		const Vec3f up = mouse_delta_y * factor * axis_u_; // yæ–¹å‘çš„å¹³ç§»å‘é‡
 
 		position_ += (-right + up);
 		target_ += (-right + up);
 	}
 
-	// Êó±ê¹öÂÖ
+	// é¼ æ ‡æ»šè½®
 	if (window_->mouse_buttons_[2])
 	{
 		radius *= static_cast<float>(pow(0.95, window_->mouse_info_.mouse_wheel_delta));
 		window_->mouse_buttons_[2] = 0;
 	}
 
-	// ¸üĞÂÏà»úÎ»ÖÃ, ¸ù¾İÊÓµã·´ÍÆÏà»úÎ»ÖÃ, Ö»¸üĞÂ ×ó¼üºÍ¹öÂÖ, ÓÒ¼üÆ½ÒÆÔÚ´úÂë¿éÄÚÒÑ¸üĞÂ;
+	// æ›´æ–°ç›¸æœºä½ç½®, æ ¹æ®è§†ç‚¹åæ¨ç›¸æœºä½ç½®, åªæ›´æ–° å·¦é”®å’Œæ»šè½®, å³é”®å¹³ç§»åœ¨ä»£ç å—å†…å·²æ›´æ–°;
 	position_[0] = target_[0] + radius * sin(phi) * sin(theta);
 	position_[1] = target_[1] + radius * cos(theta);
 	position_[2] = target_[2] + radius * sin(theta) * cos(phi);
@@ -64,16 +64,16 @@ void Camera::UpdateCameraPose(){
 void Camera::HandleInputEvents()
 {
 	/*
-		¼ÆËãÏà»ú×ø±êÏµµÄÖá
-		axis_v£º¹Û²ìÏòÁ¿£¬´ÓÄ¿±êÎ»ÖÃÖ¸ÏòÏà»úÎ»ÖÃ
-		axis_r£ºÕı·½ÏòÖ¸ÏòÆÁÄ»ÓÒ²à
-		axis_u£ºÕı·½ÏòÖ¸ÏòÆÁÄ»ÉÏ²à
+		è®¡ç®—ç›¸æœºåæ ‡ç³»çš„è½´
+		axis_vï¼šè§‚å¯Ÿå‘é‡ï¼Œä»ç›®æ ‡ä½ç½®æŒ‡å‘ç›¸æœºä½ç½®
+		axis_rï¼šæ­£æ–¹å‘æŒ‡å‘å±å¹•å³ä¾§
+		axis_uï¼šæ­£æ–¹å‘æŒ‡å‘å±å¹•ä¸Šä¾§
 	*/
 	axis_v_ = vector_normalize(target_ - position_);
 	axis_r_ = vector_normalize(vector_cross(axis_v_, up_));
 	axis_u_ = vector_normalize(vector_cross(axis_r_, axis_v_));
 
-	// ´¦ÀíÊäÈëÊÂ¼ş
+	// å¤„ç†è¾“å…¥äº‹ä»¶
 	HandleMouseEvents();
 	HandleKeyEvents();
 }
@@ -92,12 +92,12 @@ void Camera::HandleKeyEvents()
 {
 	const float distance = vector_length(target_ - position_);
 
-	if (window_->keys_['Q']) //·Å´ó
+	if (window_->keys_['Q']) //æ”¾å¤§
 	{
 		const float factor = distance / window_->width_ * 200.0f;
 		position_ += -0.05f * axis_v_ * factor;
 	}
-	if (window_->keys_['E'])//ËõĞ¡
+	if (window_->keys_['E'])//ç¼©å°
 	{
 		position_ += 0.05f * axis_v_;
 	}
@@ -158,7 +158,7 @@ void Camera::UpdateSkyboxMesh(SkyBoxShader* sky_box_shader) const
 	float yf = tan(fov * 0.5f);
 	float  xf = aspect_;
 
-	// Ìì¿ÕºĞ(Ìì¿ÕÃæ)µÄËÄ¸ö¶¥µãÏòÁ¿
+	// å¤©ç©ºç›’(å¤©ç©ºé¢)çš„å››ä¸ªé¡¶ç‚¹å‘é‡
 	Vec3f right_top = axis_v_ + axis_r_ * xf + axis_u_ * yf;
 	Vec3f left_top = axis_v_ - axis_r_ * xf + axis_u_ * yf;
 	Vec3f left_bottom = axis_v_ - axis_r_ * xf - axis_u_ * yf;
@@ -170,9 +170,9 @@ void Camera::UpdateSkyboxMesh(SkyBoxShader* sky_box_shader) const
 	//Vec3f right_bottom = Vec3f(xf, -yf, 1);
 
 	Vec3f camera_position = position_;
-	float far_plane = far_plane_ - 2; //ÎªÊ²Ã´¼õ2?
+	float far_plane = far_plane_ - 2; //ä¸ºä»€ä¹ˆå‡2?
 
-	sky_box_shader->plane_vertex_[0] = camera_position + far_plane * right_top; //¶¥µãÏòÁ¿³ËÒÔÔ¶²Ã¼ôÃæz, µÃµ½¶¥µãÊÀ½ç¿Õ¼ä×ø±ê
+	sky_box_shader->plane_vertex_[0] = camera_position + far_plane * right_top; //é¡¶ç‚¹å‘é‡ä¹˜ä»¥è¿œè£å‰ªé¢z, å¾—åˆ°é¡¶ç‚¹ä¸–ç•Œç©ºé—´åæ ‡
 	sky_box_shader->plane_vertex_[1] = camera_position + far_plane * left_top;
 	sky_box_shader->plane_vertex_[2] = camera_position + far_plane * left_bottom;
 	sky_box_shader->plane_vertex_[3] = camera_position + far_plane * right_bottom;

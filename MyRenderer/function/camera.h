@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../core/math.h"
 #include "shader.h"
@@ -10,38 +10,38 @@ public:
 	Camera(const Vec3f& positon, const Vec3f& target, const Vec3f& up, float fov, float aspect);
 	~Camera() = default;
 	
-	// ´¦ÀíÊäÈëÊÂ¼ş
+	// å¤„ç†è¾“å…¥äº‹ä»¶
 	void HandleInputEvents();
 
-	// ¸üĞÂuniform bufferÖĞµÄ¾ØÕó
+	// æ›´æ–°uniform bufferä¸­çš„çŸ©é˜µ
 	void UpdateUniformBuffer(UniformBuffer* uniform_buffer, const Mat4x4f& model_matrix) const;
 	void UpdateSkyBoxUniformBuffer(UniformBuffer* uniform_buffer) const;
 	void UpdateSkyboxMesh(SkyBoxShader* sky_box_shader) const;
 
 	Window* window_;
-	Vec3f position_; // Ïà»úµÄÊÀ½ç¿Õ¼äÎ»ÖÃ
-	Vec3f origin_position_;	//×î³õµÄÎ»ÖÃ,ÓÃÓÚ¸´Î»
-	Vec3f target_;// Ïà»ú¿´ÏòµÄÊÀ½ç¿Õ¼äÎ»ÖÃ
-	Vec3f origin_target_;	//×î³õµÄÄ¿±êÎ»ÖÃ,ÓÃÓÚ¸´Î»
-	Vec3f up_;							// Ïà»úµÄupÏòÁ¿
+	Vec3f position_; // ç›¸æœºçš„ä¸–ç•Œç©ºé—´ä½ç½®
+	Vec3f origin_position_;	//æœ€åˆçš„ä½ç½®,ç”¨äºå¤ä½
+	Vec3f target_;// ç›¸æœºçœ‹å‘çš„ä¸–ç•Œç©ºé—´ä½ç½®
+	Vec3f origin_target_;	//æœ€åˆçš„ç›®æ ‡ä½ç½®,ç”¨äºå¤ä½
+	Vec3f up_;							// ç›¸æœºçš„upå‘é‡
 
 	/*
-		Ïà»ú×ø±êÏµµÄÖá
-		axis_r£ºÕı·½ÏòÖ¸ÏòÆÁÄ»ÓÒ²à
-		axis_u£ºÕı·½ÏòÖ¸ÏòÆÁÄ»ÉÏ²à
-		axis_v£ºÕı·½ÏòÖ¸ÏòÆÁÄ»
+		ç›¸æœºåæ ‡ç³»çš„è½´
+		axis_rï¼šæ­£æ–¹å‘æŒ‡å‘å±å¹•å³ä¾§
+		axis_uï¼šæ­£æ–¹å‘æŒ‡å‘å±å¹•ä¸Šä¾§
+		axis_vï¼šæ­£æ–¹å‘æŒ‡å‘å±å¹•
 	*/
-	Vec3f axis_r_, axis_u_, axis_v_; // ÖØ¸´¼ÆËã?
+	Vec3f axis_r_, axis_u_, axis_v_; // é‡å¤è®¡ç®—?
 
-	float fov_;						// Ïà»úFOV
-	float aspect_;					// ³¤¿í±È
+	float fov_;						// ç›¸æœºFOV
+	float aspect_;					// é•¿å®½æ¯”
 
-	float near_plane_;				// ½ü²Ã¼ôÆ½Ãæ
-	float far_plane_;				// Ô¶²Ã¼ôÆ½Ãæ
+	float near_plane_;				// è¿‘è£å‰ªå¹³é¢
+	float far_plane_;				// è¿œè£å‰ªå¹³é¢
 
 private:
-	// ¸üĞÂÏà»ú×ËÌ¬
+	// æ›´æ–°ç›¸æœºå§¿æ€
 	void UpdateCameraPose();
-	void HandleMouseEvents(); //Êó±êÊäÈë
-	void HandleKeyEvents(); // ¼üÅÌÊäÈë
+	void HandleMouseEvents(); //é¼ æ ‡è¾“å…¥
+	void HandleKeyEvents(); // é”®ç›˜è¾“å…¥
 };

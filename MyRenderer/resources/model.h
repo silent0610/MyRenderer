@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <vector>
 #include "math.h"
@@ -14,17 +14,17 @@ struct Attribute {
 class Model {
 public:
 
-	//´ÓÎÄ¼şµ¼ÈëÄ£ĞÍ,Ê¹ÓÃtiny_loader
+	//ä»æ–‡ä»¶å¯¼å…¥æ¨¡å‹,ä½¿ç”¨tiny_loader
 	Model(const std::string& model_path, const Mat4x4f& model_matrix);
-	//³ÌĞò»¯Éú³ÉÄ£ĞÍ
+	//ç¨‹åºåŒ–ç”Ÿæˆæ¨¡å‹
 	Model(const std::vector<Vec3f>& vertex, const std::vector<int>& index);
 
 	std::string PrintModelInfo() const;
 
 	~Model();
-	//¸ù¾İÎÆÀíÀàĞÍ»ñÈ¡¶ÔÓ¦µÄ ´ú±íÎÆÀíÀàĞÍµÄ×Ö·û´®
+	//æ ¹æ®çº¹ç†ç±»å‹è·å–å¯¹åº”çš„ ä»£è¡¨çº¹ç†ç±»å‹çš„å­—ç¬¦ä¸²
 	static std::string GetTextureType(TextureType texture_type);
-	//Éú³ÉÎÆÀíÎÄ¼şÂ·¾¶,¸ù¾İÂ·¾¶,ÎÄ¼şÃû,ÎÆÀíÀàĞÍ,ÎÆÀí¸ñÊ½
+	//ç”Ÿæˆçº¹ç†æ–‡ä»¶è·¯å¾„,æ ¹æ®è·¯å¾„,æ–‡ä»¶å,çº¹ç†ç±»å‹,çº¹ç†æ ¼å¼
 	static std::string GetTextureFileName(const std::string& file_path, const std::string& file_name, 
 		TextureType texture_type, const std::string& texture_format);
 
@@ -35,7 +35,7 @@ public:
 
 	int vertex_number_, face_number_;
 
-	//ÎÆÀíÖ¸Õë
+	//çº¹ç†æŒ‡é’ˆ
 	Texture* base_color_map_;
 	Texture* normal_map_;
 	Texture* roughness_map_;

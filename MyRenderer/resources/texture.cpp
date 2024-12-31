@@ -1,8 +1,8 @@
-#include "texture.h"
+ï»¿#include "texture.h"
 #include "utility.h"
 // lib 
-// ÕâÀïÒòÎªstb_image.h °üº¬ÁËÉùÃ÷ºÍ¶¨Òå, µ«ÊÇÄ¬ÈÏÇé¿öÏÂºê STB_IMAGE_IMPLEMENTATION Î´¶¨Òå, 
-// ËùÒÔÆä ÊµÏÖ ÔÚÔ¤´¦Àí½×¶Î±»Å×Æú,Ã»ÓĞ±»±àÒë, ĞèÒªÊÖ¶¯±àÒë
+// è¿™é‡Œå› ä¸ºstb_image.h åŒ…å«äº†å£°æ˜å’Œå®šä¹‰, ä½†æ˜¯é»˜è®¤æƒ…å†µä¸‹å® STB_IMAGE_IMPLEMENTATION æœªå®šä¹‰, 
+// æ‰€ä»¥å…¶ å®ç° åœ¨é¢„å¤„ç†é˜¶æ®µè¢«æŠ›å¼ƒ,æ²¡æœ‰è¢«ç¼–è¯‘, éœ€è¦æ‰‹åŠ¨ç¼–è¯‘
 #define STB_IMAGE_IMPLEMENTATION	
 #include "../lib/stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -24,8 +24,8 @@ Vec4f Texture::Sample2D(float u, float v) const
 {
 	if (!has_data_) return { 1.0f };
 
-	//mark ¼ÓÔØÄ£ĞÍÊ±ÒÑ½Ø¶Ï
-	////ÇóÓàÊı, Í¬Ê±±£Ö¤u,vÔÚ[0,1]Ö®¼ä,³¬¹ı1µÄ²¿·Ö Ñ­»·½Ø¶Ï
+	//mark åŠ è½½æ¨¡å‹æ—¶å·²æˆªæ–­
+	////æ±‚ä½™æ•°, åŒæ—¶ä¿è¯u,våœ¨[0,1]ä¹‹é—´,è¶…è¿‡1çš„éƒ¨åˆ† å¾ªç¯æˆªæ–­
 	u = fmod(u, 1);
 	v = fmod(v, 1);
 
@@ -34,7 +34,7 @@ Vec4f Texture::Sample2D(float u, float v) const
 Vec4f Texture::Sample2D(Vec2f uv) const
 {
 	if (!has_data_) return { 1.0f };
-	//mark ¼ÓÔØÄ£ĞÍÊ±ÒÑ½Ø¶Ï
+	//mark åŠ è½½æ¨¡å‹æ—¶å·²æˆªæ–­
 	uv.x = fmod(uv.x, 1);
 	uv.y = fmod(uv.y, 1);
 
@@ -43,12 +43,12 @@ Vec4f Texture::Sample2D(Vec2f uv) const
 
 ColorRGBA Texture::GetPixelColor(int x, int y) const
 {
-	x = Between(0, texture_width_ - 1, x); //xÎªÁĞºÅ
-	y = Between(0, texture_height_ - 1, y); //yÎªĞĞºÅ
+	x = Between(0, texture_width_ - 1, x); //xä¸ºåˆ—å·
+	y = Between(0, texture_height_ - 1, y); //yä¸ºè¡Œå·
 	ColorRGBA color(1.0); //Vec4f
 	if (x >= 0 && x < texture_width_ && y >= 0 && y < texture_height_)
 	{
-		//Ê¹ÓÃÖ¸Õë·ÃÎÊÏñËØÊı¾İ,¼ÆËãµÃµ½ ËùĞèÏñËØrµÄÆ«ÒÆÁ¿
+		//ä½¿ç”¨æŒ‡é’ˆè®¿é—®åƒç´ æ•°æ®,è®¡ç®—å¾—åˆ° æ‰€éœ€åƒç´ rçš„åç§»é‡
 		const uint8_t* pixel_offset = texture_data_ + (x + y * texture_width_) * texture_channels_;
 		color.r = pixel_offset[0] / 255.0f;
 		color.g = pixel_offset[1] / 255.0f;
@@ -100,15 +100,15 @@ CubeMap::CubeMap(const std::string& file_folder, CubeMapType cube_map_type, int 
 	switch (cube_map_type_)
 	{
 	case kSkyBox:
-		cubemap_[0] = new Texture(file_folder + "m0_px.hdr"); //x Õı·½ÏòµÄÃæ ¼´ÓÒ²àÃæ
-		cubemap_[1] = new Texture(file_folder + "m0_nx.hdr"); //x ¸º·½ÏòµÄÃæ ¼´×ó²àÃæ
-		cubemap_[2] = new Texture(file_folder + "m0_py.hdr"); //y Õı·½ÏòµÄÃæ ¼´ÉÏ·½Ãæ
-		cubemap_[3] = new Texture(file_folder + "m0_ny.hdr"); //y ¸º·½ÏòµÄÃæ ¼´ÏÂ·½Ãæ
-		cubemap_[4] = new Texture(file_folder + "m0_pz.hdr"); //z Õı·½ÏòµÄÃæ ¼´Ç°·½Ãæ
-		cubemap_[5] = new Texture(file_folder + "m0_nz.hdr"); //z ¸º·½ÏòµÄÃæ ¼´ºó·½Ãæ
+		cubemap_[0] = new Texture(file_folder + "m0_px.hdr"); //x æ­£æ–¹å‘çš„é¢ å³å³ä¾§é¢
+		cubemap_[1] = new Texture(file_folder + "m0_nx.hdr"); //x è´Ÿæ–¹å‘çš„é¢ å³å·¦ä¾§é¢
+		cubemap_[2] = new Texture(file_folder + "m0_py.hdr"); //y æ­£æ–¹å‘çš„é¢ å³ä¸Šæ–¹é¢
+		cubemap_[3] = new Texture(file_folder + "m0_ny.hdr"); //y è´Ÿæ–¹å‘çš„é¢ å³ä¸‹æ–¹é¢
+		cubemap_[4] = new Texture(file_folder + "m0_pz.hdr"); //z æ­£æ–¹å‘çš„é¢ å³å‰æ–¹é¢
+		cubemap_[5] = new Texture(file_folder + "m0_nz.hdr"); //z è´Ÿæ–¹å‘çš„é¢ å³åæ–¹é¢
 		break;
 	case kIrradianceMap:
-		cubemap_[0] = new Texture(file_folder + "i_px.hdr"); // Ë³ĞòÓëÉÏÃæÒ»ÖÂ
+		cubemap_[0] = new Texture(file_folder + "i_px.hdr"); // é¡ºåºä¸ä¸Šé¢ä¸€è‡´
 		cubemap_[1] = new Texture(file_folder + "i_nx.hdr");
 		cubemap_[2] = new Texture(file_folder + "i_py.hdr");
 		cubemap_[3] = new Texture(file_folder + "i_ny.hdr");
@@ -116,8 +116,8 @@ CubeMap::CubeMap(const std::string& file_folder, CubeMapType cube_map_type, int 
 		cubemap_[5] = new Texture(file_folder + "i_nz.hdr");
 		break;
 	case kSpecularMap:
-		//¸ù¾İmipmap_level¼ÓÔØ²»Í¬µÄÌùÍ¼
-		cubemap_[0] = new Texture(file_folder + "m" + std::to_string(mipmap_level) + "_px.hdr"); //Ë³ĞòÓëÉÏÃæÒ»ÖÂ
+		//æ ¹æ®mipmap_levelåŠ è½½ä¸åŒçš„è´´å›¾
+		cubemap_[0] = new Texture(file_folder + "m" + std::to_string(mipmap_level) + "_px.hdr"); //é¡ºåºä¸ä¸Šé¢ä¸€è‡´
 		cubemap_[1] = new Texture(file_folder + "m" + std::to_string(mipmap_level) + "_nx.hdr");
 		cubemap_[2] = new Texture(file_folder + "m" + std::to_string(mipmap_level) + "_py.hdr");
 		cubemap_[3] = new Texture(file_folder + "m" + std::to_string(mipmap_level) + "_ny.hdr");
@@ -138,31 +138,31 @@ CubeMap::~CubeMap()
 	delete[] cubemap_;
 }
 
-//²ÉÑùÁ¢·½ÌåÌùÍ¼
+//é‡‡æ ·ç«‹æ–¹ä½“è´´å›¾
 Vec3f CubeMap::Sample(Vec3f& direction)const
 {
-	//CalculateCubeMapUV·µ»Ø½á¹¹Ìå, auto½øĞĞ½á¹¹»¯°ó¶¨, ¿ÉÒÔµÃµ½ÖµÀïÃæµÄÖµ,ÄÇÃ´Àà¿ÉÒÔÕâÃ´²Ù×÷Âğ
+	//CalculateCubeMapUVè¿”å›ç»“æ„ä½“, autoè¿›è¡Œç»“æ„åŒ–ç»‘å®š, å¯ä»¥å¾—åˆ°å€¼é‡Œé¢çš„å€¼,é‚£ä¹ˆç±»å¯ä»¥è¿™ä¹ˆæ“ä½œå—
 	const auto [face_id, uv] = CalculateCubeMapUV(direction);
 	return cubemap_[face_id]->Sample2D(uv.x, uv.y).xyz();
 }
 
 
-/// @brief  ¼ÆËãÁ¢·½ÌåÌùÍ¼µÄuv×ø±êºÍÒª²ÉÑùµÄÃæ,auto½øĞĞ½á¹¹»¯°ó¶¨, ¿ÉÒÔµÃµ½ÖµÀïÃæµÄÖµ,ÄÇÃ´Àà¿ÉÒÔÕâÃ´²Ù×÷Âğ
-/// @param direction ÓÃÓÚ²ÉÑùµÄ·½Ïò
-/// @return ·µ»Ø½á¹¹Ìå
+/// @brief  è®¡ç®—ç«‹æ–¹ä½“è´´å›¾çš„uvåæ ‡å’Œè¦é‡‡æ ·çš„é¢,autoè¿›è¡Œç»“æ„åŒ–ç»‘å®š, å¯ä»¥å¾—åˆ°å€¼é‡Œé¢çš„å€¼,é‚£ä¹ˆç±»å¯ä»¥è¿™ä¹ˆæ“ä½œå—
+/// @param direction ç”¨äºé‡‡æ ·çš„æ–¹å‘
+/// @return è¿”å›ç»“æ„ä½“
 CubeMap::CubeMapUV& CubeMap::CalculateCubeMapUV(const Vec3f& direction)
 {
 	//todo
 	CubeMapUV cubemap_uv;
 	float ma = 0, sc = 0, tc = 0;
-	//È·¶¨Ö÷Öá
+	//ç¡®å®šä¸»è½´
 	const Vec3f direction_abs = vector_abs(direction);
 	if (direction_abs.x > direction_abs.y && direction_abs.x > direction_abs.z)
-	{//xÎªÖ÷Öá
-		ma = direction_abs.x; //ÒòÎªmaÎªÖ÷ÖáµÄ¾ø¶ÔÖµ
+	{//xä¸ºä¸»è½´
+		ma = direction_abs.x; //å› ä¸ºmaä¸ºä¸»è½´çš„ç»å¯¹å€¼
 		if (direction.x > 0)
 		{
-			cubemap_uv.face_id = 0; //xÕı·½Ïò
+			cubemap_uv.face_id = 0; //xæ­£æ–¹å‘
 			sc = -direction.z;
 			tc = -direction.y;
 		}
@@ -173,7 +173,7 @@ CubeMap::CubeMapUV& CubeMap::CalculateCubeMapUV(const Vec3f& direction)
 			tc = -direction.y;
 		}
 	}
-	else if (direction_abs.y > direction_abs.z)		// yÖáÎªÖ÷Öá
+	else if (direction_abs.y > direction_abs.z)		// yè½´ä¸ºä¸»è½´
 	{
 		ma = direction_abs.y;
 		if (direction.y > 0)					/* positive y */
@@ -189,7 +189,7 @@ CubeMap::CubeMapUV& CubeMap::CalculateCubeMapUV(const Vec3f& direction)
 			tc = -direction.z;
 		}
 	}
-	else											// zÖáÎªÖ÷Öá
+	else											// zè½´ä¸ºä¸»è½´
 	{
 		ma = direction_abs.z;
 		if (direction.z > 0)					/* positive z */
@@ -205,7 +205,7 @@ CubeMap::CubeMapUV& CubeMap::CalculateCubeMapUV(const Vec3f& direction)
 			tc = -direction.y;
 		}
 	}
-	//¸ù¾İ¹«Ê½¼ÆËãuv×ø±ê
+	//æ ¹æ®å…¬å¼è®¡ç®—uvåæ ‡
 	cubemap_uv.uv.u = (sc / ma + 1.0f) / 2.0f;
 	cubemap_uv.uv.v = (tc / ma + 1.0f) / 2.0f;
 
@@ -222,17 +222,17 @@ SpecularCubeMap::SpecularCubeMap(const std::string& file_folder, CubeMap::CubeMa
 
 IBLMap::IBLMap(const std::string& skybox_path)
 {
-	skybox_name_ = GetFileNameWithoutExtension(skybox_path);//»ñÈ¡Â·¾¶µÄÌì¿ÕºĞÃû×Ö
-	//folder´æ·Åµ÷ÓÃcmgenÉú³ÉµÄÎÄ¼ş
-	//ÔÚÌì¿ÕºĞÂ·¾¶ÏÂµÄÒÔÌì¿ÕºĞÃû×ÖÎªÃûµÄÎÄ¼ş¼Ğ  Ìì¿ÕºĞÂ·¾¶/Ìì¿ÕºĞÃû×Ö/
+	skybox_name_ = GetFileNameWithoutExtension(skybox_path);//è·å–è·¯å¾„çš„å¤©ç©ºç›’åå­—
+	//folderå­˜æ”¾è°ƒç”¨cmgenç”Ÿæˆçš„æ–‡ä»¶
+	//åœ¨å¤©ç©ºç›’è·¯å¾„ä¸‹çš„ä»¥å¤©ç©ºç›’åå­—ä¸ºåçš„æ–‡ä»¶å¤¹  å¤©ç©ºç›’è·¯å¾„/å¤©ç©ºç›’åå­—/
 	skybox_folder_ = GetFileFolder(skybox_path) + "/" + skybox_name_ + "/"; 
 	
-	// ¼ì²é²¢Éú³ÉIBL
+	// æ£€æŸ¥å¹¶ç”ŸæˆIBL
 	if (!CheckFileExist(skybox_folder_ + "brdf_lut.hdr"))
 	{
 		GenerateCubeMap(skybox_path);
 	}
-	// ¼ÓÔØIBL×ÊÔ´
+	// åŠ è½½IBLèµ„æº
 	skybox_cubemap_ = new CubeMap(skybox_folder_, CubeMap::CubeMapType::kSkyBox);
 	irradiance_cubemap_ = new CubeMap(skybox_folder_, CubeMap::CubeMapType::kIrradianceMap);
 	specular_cubemap_ = new SpecularCubeMap(skybox_folder_, CubeMap::CubeMapType::kSpecularMap);

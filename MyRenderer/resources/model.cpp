@@ -1,25 +1,25 @@
-#include "model.h"
+ï»¿#include "model.h"
 #include "utility.h"
 
-#define TINYOBJLOADER_IMPLEMENTATION // ÀíÓÉ¼ûtexture.cpp
+#define TINYOBJLOADER_IMPLEMENTATION // ç†ç”±è§texture.cpp
 #include <tiny_obj_loader.h>
 
 
 Model::Model(const std::string& model_path, const Mat4x4f& model_matrix)
 {
-	//TinyLoader ¼ÓÔØObj
+	//TinyLoader åŠ è½½Obj
 	LoadModelByTinyObj(model_path);
 	model_matrix_ = model_matrix;
 
-	model_folder_ = GetFileFolder(model_path); //Ä£ĞÍÎÄ¼ş¼Ğ
-	model_name_ = GetFileNameWithoutExtension(model_path); //Ä£ĞÍÎÄ¼şÃû
+	model_folder_ = GetFileFolder(model_path); //æ¨¡å‹æ–‡ä»¶å¤¹
+	model_name_ = GetFileNameWithoutExtension(model_path); //æ¨¡å‹æ–‡ä»¶å
 
-	//¸ù¾İÄ£ĞÍÎÄ¼şÂ·¾¶,¸ù¾İÎÆÀíÀàĞÍ¼ìË÷Ò»¸öÎÆÀíÎÄ¼şÍêÕûÂ·¾¶(ÕâÀïËæ±ãÑ¡ÁËÒ»¸öbasecolor),
-	//ËæºóÊ¹ÓÃGetFileExtension»ñÈ¡ÎÆÀíµÄºó×º,¼´¸ñÊ½
+	//æ ¹æ®æ¨¡å‹æ–‡ä»¶è·¯å¾„,æ ¹æ®çº¹ç†ç±»å‹æ£€ç´¢ä¸€ä¸ªçº¹ç†æ–‡ä»¶å®Œæ•´è·¯å¾„(è¿™é‡Œéšä¾¿é€‰äº†ä¸€ä¸ªbasecolor),
+	//éšåä½¿ç”¨GetFileExtensionè·å–çº¹ç†çš„åç¼€,å³æ ¼å¼
 	const std::string basecolor_file_name = GetFilePathByFileName(model_folder_, GetTextureType(kTextureTypeBaseColor));
 	const std::string texture_format = GetFileExtension(basecolor_file_name);
 
-	//¸ù¾İÄ£ĞÍÎÄ¼şÂ·¾¶,Ä£ĞÍÎÄ¼şÃû,ÎÆÀíÀàĞÍ,ÎÆÀí¸ñÊ½Éú³ÉÎÆÀíÎÄ¼şÍêÕûÂ·¾¶²¢¼ÓÔØÎÆÀí
+	//æ ¹æ®æ¨¡å‹æ–‡ä»¶è·¯å¾„,æ¨¡å‹æ–‡ä»¶å,çº¹ç†ç±»å‹,çº¹ç†æ ¼å¼ç”Ÿæˆçº¹ç†æ–‡ä»¶å®Œæ•´è·¯å¾„å¹¶åŠ è½½çº¹ç†
 	{
 		base_color_map_ = new Texture(GetTextureFileName(model_folder_, model_name_, kTextureTypeBaseColor, texture_format));
 		normal_map_ = new Texture(GetTextureFileName(model_folder_, model_name_, kTextureTypeNormal, texture_format));
@@ -44,14 +44,14 @@ void Model::LoadModel(const std::string& model_name)
 	FILE* file = fopen(model_name.c_str(), "rb");
 	while (true)
 	{
-		if (fgets(line, LINE_SIZE, file) == nullptr) //¶ÁÈ¡ÎÄ¼şÒ»ĞĞ, Èô¿ÕÔòÖÕÖ¹
+		if (fgets(line, LINE_SIZE, file) == nullptr) //è¯»å–æ–‡ä»¶ä¸€è¡Œ, è‹¥ç©ºåˆ™ç»ˆæ­¢
 		{
 			break;
 		}
-		else if (strncmp(line, "v ", 2) == 0) //ÅĞ¶Ï¸ÃĞĞµÄÇ° 2 ¸ö×Ö·û´®Îª"v ",¼´¶¥µãĞĞ
+		else if (strncmp(line, "v ", 2) == 0) //åˆ¤æ–­è¯¥è¡Œçš„å‰ 2 ä¸ªå­—ç¬¦ä¸²ä¸º"v ",å³é¡¶ç‚¹è¡Œ
 		{
 			Vec3f position;
-			sscanf(line, "v %f %f %f", &position.x, &position.y, &position.z); //¶ÁÈ¡¶¥µã×ø±ê
+			sscanf(line, "v %f %f %f", &position.x, &position.y, &position.z); //è¯»å–é¡¶ç‚¹åæ ‡
 			positions.push_back(position);
 		}
 		else if (strncmp(line, "vt ", 3) == 0)  //uv
@@ -60,34 +60,34 @@ void Model::LoadModel(const std::string& model_name)
 			sscanf(line, "vt %f %f", &texcoord.x, &texcoord.y);
 			texcoords.push_back(texcoord);
 		}
-		else if (strncmp(line, "vn ", 3) == 0) // ·¨Ïß
+		else if (strncmp(line, "vn ", 3) == 0) // æ³•çº¿
 		{
 			Vec3f normal;
 			sscanf(line, "vn %f %f %f", &normal.x, &normal.y, &normal.z);
 			normals.push_back(normal);
 		}
-		else if (strncmp(line, "f ", 2) == 0) // Ãæ
+		else if (strncmp(line, "f ", 2) == 0) // é¢
 		{
 			int i;
 			int pos_indices[3], uv_indices[3], n_indices[3];
 			sscanf(line, "f %d/%d/%d %d/%d/%d %d/%d/%d",
-				&pos_indices[0], &uv_indices[0], &n_indices[0], //±£´æµÄÊÇ¶¥µã,uv,·¨ÏßµÄË÷Òı
+				&pos_indices[0], &uv_indices[0], &n_indices[0], //ä¿å­˜çš„æ˜¯é¡¶ç‚¹,uv,æ³•çº¿çš„ç´¢å¼•
 				&pos_indices[1], &uv_indices[1], &n_indices[1],
 				&pos_indices[2], &uv_indices[2], &n_indices[2]);
 
-			// ½«µÚÈı½ÇĞÎµÄµÚÒ»¸ö¶¥µãµÄ¸÷¸öĞÅÏ¢Êä³ö
+			// å°†ç¬¬ä¸‰è§’å½¢çš„ç¬¬ä¸€ä¸ªé¡¶ç‚¹çš„å„ä¸ªä¿¡æ¯è¾“å‡º
 			std::cout << pos_indices[0] << " ";
 			std::cout << uv_indices[0] << " ";
 			std::cout << n_indices[0] << std::endl;
 
 			for (i = 0; i < 3; i++)
 			{
-				position_indices.push_back(pos_indices[i] - 1); //Ë÷Òı´Ó1¿ªÊ¼,ËùÒÔ¼õ1,Ê¹Æä´Ó0¿ªÊ¼
+				position_indices.push_back(pos_indices[i] - 1); //ç´¢å¼•ä»1å¼€å§‹,æ‰€ä»¥å‡1,ä½¿å…¶ä»0å¼€å§‹
 				texcoord_indices.push_back(uv_indices[i] - 1);
 				normal_indices.push_back(n_indices[i] - 1);
 			}
 		}
-		else if (strncmp(line, "# ext.tangent ", 14) == 0) //ÇĞÏßÌùÍ¼..
+		else if (strncmp(line, "# ext.tangent ", 14) == 0) //åˆ‡çº¿è´´å›¾..
 		{
 			Vec4f tangent;
 			sscanf(line, "# ext.tangent %f %f %f %f", &tangent.x, &tangent.y, &tangent.z, &tangent.w);
@@ -112,11 +112,11 @@ void Model::LoadModel(const std::string& model_name)
 		float u = texcoords[texcoord_index].u;
 		float v = texcoords[texcoord_index].v;
 
-		//mark,¼ÓÔØµÄÊ±ºò¾ÍÏÈ½Ø¶Ïuv,»á²»»á¸üºÃ?
-		// ²¿·ÖuvÖµ´óÓÚ1£¬ÏÈ½«uvÖµ×ª»»µ½[0-1]Çø¼äÖĞ,Ñ­»·½Ø¶Ï
+		//mark,åŠ è½½çš„æ—¶å€™å°±å…ˆæˆªæ–­uv,ä¼šä¸ä¼šæ›´å¥½?
+		// éƒ¨åˆ†uvå€¼å¤§äº1ï¼Œå…ˆå°†uvå€¼è½¬æ¢åˆ°[0-1]åŒºé—´ä¸­,å¾ªç¯æˆªæ–­
 		u = fmod(u, 1);
 		v = fmod(v, 1);
-		// uv×ø±êµÄÔ­µãÎ»ÓÚ×óÏÂ½Ç£¬ÌùÍ¼Êı¾İµÄÔ­µãÎ»ÓÚ×óÉÏ½Ç£¬Òò´ËĞèÒªÔÚvÖáÉÏ·´Ïò
+		// uvåæ ‡çš„åŸç‚¹ä½äºå·¦ä¸‹è§’ï¼Œè´´å›¾æ•°æ®çš„åŸç‚¹ä½äºå·¦ä¸Šè§’ï¼Œå› æ­¤éœ€è¦åœ¨vè½´ä¸Šåå‘
 		v = 1.0f - v;
 
 		attribute.texcoord = { u,v };
@@ -135,10 +135,10 @@ void Model::LoadModel(const std::string& model_name)
 	has_tangent_ = tangents.size() > 0;
 }
 
-//ÕâÀïÃ»ÓĞÊ¹ÓÃË÷Òı,·´¶øÖ±½Ó±£´æÃ¿¸ö¶¥µãµÄĞÅÏ¢,ÕâÑù»áµ¼ÖÂÖØ¸´µÄ¶¥µãĞÅÏ¢
+//è¿™é‡Œæ²¡æœ‰ä½¿ç”¨ç´¢å¼•,åè€Œç›´æ¥ä¿å­˜æ¯ä¸ªé¡¶ç‚¹çš„ä¿¡æ¯,è¿™æ ·ä¼šå¯¼è‡´é‡å¤çš„é¡¶ç‚¹ä¿¡æ¯
 void Model::LoadModelByTinyObj(const std::string& model_name)
 {
-	// ¼ÓÔØÇĞÏß
+	// åŠ è½½åˆ‡çº¿
 	std::pmr::vector<Vec4f>tangents;
 	constexpr int LINE_SIZE = 256;
 	char line[LINE_SIZE];
@@ -171,12 +171,12 @@ void Model::LoadModelByTinyObj(const std::string& model_name)
 		}
 		vertex_number_ = 0;
 		face_number_ = 0;
-		//±éÀúshape
+		//éå†shape
 		for (const auto& shape : shapes)
-		{  //±éÀúÃ¿¸öÃæ
+		{  //éå†æ¯ä¸ªé¢
 			for (size_t face_id = 0; face_id < shape.mesh.indices.size();)
 			{
-				//Ã¿¸öÃæÓĞ3¸ö¶¥µã
+				//æ¯ä¸ªé¢æœ‰3ä¸ªé¡¶ç‚¹
 				for (size_t i = 0; i < 3; i++)
 				{
 					Attribute attribute{};
@@ -220,7 +220,7 @@ void Model::LoadModelByTinyObj(const std::string& model_name)
 	}
 }
 
-//vertexÖĞ±£´æÁË¶¥µãµÄ×ø±ê
+//vertexä¸­ä¿å­˜äº†é¡¶ç‚¹çš„åæ ‡
 Model::Model(const std::vector<Vec3f>& vertex, const std::vector<int>& index)
 {
 	for (int i : index)

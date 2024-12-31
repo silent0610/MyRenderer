@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <map>
 #include <Windows.h> // Windows API
@@ -6,31 +6,31 @@
 #include <string>
 
 struct Mouse{
-	Vec2f mouse_pos; // Êó±êÎ»ÖÃ
-	Vec2f mouse_delta; // Êó±êÒÆ¶¯µÄÔöÁ¿
-	float mouse_wheel_delta; // Êó±ê¹öÂÖµÄÔöÁ¿
+	Vec2f mouse_pos; // é¼ æ ‡ä½ç½®
+	Vec2f mouse_delta; // é¼ æ ‡ç§»åŠ¨çš„å¢é‡
+	float mouse_wheel_delta; // é¼ æ ‡æ»šè½®çš„å¢é‡
 };
 
 class Window {
 public:
-	int width_;							// ´°¿Ú¿í¶È
-	int height_;						// ´°¿Ú¸ß¶È
+	int width_;							// çª—å£å®½åº¦
+	int height_;						// çª—å£é«˜åº¦
 
-	char keys_[512];					// ¼üÅÌ°´¼ü
-	char mouse_buttons_[3];				// 0-Êó±ê×ó¼ü£¬1-Êó±êÓÒ¼ü£¬2-Êó±ê¹öÂÖ	
-	bool is_close_;						// ´°¿ÚÊÇ·ñ¹Ø±Õ
-	Mouse mouse_info_;					// Êó±êĞÅÏ¢
+	char keys_[512];					// é”®ç›˜æŒ‰é”®
+	char mouse_buttons_[3];				// 0-é¼ æ ‡å·¦é”®ï¼Œ1-é¼ æ ‡å³é”®ï¼Œ2-é¼ æ ‡æ»šè½®	
+	bool is_close_;						// çª—å£æ˜¯å¦å…³é—­
+	Mouse mouse_info_;					// é¼ æ ‡ä¿¡æ¯
 
 	bool can_press_keyboard_;
 
 	Window() = default;
 	~Window() = default;
-	Window(const Window& window) = delete; // ½ûÖ¹¿½±´¹¹Ôìº¯Êı
-	Window& operator=(const Window& window) = delete; // ½ûÖ¹¿½±´¸³ÖµÔËËã·û
-	static Window* GetInstance(); //»ñÈ¡ÊµÀı?
+	Window(const Window& window) = delete; // ç¦æ­¢æ‹·è´æ„é€ å‡½æ•°
+	Window& operator=(const Window& window) = delete; // ç¦æ­¢æ‹·è´èµ‹å€¼è¿ç®—ç¬¦
+	static Window* GetInstance(); //è·å–å®ä¾‹?
 
-	void WindowInit(int width, int height, const char* title); // ³õÊ¼»¯´°¿Ú
-	void WindowDestroy(); // Ïú»Ù´°¿Ú
+	void WindowInit(int width, int height, const char* title); // åˆå§‹åŒ–çª—å£
+	void WindowDestroy(); // é”€æ¯çª—å£
 
 	Vec2f GetMousePosition() const;
 	void WindowDisplay(const uint8_t* frame_buffer);
@@ -43,12 +43,12 @@ private:
 	HDC memory_dc_;
 	HBITMAP bitmap_old_;
 	HBITMAP bitmap_dib_;
-	uint8_t* frame_buffer_;				// Êä³öÄÚÈİ
+	uint8_t* frame_buffer_;				// è¾“å‡ºå†…å®¹
 
-	std::map<std::string, std::string> log_messages_;	// ÈÕÖ¾ĞÅÏ¢Êı¾İ
-	int num_frames_per_second_ = 0;						// Ò»ÃëÄÚµÄÖ¡Êı
-	float last_frame_time_;								// Ò»Ö¡¿ªÊ¼äÖÈ¾µÄÊ±¿Ì
-	float current_frame_time_;							// Ò»Ö¡½áÊøäÖÈ¾µÄÊ±¿Ì
+	std::map<std::string, std::string> log_messages_;	// æ—¥å¿—ä¿¡æ¯æ•°æ®
+	int num_frames_per_second_ = 0;						// ä¸€ç§’å†…çš„å¸§æ•°
+	float last_frame_time_;								// ä¸€å¸§å¼€å§‹æ¸²æŸ“çš„æ—¶åˆ»
+	float current_frame_time_;							// ä¸€å¸§ç»“æŸæ¸²æŸ“çš„æ—¶åˆ»
 
 	static Window* window_;
 
