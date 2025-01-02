@@ -523,7 +523,7 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 			// 如果是上边缘, 允许等于0???
 			// 
 			// 判断点(x,y)是否位于三角形内部或者三角形边缘
-			// 当属于上边缘或者左边缘的时候，将e与1进行比较，从而跳过e=0的情况 mark bug?
+			// 当不属于上边缘或者左边缘的时候，将e与1进行比较，从而跳过e=0的情况 mark bug?
 			float e0 = edge_equation_[0].Evaluate(offset.x, offset.y);
 			if (e0 < (edge_equation_[0].is_top_left ? 0 : 1)) continue;
 

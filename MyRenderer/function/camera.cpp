@@ -170,7 +170,7 @@ void Camera::UpdateSkyboxMesh(SkyBoxShader* sky_box_shader) const
 	//Vec3f right_bottom = Vec3f(xf, -yf, 1);
 
 	Vec3f camera_position = position_;
-	float far_plane = far_plane_ - 2; //为什么减2?
+	float far_plane = far_plane_ - 2; // 精度 为什么减2?
 
 	sky_box_shader->plane_vertex_[0] = camera_position + far_plane * right_top; //顶点向量乘以远裁剪面z, 得到顶点世界空间坐标
 	sky_box_shader->plane_vertex_[1] = camera_position + far_plane * left_top;
