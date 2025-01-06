@@ -249,7 +249,7 @@ Model::~Model()
 	delete metallic_map_;
 	delete occlusion_map_;
 	delete emission_map_;
-
+	delete Motion;
 	attributes_.clear();
 }
 

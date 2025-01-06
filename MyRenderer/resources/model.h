@@ -3,6 +3,7 @@
 #include <vector>
 #include "math.h"
 #include "texture.h"
+#include <../function/Motion.h>
 
 struct Attribute {
 	Vec3f position_os;
@@ -45,7 +46,7 @@ public:
 
 	bool has_tangent_ = false;
 
-
+	Motion* Motion;
 
 private: 
 	void LoadModel(const std::string& model_name);

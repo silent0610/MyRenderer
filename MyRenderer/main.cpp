@@ -44,7 +44,7 @@ int main()
 	const Vec3f camera_up = { 0, 1, 0 };		// 相机向上的位置
 	constexpr float fov = 90.0f;				// 相加的垂直FOV
 	auto* camera = new Camera(camera_position, camera_target, camera_up, fov, static_cast<float>(width) / height);
-	DirectionalLight light = { Vec3f(1.0f) ,{ 0, -5, -2 } };
+	auto light = PointLight(Vec3f(1.0f),Vec3f(0.0f));
 
 
 	const auto uniform_buffer = new UniformBuffer();
@@ -67,6 +67,8 @@ int main()
 	const auto renderer = new Renderer(width, height);
 	renderer->SetRenderState(false, true); 
 #pragma endregion
+
+
 
 #pragma region RenderLoop
 	while (!window->is_close_)
@@ -97,12 +99,29 @@ int main()
 			break;
 		}
 		renderer->ClearFrameBuffer(renderer->render_frame_, true);
+
+#pragma 日地月旋转
+		//公转
+		//CircleMovement* orbitMovement = new CircleMovement(1.0f, 1.0f);
+		//scene->models_[0]->Motion->Movements[0] = orbitMovement;
+		//scene->models_[1]->Motion->Movements[0] = orbitMovement;
+		//scene->models_[2]->Motion->Movements[0] = orbitMovement;
+		//for (auto model : scene->models_){
+		//	model->Motion->GetModelMatrix();
+		//}
+		// 月球绕地球转
+		//Vec3f axis = scene->models_[1]->Motion->modelMatrix.GetCol(3).xyz();
+		//Mat4x4f moveToOrigin = matrix_set_translate(-axis.x, -axis.y, -axis.z);
+		//Mat4x4f moveBack = matrix_set_translate(axis.x, axis.y, axis.z);
+		//Mat4x4f rotate = matrix_set_rotate(0, 1, 0, 0.1f);
+		//scene->models_[2]->Motion->modelMatrix = moveBack*rotate*moveToOrigin * scene->models_[2]->Motion->modelMatrix;
+#pragma endregion
 		for (auto model : scene->models_)
 		{
 			switch (scene->current_shader_type_)
 			{
 			case kBlinnPhongShader:
-				camera->UpdateUniformBuffer(blinn_phong_shader->uniform_buffer_, model->model_matrix_);
+				camera->UpdateUniformBuffer(blinn_phong_shader->uniform_buffer_, model->Motion->modelMatrix);
 				blinn_phong_shader->model_ = model;
 				break;
 			case kPbrShader:

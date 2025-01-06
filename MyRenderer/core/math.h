@@ -107,7 +107,7 @@ inline static Mat4x4f matrix_set_scale(const float x, const float y, const float
 	return m;
 }
 
-// 旋转变换, 围绕（x,y,z）矢量旋转theta角度
+// 旋转变换, 围绕（x,y,z）轴旋转theta角度, 只生效于原点
 // hamilton四元数 https://blog.csdn.net/gyxx1998/article/details/119636130
 inline static Mat4x4f matrix_set_rotate(float x, float y, float z, float theta) {
 	float qsin = (float)sin(theta * 0.5f);

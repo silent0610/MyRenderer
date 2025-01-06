@@ -1,14 +1,19 @@
 ﻿#include "scene.h"
 #include "../resources/utility.h"
 
+
+
 Scene::Scene(std::vector<std::string> model_paths)
 {
 	// 加载模型
 	for (size_t i = 0; i < model_paths.size(); i++)
 	{
 		auto model = new Model(model_paths[i], model_matrices[i]);
+		Motion * motion = new Motion(model_matrices[i], window_);
+		model->Motion = motion;
 		models_.push_back(model);
 	}
+
 
 	// 加载IBL资源
 	for (size_t i = 0; i < skybox_paths.size(); i++)

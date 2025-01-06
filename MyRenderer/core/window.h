@@ -36,6 +36,7 @@ public:
 	void WindowDisplay(const uint8_t* frame_buffer);
 	void RemoveLogMessage(const std::string& log_type);
 	void SetLogMessage(const std::string&, const std::string&);
+	static float PlatformGetTime();
 
 private:
 
@@ -59,7 +60,7 @@ private:
 	static void RegisterWindowClass(const char* title);
 
 	static float GetNativeTime();
-	static float PlatformGetTime();
+	
 	static void MessageDispatch();
 	static void InitBitmapHeader(BITMAPINFOHEADER& bitmap, const int width, const int height);
 };

@@ -102,6 +102,23 @@ public:
 	}
 };
 
+//class ShadowShader : public Shader
+//{
+//public:
+//	enum VaryingAttributes
+//	{
+//		VARYING_TEXCOORD = 0,			// 纹理坐标
+//		VARYING_POSITION_WS = 1,		// 世界空间坐标
+//		VARYING_NORMAL_WS = 2,			// 世界空间法线
+//		VARYING_TANGENT_WS = 3,			// 世界空间切线
+//	};
+//	ShadowShader(UniformBuffer* uniform_buffer) : Shader(uniform_buffer) {};
+//	Vec4f VertexShaderFunction(int index, Varyings& output) const override;
+//	Vec4f PixelShaderFunction(Varyings& input) const override;
+//	void HandleKeyEvents()  override;
+//};
+
+
 class BlinnPhongShader : public Shader
 {
 public:

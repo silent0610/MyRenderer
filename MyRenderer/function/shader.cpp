@@ -1,11 +1,26 @@
 ﻿#include "shader.h"
 
-#pragma region ToneMapping
-//似乎没用到吗
-#pragma endregion
 
 
-#pragma Region BlingPhong
+
+//#pragma region Shadow
+//
+//Vec4f ShadowShader::VertexShaderFunction(int index, Varyings& output) const
+//{
+//	Vec4f position_cs = uniform_buffer_->mvp_matrix * attributes_[index].position_os.xyz1();
+//	return position_cs;
+//}
+//
+//Vec4f ShadowShader::PixelShaderFunction(Varyings& input) const
+//{
+//	Vec3f color(0.0f);
+//
+//	return color.xyz1();
+//}
+//#pragma endregion
+
+
+#pragma region BlingPhong
 
 /// @brief 这个似乎可以改进, 把position_cs也放在 Varyings结构体中,更统一
 /// @param index 
