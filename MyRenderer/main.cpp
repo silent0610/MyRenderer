@@ -9,6 +9,18 @@
 #include "function/scene.h"
 
 void HandleModelSkyboxSwitchEvents(Window* window, Scene* scene, Renderer* renderer);
+
+inline std::vector<std::string> model_paths =
+{
+	/*"../assets/helmet/helmet.obj",*/
+	"../assets/sun/sun.obj",
+	"../assets/earth/earth.obj",
+	"../assets/moon/moon.obj"
+	
+	// "../assets/Cerberus/Cerberus.obj",
+	// "../assets/Safe/Safe.obj",
+	// "../assets/Revolver_bolter/Revolver_bolter.obj"
+};
 int main()
 {
 	constexpr int width = 800;
@@ -18,7 +30,7 @@ int main()
 	window->WindowInit(width, height, "SoftRenderer");
 
 #pragma region 外部资源加载
-	const auto scene = new Scene();
+	const auto scene = new Scene(model_paths);
 
 	auto model = scene->current_model_;
 	window->SetLogMessage("model_message", model->PrintModelInfo());
@@ -27,7 +39,7 @@ int main()
 #pragma endregion
 
 #pragma region 配置UniformBuffer, 相机参数, 光源参数
-	const Vec3f camera_position = { 0, 0, 2 };	// 相机位置
+	const Vec3f camera_position = { 0, 0, 5 };	// 相机位置
 	const Vec3f camera_target = { 0, 0, 0 };	// 相机看向的位置
 	const Vec3f camera_up = { 0, 1, 0 };		// 相机向上的位置
 	constexpr float fov = 90.0f;				// 相加的垂直FOV
@@ -62,14 +74,13 @@ int main()
 		scene->HandleKeyEvents( blinn_phong_shader, pbr_shader);			// 更新当前使用的shader
 	
 #pragma region 渲染Model
-		model = scene->current_model_;
+#pragma region 多物体
 		switch (scene->current_shader_type_)
 		{
 		case kBlinnPhongShader:
 			scene->UpdateShaderInfo(blinn_phong_shader);
 			renderer->SetVertexShader(blinn_phong_shader->vertex_shader_);
 			renderer->SetPixelShader(blinn_phong_shader->pixel_shader_);
-			camera->UpdateUniformBuffer(blinn_phong_shader->uniform_buffer_, model->model_matrix_);
 
 			blinn_phong_shader->HandleKeyEvents();
 			break;
@@ -77,38 +88,103 @@ int main()
 			scene->UpdateShaderInfo(pbr_shader);
 			renderer->SetVertexShader(pbr_shader->vertex_shader_);
 			renderer->SetPixelShader(pbr_shader->pixel_shader_);
-			camera->UpdateUniformBuffer(pbr_shader->uniform_buffer_, model->model_matrix_);
-
+			
 			pbr_shader->HandleKeyEvents();
 			break;
 		default:
 			break;
 		}
 		renderer->ClearFrameBuffer(renderer->render_frame_, true);
-		for (size_t i = 0; i < model->attributes_.size(); i += 3)
+		for (auto model : scene->models_)
 		{
-			// 设置三个顶点的输入，供 VS 读取
-			for (int j = 0; j < 3; j++)
+			switch (scene->current_shader_type_)
 			{
-				switch (scene->current_shader_type_)
-				{
-				case kBlinnPhongShader:
-					blinn_phong_shader->attributes_[j].position_os = model->attributes_[i + j].position_os;
-					blinn_phong_shader->attributes_[j].texcoord = model->attributes_[i + j].texcoord;
-					blinn_phong_shader->attributes_[j].normal_os = model->attributes_[i + j].normal_os;
-					blinn_phong_shader->attributes_[j].tangent_os = model->attributes_[i + j].tangent_os;
-					break;
-				case kPbrShader:
-					pbr_shader->attributes_[j].position_os = model->attributes_[i + j].position_os;
-					pbr_shader->attributes_[j].texcoord = model->attributes_[i + j].texcoord;
-					pbr_shader->attributes_[j].normal_os = model->attributes_[i + j].normal_os;
-					pbr_shader->attributes_[j].tangent_os = model->attributes_[i + j].tangent_os;
-					break;
-				}
+			case kBlinnPhongShader:
+				camera->UpdateUniformBuffer(blinn_phong_shader->uniform_buffer_, model->model_matrix_);
+				blinn_phong_shader->model_ = model;
+				break;
+			case kPbrShader:
+				camera->UpdateUniformBuffer(pbr_shader->uniform_buffer_, model->model_matrix_);
+				pbr_shader->model_ = model;
+				break;
+			default:
+				break;
 			}
-			// 绘制三角形
-			renderer->DrawMesh();
+			for (size_t i = 0; i < model->attributes_.size(); i += 3)
+			{
+				// 设置三个顶点的输入，供 VS 读取
+				for (int j = 0; j < 3; j++)
+				{
+					switch (scene->current_shader_type_)
+					{
+					case kBlinnPhongShader:
+						blinn_phong_shader->attributes_[j].position_os = model->attributes_[i + j].position_os;
+						blinn_phong_shader->attributes_[j].texcoord = model->attributes_[i + j].texcoord;
+						blinn_phong_shader->attributes_[j].normal_os = model->attributes_[i + j].normal_os;
+						blinn_phong_shader->attributes_[j].tangent_os = model->attributes_[i + j].tangent_os;
+						break;
+					case kPbrShader:
+						pbr_shader->attributes_[j].position_os = model->attributes_[i + j].position_os;
+						pbr_shader->attributes_[j].texcoord = model->attributes_[i + j].texcoord;
+						pbr_shader->attributes_[j].normal_os = model->attributes_[i + j].normal_os;
+						pbr_shader->attributes_[j].tangent_os = model->attributes_[i + j].tangent_os;
+						break;
+					}
+				}
+				// 绘制三角形
+				renderer->DrawMesh();
+			}
+			
 		}
+#pragma endregion
+
+		//model = scene->current_model_;
+		//switch (scene->current_shader_type_)
+		//{
+		//case kBlinnPhongShader:
+		//	scene->UpdateShaderInfo(blinn_phong_shader);
+		//	renderer->SetVertexShader(blinn_phong_shader->vertex_shader_);
+		//	renderer->SetPixelShader(blinn_phong_shader->pixel_shader_);
+		//	camera->UpdateUniformBuffer(blinn_phong_shader->uniform_buffer_, model->model_matrix_);
+
+		//	blinn_phong_shader->HandleKeyEvents();
+		//	break;
+		//case kPbrShader:
+		//	scene->UpdateShaderInfo(pbr_shader);
+		//	renderer->SetVertexShader(pbr_shader->vertex_shader_);
+		//	renderer->SetPixelShader(pbr_shader->pixel_shader_);
+		//	camera->UpdateUniformBuffer(pbr_shader->uniform_buffer_, model->model_matrix_);
+
+		//	pbr_shader->HandleKeyEvents();
+		//	break;
+		//default:
+		//	break;
+		//}
+		//renderer->ClearFrameBuffer(renderer->render_frame_, true);
+		//for (size_t i = 0; i < model->attributes_.size(); i += 3)
+		//{
+		//	// 设置三个顶点的输入，供 VS 读取
+		//	for (int j = 0; j < 3; j++)
+		//	{
+		//		switch (scene->current_shader_type_)
+		//		{
+		//		case kBlinnPhongShader:
+		//			blinn_phong_shader->attributes_[j].position_os = model->attributes_[i + j].position_os;
+		//			blinn_phong_shader->attributes_[j].texcoord = model->attributes_[i + j].texcoord;
+		//			blinn_phong_shader->attributes_[j].normal_os = model->attributes_[i + j].normal_os;
+		//			blinn_phong_shader->attributes_[j].tangent_os = model->attributes_[i + j].tangent_os;
+		//			break;
+		//		case kPbrShader:
+		//			pbr_shader->attributes_[j].position_os = model->attributes_[i + j].position_os;
+		//			pbr_shader->attributes_[j].texcoord = model->attributes_[i + j].texcoord;
+		//			pbr_shader->attributes_[j].normal_os = model->attributes_[i + j].normal_os;
+		//			pbr_shader->attributes_[j].tangent_os = model->attributes_[i + j].tangent_os;
+		//			break;
+		//		}
+		//	}
+		//	// 绘制三角形
+		//	renderer->DrawMesh();
+		//}
 #pragma endregion
 #pragma region 渲染Skybox
 		scene->UpdateShaderInfo(skybox_shader);

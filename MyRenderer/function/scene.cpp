@@ -1,7 +1,7 @@
 ﻿#include "scene.h"
 #include "../resources/utility.h"
 
-Scene::Scene()
+Scene::Scene(std::vector<std::string> model_paths)
 {
 	// 加载模型
 	for (size_t i = 0; i < model_paths.size(); i++)
@@ -27,7 +27,7 @@ Scene::Scene()
 
 	current_shader_type_ = kBlinnPhongShader;
 	window_ = Window::GetInstance();
-	window_->SetLogMessage("Shading Model", "Shading Model: PBR + IBL");
+	window_->SetLogMessage("Shading Model", "Shading Model: Blinn Phong");
 }
 void Scene::HandleKeyEvents(BlinnPhongShader* blinn_phong_shader, PBRShader* pbr_shader)
 {

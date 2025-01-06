@@ -61,6 +61,14 @@ Vec4f BlinnPhongShader::PixelShaderFunction(Varyings& input) const
 	//环境光
 	Vec3f ambientColor = baseColor * Vec3f(0.1f);
 
+
+	if (model_->emission_map_->has_data_)
+	{
+		Vec3f emission = model_->emission_map_->Sample2D(uv).xyz();
+		diffuse += emission;
+	}
+
+
 	Vec3f shadedColor = ambientColor + diffuse + specular;
 
 	Vec3f displayColor;
@@ -104,7 +112,7 @@ void BlinnPhongShader::HandleKeyEvents()
 #pragma endregion
 
 
-#pragma region PBR实现 Todo
+#pragma region PBR实现 
 // 菲涅尔反射率的Schlick近似值，详见RTR4 章节9.5 ,公式9.16
 // 在F0和F90（白色）之间进行插值，使用pow函数进行拟合，在接近掠射角度下快速增长
 // 由于镜面微表面的假设，因此half_dir就是微表面的法线，见章节 9.8 
