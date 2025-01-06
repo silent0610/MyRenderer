@@ -7,7 +7,7 @@
 #include "resources/model.h"
 #include "function/camera.h"
 #include "function/scene.h"
-
+#include "function/light.h"
 void HandleModelSkyboxSwitchEvents(Window* window, Scene* scene, Renderer* renderer);
 
 inline std::vector<std::string> model_paths =
@@ -44,15 +44,17 @@ int main()
 	const Vec3f camera_up = { 0, 1, 0 };		// 相机向上的位置
 	constexpr float fov = 90.0f;				// 相加的垂直FOV
 	auto* camera = new Camera(camera_position, camera_target, camera_up, fov, static_cast<float>(width) / height);
+	DirectionalLight light = { Vec3f(1.0f) ,{ 0, -5, -2 } };
+
 
 	const auto uniform_buffer = new UniformBuffer();
 	uniform_buffer->model_matrix = model->model_matrix_;
 	uniform_buffer->view_matrix = matrix_look_at(camera_position, camera_target, camera_up);
 	uniform_buffer->proj_matrix = matrix_set_perspective(fov, camera->aspect_, camera->near_plane_, camera->near_plane_);
 	uniform_buffer->CalculateRestMatrix();
-
-	uniform_buffer->light_direction = { 0, -5, -2 };
-	uniform_buffer->light_color = Vec3f(1.0f);
+	uniform_buffer->light = &light;
+	//uniform_buffer->light_direction = { 0, -5, -2 };
+	//uniform_buffer->light_color = Vec3f(1.0f);
 	uniform_buffer->camera_position = camera->position_;
 #pragma endregion
 

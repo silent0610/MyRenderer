@@ -3,7 +3,7 @@
 #include  <functional>
 #include "../core/window.h"
 #include "../resources/model.h"
-
+#include "light.h"
 /// @brief 保存了渲染单个模型所需的数据, 如果要适应多物体需要一定修改
 struct UniformBuffer
 {
@@ -25,6 +25,7 @@ struct UniformBuffer
 	}
 
 	// 光照数据
+	Light* light;
 	Vec3f light_direction;		// 光照方向 , 方向光, 从光源发出
 	Vec3f light_color;			// 光照颜色
 	Vec3f camera_position;		// 相机方向

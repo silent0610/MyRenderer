@@ -45,8 +45,8 @@ Vec4f BlinnPhongShader::PixelShaderFunction(Varyings& input) const
 	normal_ws = NormalizeVector(normal_ws);
 
 	Vec3f positionWS = input.varying_vec3f[VARYING_POSITION_WS];
-	Vec3f lightColor = uniform_buffer_->light_color;
-	Vec3f lightDir = NormalizeVector(-uniform_buffer_->light_direction);
+	Vec3f lightColor = uniform_buffer_->light->lightColor;
+	Vec3f lightDir = NormalizeVector(-uniform_buffer_->light->GetLightDir(positionWS));
 	Vec3f viewDir = NormalizeVector(uniform_buffer_->camera_position - positionWS);
 
 	//漫反射
@@ -61,7 +61,7 @@ Vec4f BlinnPhongShader::PixelShaderFunction(Varyings& input) const
 	//环境光
 	Vec3f ambientColor = baseColor * Vec3f(0.1f);
 
-
+	//自发光, 仅用于计算机图形学大作业
 	if (model_->emission_map_->has_data_)
 	{
 		Vec3f emission = model_->emission_map_->Sample2D(uv).xyz();
