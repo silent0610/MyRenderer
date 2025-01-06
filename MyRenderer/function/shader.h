@@ -25,7 +25,7 @@ struct UniformBuffer
 	}
 
 	// 光照数据
-	Vec3f light_direction;		// 光照方向，从着色点指向光源
+	Vec3f light_direction;		// 光照方向 , 方向光, 从光源发出
 	Vec3f light_color;			// 光照颜色
 	Vec3f camera_position;		// 相机方向
 

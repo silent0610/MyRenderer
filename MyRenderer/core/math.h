@@ -41,6 +41,10 @@ template<typename T>inline T Between(T min_x, T max_x, T x) {
 	return Min(Max(min_x, x), max_x);
 }
 
+/// @brief 限制到0,1
+/// @tparam T 
+/// @param x 
+/// @return 
 template<typename T> inline T Saturate(T x) {
 	return Between(T(0), T(1), x);
 }

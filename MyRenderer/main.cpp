@@ -46,8 +46,7 @@ int main()
 
 #pragma region 配置Renderer
 	const auto blinn_phong_shader = new BlinnPhongShader(uniform_buffer);
-	//const auto pbr_shader = new PBRShader(uniform_buffer);
-	const auto pbr_shader = nullptr;
+	const auto pbr_shader = new PBRShader(uniform_buffer);
 	const auto skybox_shader = new SkyBoxShader(uniform_buffer);
 
 	// 初始化渲染器
@@ -60,7 +59,7 @@ int main()
 	{
 		HandleModelSkyboxSwitchEvents(window, scene, renderer);		// 切换天空盒和模型，切换线框渲染
 		camera->HandleInputEvents();									// 更新相机参数
-		scene->HandleKeyEvents( blinn_phong_shader, nullptr );			// 更新当前使用的shader
+		scene->HandleKeyEvents( blinn_phong_shader, pbr_shader);			// 更新当前使用的shader
 	
 #pragma region 渲染Model
 		model = scene->current_model_;
@@ -74,14 +73,14 @@ int main()
 
 			blinn_phong_shader->HandleKeyEvents();
 			break;
-		//case kPbrShader:
-		//	scene->UpdateShaderInfo(pbr_shader);
-		//	renderer->SetVertexShader(pbr_shader->vertex_shader_);
-		//	renderer->SetPixelShader(pbr_shader->pixel_shader_);
-		//	camera->UpdateUniformBuffer(pbr_shader->uniform_buffer_, model->model_matrix_);
+		case kPbrShader:
+			scene->UpdateShaderInfo(pbr_shader);
+			renderer->SetVertexShader(pbr_shader->vertex_shader_);
+			renderer->SetPixelShader(pbr_shader->pixel_shader_);
+			camera->UpdateUniformBuffer(pbr_shader->uniform_buffer_, model->model_matrix_);
 
-		//	pbr_shader->HandleKeyEvents();
-		//	break;
+			pbr_shader->HandleKeyEvents();
+			break;
 		default:
 			break;
 		}
@@ -99,12 +98,12 @@ int main()
 					blinn_phong_shader->attributes_[j].normal_os = model->attributes_[i + j].normal_os;
 					blinn_phong_shader->attributes_[j].tangent_os = model->attributes_[i + j].tangent_os;
 					break;
-				//case kPbrShader:
-				//	pbr_shader->attributes_[j].position_os = model->attributes_[i + j].position_os;
-				//	pbr_shader->attributes_[j].texcoord = model->attributes_[i + j].texcoord;
-				//	pbr_shader->attributes_[j].normal_os = model->attributes_[i + j].normal_os;
-				//	pbr_shader->attributes_[j].tangent_os = model->attributes_[i + j].tangent_os;
-				//	break;
+				case kPbrShader:
+					pbr_shader->attributes_[j].position_os = model->attributes_[i + j].position_os;
+					pbr_shader->attributes_[j].texcoord = model->attributes_[i + j].texcoord;
+					pbr_shader->attributes_[j].normal_os = model->attributes_[i + j].normal_os;
+					pbr_shader->attributes_[j].tangent_os = model->attributes_[i + j].tangent_os;
+					break;
 				}
 			}
 			// 绘制三角形
