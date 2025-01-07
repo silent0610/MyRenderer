@@ -17,7 +17,7 @@ Mat4x4f Motion::GetModelMatrix()
 	float curTime = _window->PlatformGetTime();
 	float deltaTime = curTime - _time;
 	_time = curTime;
-
+	//std::cout << modelMatrix << std::endl;
 	modelMatrix = Movements[0]->GetMovementMatrix(deltaTime) * modelMatrix;
 	return modelMatrix;
 
@@ -27,7 +27,9 @@ CircleMovement::CircleMovement(float angelSpeed, float direction):Movement(), _a
 }
 Mat4x4f CircleMovement::GetMovementMatrix(float deltaTime) const
 {
+	//std::cout << deltaTime << std::endl;
 	float theta =  _angelSpeed * deltaTime;
 	Mat4x4f matrix = matrix_set_rotate(0.0f, 1.0f, 0.0f, theta);
+	//std::cout << matrix << std::endl;
 	return matrix;
 }

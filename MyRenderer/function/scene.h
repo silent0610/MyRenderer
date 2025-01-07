@@ -32,9 +32,9 @@ public:
 	/// @brief 负责shader的切换
 	/// @param pbr_shader 
 	/// @param blinn_phong_shader 
-	void HandleKeyEvents( BlinnPhongShader* blinn_phong_shader, PBRShader* pbr_shader = nullptr );
+	void HandleKeyEvents(std::vector<Shader*> blinn_phong_shaders, std::vector <Shader*> pbr_shaders);
 
-	void UpdateShaderInfo(Shader* shader) const;
+	void UpdateShaderInfo(std::vector<Shader*> shaders) const;
 
 	void LoadNextModel();
 	void LoadPrevModel();

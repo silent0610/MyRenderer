@@ -10,20 +10,20 @@ public:
 
 	Renderer() = default;
 
-	Renderer(const int width, const int height)
+	Renderer(const int width, const int height, uint8_t *color_buffer,float**depth_buffer)
 	{
 		color_buffer_ = nullptr;
 		depth_buffer_ = nullptr;
 		render_frame_ = false; //指是否渲染线框图
 		render_pixel_ = true;
-		Init(width, height);
+		Init(width, height, color_buffer, depth_buffer);
 	}
 
-	~Renderer() { CleanUp(); }
+	~Renderer() { std::cout<<"clear Renderer" << std::endl; CleanUp(); }
 
 public:
 	// 初始化 frame buffer，渲染前需要先调用
-	void Init(int width, int height);
+	void Init(int width, int height, uint8_t* color_buffer, float** depth_buffer);
 
 	// 释放资源
 	void CleanUp();

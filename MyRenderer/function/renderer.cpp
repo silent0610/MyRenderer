@@ -1,7 +1,8 @@
 ﻿#include "renderer.h"
 #include <optional>
 #include <ranges>
-
+#include <mutex>
+extern std::mutex mtx;
 
 // 顶点是否位于可视空间内部, 视锥体
 // 此时vertex位于裁剪空间中，没有经过透视除法
@@ -150,7 +151,7 @@ void Renderer::CleanUp()
 	}
 }
 
-void Renderer::Init(const int width, const int height)
+void Renderer::Init(const int width, const int height,uint8_t * color_buffer,float **depth_buffer)
 {
 
 	frame_buffer_width_ = width;
@@ -160,15 +161,12 @@ void Renderer::Init(const int width, const int height)
 	color_foreground_ = Vec4f(0.0f);
 	color_background_ = Vec4f(0.5f, 1.0f, 1.0f, 1.0f);
 
-	color_buffer_ = new uint8_t[height * width * 4];
+	color_buffer_ = color_buffer;
+	depth_buffer_ = depth_buffer;
 
-	depth_buffer_ = new float* [height];
-	for (int j = 0; j < height; j++)
-	{
-		depth_buffer_[j] = new float[width];
-	}
 
-	ClearFrameBuffer(true, true);
+	//ClearFrameBuffer(true, true);
+
 }
 
 void Renderer::ClearFrameBuffer(bool clear_color_buffer, bool clear_depth_buffer) const
@@ -559,10 +557,12 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 				vertex[0]->position.z * bc_p0 +
 				vertex[1]->position.z * bc_p1 +
 				vertex[2]->position.z * bc_p2;
-
+			
+			//std::cout << depth_buffer_[y][x] << std::endl;
 			if (1.0f - depth <= depth_buffer_[y][x]) continue;
+			//std::cout << 1.0f - depth << " " << depth_buffer_[y][x] << std::endl;
 			depth_buffer_[y][x] = 1.0f - depth;
-
+			
 			// 准备为当前像素的各项 varying 进行插值
 
 			Varyings& context_p0 = vertex[0]->context;
@@ -622,6 +622,7 @@ void Renderer::RasterizeTriangle(Vertex* vertex[3])
 			{
 				color = pixel_shader_(current_varyings_);
 			}
+			//color = Vec4f(depth_buffer_[y][x]);
 			SetPixel(x, y, color);
 		}
 	}

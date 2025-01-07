@@ -322,9 +322,9 @@ Vec4f PBRShader::PixelShaderFunction(Varyings& input)const
 	case kMaterialInspectorBaseColor:		display_color = baseColor;		break;
 	case kMaterialInspectorNormal:			display_color = normal_ws;		break;
 	case kMaterialInspectorWorldPosition:	display_color = position_ws;	break;
-	case kMaterialInspectorRoughness:		display_color = roughness;	break;
+	case kMaterialInspectorRoughness:		display_color = roughness;		break;
 	case kMaterialInspectorMetallic:		display_color = metallic;		break;
-	case kMaterialInspectorOcclusion:		display_color = occlusion;	break;
+	case kMaterialInspectorOcclusion:		display_color = occlusion;		break;
 	case kMaterialInspectorEmission:		display_color = emission;		break;
 
 	default:								display_color = shaded_color;

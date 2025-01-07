@@ -34,45 +34,57 @@ Scene::Scene(std::vector<std::string> model_paths)
 	window_ = Window::GetInstance();
 	window_->SetLogMessage("Shading Model", "Shading Model: Blinn Phong");
 }
-void Scene::HandleKeyEvents(BlinnPhongShader* blinn_phong_shader, PBRShader* pbr_shader)
+void Scene::HandleKeyEvents(std::vector<Shader*> blinn_phong_shaders, std::vector < Shader*> pbr_shaders)
 {
 	if (window_->keys_['P'])
 	{
 		window_->SetLogMessage("Shading Model", "Shading Model: PBR + IBL");
 		current_shader_type_ = kPbrShader;
 
-		pbr_shader->material_inspector_ = PBRShader::kMaterialInspectorShaded;
+		for(auto pbr_shader: pbr_shaders)
+		{
+			auto pbr_shader1 = dynamic_cast<PBRShader*>(pbr_shader);
+			pbr_shader1->material_inspector_ = PBRShader::kMaterialInspectorShaded;
+		}
+	
 		window_->RemoveLogMessage("Material Inspector");
 	}
 	else if (window_->keys_['B'])
 	{
 		window_->SetLogMessage("Shading Model", "Shading Model: Blinn Phong");
 		current_shader_type_ = kBlinnPhongShader;
-
-		blinn_phong_shader->material_inspector_ = BlinnPhongShader::kMaterialInspectorShaded;
+		for (auto blinn_phong_shader : blinn_phong_shaders)
+		{
+			auto blinn_phong_shader1 = dynamic_cast<BlinnPhongShader*>(blinn_phong_shader);
+			blinn_phong_shader1->material_inspector_ = BlinnPhongShader::kMaterialInspectorShaded;
+		}
 		window_->RemoveLogMessage("Material Inspector");
 	}
 }
 
-void Scene::UpdateShaderInfo(Shader* shader) const
+void Scene::UpdateShaderInfo(std::vector<Shader*> shaders) const
 {
 	// 检查是否是 BlinnPhongShader 类型
-	if (const auto blinn_phong_shader = dynamic_cast<BlinnPhongShader*>(shader))
+	if (const auto blinn_phong_shader = dynamic_cast<BlinnPhongShader*>(shaders[0]))
 	{
-		blinn_phong_shader->model_ = current_model_;
+		for(auto blinn_phong_shader: shaders)
+			blinn_phong_shader->model_ = current_model_;
 		return;
 	}
 
-	if (const auto pbr_shader = dynamic_cast<PBRShader*>(shader))
+	if (const auto pbr_shader = dynamic_cast<PBRShader*>(shaders[0]))
 	{
-		pbr_shader->model_ = current_model_;
+		for(int i =0;i<shaders.size();i++){
+			auto pbr_shader = dynamic_cast<PBRShader*>(shaders[i]);
+			pbr_shader->model_ = current_model_;
 
-		pbr_shader->irradiance_cubemap_ = current_iblmap_->irradiance_cubemap_;
-		pbr_shader->specular_cubemap_ = current_iblmap_->specular_cubemap_;
-		pbr_shader->brdf_lut_ = current_iblmap_->brdf_lut_;
+			pbr_shader->irradiance_cubemap_ = current_iblmap_->irradiance_cubemap_;
+			pbr_shader->specular_cubemap_ = current_iblmap_->specular_cubemap_;
+			pbr_shader->brdf_lut_ = current_iblmap_->brdf_lut_;
+		}
+
 	}
-
-	if (const auto skybox_shader = dynamic_cast<SkyBoxShader*>(shader))
+	if (const auto skybox_shader = dynamic_cast<SkyBoxShader*>(shaders[0]))
 	{
 		skybox_shader->skybox_cubemap_ = current_iblmap_->skybox_cubemap_;
 	}

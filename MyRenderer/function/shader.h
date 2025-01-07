@@ -60,8 +60,7 @@ typedef std::function<Vec4f(int index, Varyings& output)> VertexShader;
 // 像素着色器：返回像素的颜色
 typedef std::function<Vec4f(Varyings& input)> PixelShader;
 
-/// 学长我想问一下, 我刚写到shader这里, 不是很清楚这里为什么要这么设计一个函数指针, 
-/// 为什么要多封装一层, 是可以方便切换Shader吗(不能直接调用虚函数)?
+
 //着色模型
 class Shader
 {
