@@ -395,6 +395,10 @@ void MultiMultiThreadedRender()
 			//model->attributes_
 			std::cout << "multi thread start time: ";
 			PrintTime();
+			//// 单线程处理
+			ProcessThread(0, trigianleCount, model, blinn_phong_shaders[0], renderers[0], uniform_buffer, scene);
+
+			// 多线程, 没加锁 , 很怪, cpu占用率确实提高了, 但是帧率反而下降了
 			for (unsigned int i = 0; i < numThreads; ++i)
 			{
 				int start = i * tragianleNumPerThread;
