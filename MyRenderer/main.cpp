@@ -130,16 +130,15 @@ void MultiMultiThreadedRender()
 	constexpr float fov = 90.0f;				// 相加的垂直FOV
 	auto* camera = new Camera(camera_position, camera_target, camera_up, fov, static_cast<float>(width) / height);
 	auto light = PointLight(Vec3f(1.0f), Vec3f(0.0f));
-
+	// auto light = DirectionalLight(Vec3f(1.0f),Vec3f(0.0f,-5.0f,-2.0f));
 
 	const auto uniform_buffer = new UniformBuffer();
-	//uniform_buffer->model_matrix = model->model_matrix_;
+
 	uniform_buffer->view_matrix = matrix_look_at(camera_position, camera_target, camera_up);
 	uniform_buffer->proj_matrix = matrix_set_perspective(fov, camera->aspect_, camera->near_plane_, camera->near_plane_);
-	//uniform_buffer->CalculateRestMatrix();
+
 	uniform_buffer->light = &light;
-	//uniform_buffer->light_direction = { 0, -5, -2 };
-	//uniform_buffer->light_color = Vec3f(1.0f);
+
 	uniform_buffer->camera_position = camera->position_;
 #pragma endregion
 
@@ -245,7 +244,7 @@ void MultiMultiThreadedRender()
 					blinn_phong_shader->model_ = model;
 				break;
 			case kPbrShader:
-				camera->UpdateUniformBuffer(pbr_shaders[0]->uniform_buffer_, model->model_matrix_);
+				camera->UpdateUniformBuffer(pbr_shaders[0]->uniform_buffer_,model->Motion->modelMatrix);
 				for (auto pbr_shader : pbr_shaders)
 					pbr_shader->model_ = model;
 				break;

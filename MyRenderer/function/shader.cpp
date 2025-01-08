@@ -256,8 +256,8 @@ Vec4f PBRShader::PixelShaderFunction(Varyings& input)const
 	{
 		baseColor = model_->base_color_map_->Sample2D(uv).xyz();
 	}
-	Vec3f lightColor = uniform_buffer_->light_color;
-	Vec3f lightDir = NormalizeVector(-uniform_buffer_->light_direction);
+	Vec3f lightColor = uniform_buffer_->light->lightColor;
+	Vec3f lightDir = NormalizeVector(-uniform_buffer_->light->GetLightDir(position_ws));
 	Vec3f viewDir = NormalizeVector(uniform_buffer_->camera_position - position_ws);
 	Vec3f halfDir = NormalizeVector(viewDir + lightDir);
 
