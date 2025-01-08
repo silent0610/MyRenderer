@@ -4,7 +4,6 @@
 cmake_minimum_required (VERSION 3.8)
 
 
-
 project ("MyRenderer")
 message(STATUS "Project Source Directory: ${PROJECT_SOURCE_DIR}")
 message(STATUS "CMake Binary Directory: ${CMAKE_BINARY_DIR}")
@@ -13,11 +12,11 @@ message(STATUS "CMake Binary Directory: ${CMAKE_BINARY_DIR}")
 	set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
 
-# 如果支持，请为 MSVC 编译器启用热重载。
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+# # 如果支持，请为 MSVC 编译器启用热重载。
+# if (POLICY CMP0141)
+#   cmake_policy(SET CMP0141 NEW)
+#   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+# endif()
 # 复制asset文件夹到输出路径
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy_directory 
 ${PROJECT_SOURCE_DIR}/assets

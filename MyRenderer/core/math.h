@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "matrix.h"
 #include <cmath>
-
+#include <cstdint>
 
 constexpr float kPi = 3.1415926f;
 constexpr float kEpsilon = 1e-5f;

@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <initializer_list>
 #include <iostream>
+#include <cmath>
 
 #pragma region 向量定义
 

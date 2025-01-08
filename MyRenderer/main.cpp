@@ -12,21 +12,22 @@
 #include <cstdint>
 #include <mutex>
 #include <chrono>
-void PrintTime()
-{
+
+#include "../core/BS_thread_pool.hpp"
+
+int64_t GetNowTime(){
 	static int64_t startTime = -1;
 	auto now = std::chrono::system_clock::now();
-	// auto curTime = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
 	auto curTime = std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()).count();
-
+	
 	if (startTime == -1)
 	{
 		startTime = curTime;
-		std::cout << "start time(us): " << curTime << std::endl;
-		return;
+		return 0;
 	}
-	std::cout << "current time(us): " << curTime - startTime << std::endl;
+	return curTime - startTime;
 }
+
 uint8_t* color_buffer;
 float** DepthBuffer;
 constexpr int width = 800;
@@ -37,12 +38,12 @@ std::mutex mtx;
 void HandleModelSkyboxSwitchEvents(Window* window, Scene* scene, std::vector<Renderer*> renderers);
 inline std::vector<std::string> model_paths =
 {
-	/*"../assets/helmet/helmet.obj",*/
-	"../assets/sun/sun.obj",
-	"../assets/earth/earth.obj",
-	"../assets/moon/moon.obj"
+	"../assets/helmet/helmet.obj"
+	//"../assets/sun/sun.obj",
+	//"../assets/earth/earth.obj",
+	//"../assets/moon/moon.obj"
 
-	// "../assets/Cerberus/Cerberus.obj",
+	 //"../assets/Cerberus/Cerberus.obj"
 	// "../assets/Safe/Safe.obj",
 	// "../assets/Revolver_bolter/Revolver_bolter.obj"
 };
@@ -78,151 +79,12 @@ void ClearFrameBuffer(bool clear_color_buffer, bool clear_depth_buffer)
 		}
 	}
 }
-//struct Trigianle
-//{
-//	int modelIndex;
-//	int triangleIndex;
-//};
-//std::vector<std::vector<Trigianle>>* SplitTrigianles(std::vector< Model* >* models)
-//{
-//	unsigned int num_threads = std::thread::hardware_concurrency();
-//	int trigianleCount = 0;
-//	for (int i = 0; i < models->size(); i++)
-//	{
-//		trigianleCount += (*models)[i]->face_number_;
-//		std::cout << trigianleCount << std::endl;
-//	}
-//	int tragianleNumPerThread = trigianleCount / num_threads;
-//	int count = 0;
-//	int index = 0;
-//	std::vector<std::vector<Trigianle>>* threadTrigianles = new std::vector<std::vector<Trigianle>>;
-//	for (int i = 0; i < 16; i++)
-//	{
-//		threadTrigianles->push_back(std::vector<Trigianle>());
-//	}
-//	for (int i = 0; i < models->size(); i++)
-//	{
-//		Model* curModel = (*models)[i];
-//		for (int j = 0; j < curModel->face_number_; j++)
-//		{
-//			count += 1;
-//			Trigianle trigianle{ i,j };
-//
-//			(*threadTrigianles)[index].push_back(trigianle);
-//			//std::cout << i << " " << j << std::endl;
-//			if (count == tragianleNumPerThread)
-//			{
-//				count = 0;
-//				index += 1;
-//			}
-//		}
-//	}
-//	return threadTrigianles;
-//}
 
-////读取模型矩阵, 读取
-//void ProcessThread(std::vector<Trigianle>& trigianles, UniformBuffer* unifrombuffer, Scene* scene, Renderer renderer)
-//{
-//	UniformBuffer* uniformBuffer = unifrombuffer;
-//	const auto blinn_phong_shader = new BlinnPhongShader(uniformBuffer);
-//	const auto pbr_shader = new PBRShader(uniformBuffer);
-//
-//	switch (scene->current_shader_type_)
-//	{
-//	case kBlinnPhongShader:
-//		scene->UpdateShaderInfo(blinn_phong_shader);
-//		renderer.SetVertexShader(blinn_phong_shader->vertex_shader_);
-//		renderer.SetPixelShader(blinn_phong_shader->pixel_shader_);
-//
-//		blinn_phong_shader->HandleKeyEvents();
-//		break;
-//	case kPbrShader:
-//		scene->UpdateShaderInfo(pbr_shader);
-//		renderer.SetVertexShader(pbr_shader->vertex_shader_);
-//		renderer.SetPixelShader(pbr_shader->pixel_shader_);
-//
-//		pbr_shader->HandleKeyEvents();
-//		break;
-//	default:
-//		break;
-//	}
-//	for (auto& trigianle : trigianles)
-//	{
-//		switch (scene->current_shader_type_)
-//		{
-//		case kBlinnPhongShader:
-//			blinn_phong_shader->uniform_buffer_->model_matrix = scene->models_[trigianle.modelIndex]->Motion->modelMatrix;
-//			uniformBuffer->CalculateRestMatrix();
-//			blinn_phong_shader->model_ = scene->models_[trigianle.modelIndex];
-//			break;
-//		case kPbrShader:
-//			pbr_shader->uniform_buffer_->model_matrix = scene->models_[trigianle.modelIndex]->Motion->modelMatrix;
-//			uniformBuffer->CalculateRestMatrix();
-//			pbr_shader->model_ = scene->models_[trigianle.modelIndex];
-//			break;
-//		default:
-//			break;
-//		}
-//		Model* curModel = scene->models_[trigianle.modelIndex];
-//		int i = trigianle.triangleIndex * 3;
-//
-//		for (int j = 0; j < 3; j++)
-//		{
-//
-//			switch (scene->current_shader_type_)
-//			{
-//			case kBlinnPhongShader:
-//				blinn_phong_shader->attributes_[j].position_os = curModel->attributes_[i + j].position_os;
-//				blinn_phong_shader->attributes_[j].texcoord = curModel->attributes_[i + j].texcoord;
-//				blinn_phong_shader->attributes_[j].normal_os = curModel->attributes_[i + j].normal_os;
-//				blinn_phong_shader->attributes_[j].tangent_os = curModel->attributes_[i + j].tangent_os;
-//				break;
-//			case kPbrShader:
-//				pbr_shader->attributes_[j].position_os = curModel->attributes_[i + j].position_os;
-//				pbr_shader->attributes_[j].texcoord = curModel->attributes_[i + j].texcoord;
-//				pbr_shader->attributes_[j].normal_os = curModel->attributes_[i + j].normal_os;
-//				pbr_shader->attributes_[j].tangent_os = curModel->attributes_[i + j].tangent_os;
-//				break;
-//			}
-//		}
-//		renderer.DrawMesh();
-//
-//	}
-//
-//}
-void PBRProcessThread(int start, int num, Model* model,Shader *shader, Renderer *renderer, UniformBuffer *uniform_buffer,Scene *scene) {
-	int i = 0, j = 0, k = 0;
-	for (i = start; i < start + num; i++)
-	{
-		j = i * 3;
-		for (k = 0; k < 3; k++)
-		{
-			shader->attributes_[k].position_os = model->attributes_[j + k].position_os;
-			shader->attributes_[k].texcoord = model->attributes_[j + k].texcoord;
-			shader->attributes_[k].normal_os = model->attributes_[j + k].normal_os;
-			shader->attributes_[k].tangent_os = model->attributes_[j + k].tangent_os;
-		}
-		renderer->DrawMesh();
-	};
-}
-void BLPProcessThread(int start, int num, Model* model, Shader * shader, Renderer* renderer, UniformBuffer* uniform_buffer, Scene* scene)
-{
-	int i = 0, j = 0, k = 0;
-	for (i = start; i < start + num; i++)
-	{
-		j = i * 3;
-		//for (k = 0; k < 3; k++)
-		//{
-		//	shader->attributes_[k].position_os = model->attributes_[j + k].position_os;
-		//	shader->attributes_[k].texcoord = model->attributes_[j + k].texcoord;
-		//	shader->attributes_[k].normal_os = model->attributes_[j + k].normal_os;
-		//	shader->attributes_[k].tangent_os = model->attributes_[j + k].tangent_os;
-		//}
-		//renderer->DrawMesh();
-	};
-}
+
 void ProcessThread(int start, int num, Model* model,Shader* shader, Renderer* renderer, UniformBuffer* uniform_buffer, Scene* scene)
 {
+	// auto time = GetNowTime();
+
 	int i = 0, j = 0, k = 0;
 	int trigianleNum = model->face_number_;
 	int end = ((start+num) < trigianleNum)? (start + num): trigianleNum;
@@ -238,12 +100,16 @@ void ProcessThread(int start, int num, Model* model,Shader* shader, Renderer* re
 		}
 		renderer->DrawMesh();
 	};
+	// std::cout << "thread " << i <<" " << GetNowTime() - time<<std::endl;
+	
 	return;
 }
 void MultiMultiThreadedRender()
 {
-	int numThreads = std::thread::hardware_concurrency();
-	std::vector<std::thread> threads;
+
+	BS::thread_pool pool;
+	int numThreads = pool.get_thread_count();
+
 
 	Window* window = Window::GetInstance();
 	window->WindowInit(width, height, "SoftRenderer");
@@ -316,10 +182,11 @@ void MultiMultiThreadedRender()
 	float curTime = 0.0f;
 #pragma endregion
 #pragma region rendererloop
+	int loop = 16;
 	while (!window->is_close_)
 	{
-		std::cout << "frame start time: ";
-		PrintTime();
+		//std::cout << "frame start time: ";
+
 		HandleModelSkyboxSwitchEvents(window, scene, renderers);	//修改为改变所有renderer的状态	// 切换天空盒和模型，切换线框渲染
 		camera->HandleInputEvents();									// 更新相机参数
 		scene->HandleKeyEvents(blinn_phong_shaders, pbr_shaders);			// 更新当前使用的shader
@@ -352,25 +219,24 @@ void MultiMultiThreadedRender()
 		}
 
 #pragma region 逻辑 旋转
-		//公转
-		curTime = window->PlatformGetTime();
-		deltaTime = curTime - time;
-		time = curTime;
-		Mat4x4f orbitMatrix = orbitMovement->GetMovementMatrix(deltaTime);
-		for (auto model : scene->models_)
-		{
-			model->Motion->modelMatrix = orbitMatrix * model->Motion->modelMatrix;
-		}
-		//月球绕地球转
-		Vec3f axis = scene->models_[1]->Motion->modelMatrix.GetCol(3).xyz();
-		Mat4x4f moveToOrigin = matrix_set_translate(-axis.x, -axis.y, -axis.z);
-		Mat4x4f moveBack = matrix_set_translate(axis.x, axis.y, axis.z);
-		Mat4x4f rotate = matrix_set_rotate(0, 1, 0, 0.2f);
-		scene->models_[2]->Motion->modelMatrix = moveBack * rotate * moveToOrigin * scene->models_[2]->Motion->modelMatrix;
+		////公转
+		//curTime = window->PlatformGetTime();
+		//deltaTime = curTime - time;
+		//time = curTime;
+		//Mat4x4f orbitMatrix = orbitMovement->GetMovementMatrix(deltaTime);
+		//for (auto model : scene->models_)
+		//{
+		//	model->Motion->modelMatrix = orbitMatrix * model->Motion->modelMatrix;
+		//}
+		////月球绕地球转
+		//Vec3f axis = scene->models_[1]->Motion->modelMatrix.GetCol(3).xyz();
+		//Mat4x4f moveToOrigin = matrix_set_translate(-axis.x, -axis.y, -axis.z);
+		//Mat4x4f moveBack = matrix_set_translate(axis.x, axis.y, axis.z);
+		//Mat4x4f rotate = matrix_set_rotate(0, 1, 0, 0.2f);
+		//scene->models_[2]->Motion->modelMatrix = moveBack * rotate * moveToOrigin * scene->models_[2]->Motion->modelMatrix;
 #pragma endregion
 		ClearFrameBuffer(renderers[0]->render_frame_, true);
-		std::cout << "multi model start time: ";
-		PrintTime();
+		//std::cout << "multi model start time: ";
 		for (auto model : scene->models_)
 		{
 			switch (scene->current_shader_type_)
@@ -393,41 +259,52 @@ void MultiMultiThreadedRender()
 			int trigianleCount = model->face_number_;
 			int tragianleNumPerThread = std::ceil(trigianleCount / numThreads);
 			//model->attributes_
-			std::cout << "multi thread start time: ";
-			PrintTime();
+			//std::cout << "multi thread start time: ";
 			//// 单线程处理
-			ProcessThread(0, trigianleCount, model, blinn_phong_shaders[0], renderers[0], uniform_buffer, scene);
-
-			// 多线程, 没加锁 , 很怪, cpu占用率确实提高了, 但是帧率反而下降了
+			//ProcessThread(0, trigianleCount, model, blinn_phong_shaders[0], renderers[0], uniform_buffer, scene);
+			
+			////// 多线程, 没加锁 , 很怪, cpu占用率确实提高了, 但是帧率反而下降了
+			
 			for (unsigned int i = 0; i < numThreads; ++i)
-			{
+			{	
 				int start = i * tragianleNumPerThread;
 				if (start >= model->face_number_) 
 					continue;
+				Shader* blp_shader = blinn_phong_shaders[i];
+				Shader* pbr_shader = pbr_shaders[i];
+				Renderer* renderer = renderers[i];
 				//ProcessThread(start, tragianleNumPerThread, model, pbr_shaders[i], renderers[i], uniform_buffer, scene);
 				switch(scene->current_shader_type_){
 					case kBlinnPhongShader:
-						threads.push_back(std::thread(ProcessThread, start, tragianleNumPerThread, model, blinn_phong_shaders[i], renderers[i], uniform_buffer, scene));
+						pool.detach_task([start, tragianleNumPerThread, model, blp_shader, renderer, uniform_buffer, scene] { ProcessThread(start, tragianleNumPerThread, model, blp_shader, renderer, uniform_buffer, scene); });
+						//pool.enqueue([i, start, tragianleNumPerThread, model, blp_shader, renderer, uniform_buffer, scene] { ProcessThread(start, tragianleNumPerThread, model, blp_shader, renderer, uniform_buffer, scene); });
+						//threads.push_back(std::thread(ProcessThread, start, tragianleNumPerThread, model, blinn_phong_shaders[i], renderers[i], uniform_buffer, scene));
 						break;
 					case kPbrShader:
-						threads.push_back(std::thread(ProcessThread, start, tragianleNumPerThread, model,pbr_shaders[i], renderers[i], uniform_buffer, scene));
+						pool.detach_task([start, tragianleNumPerThread, model, pbr_shader, renderer, uniform_buffer, scene] { ProcessThread(start, tragianleNumPerThread, model, pbr_shader, renderer, uniform_buffer, scene);});
+						//pool.enqueue([i, start, tragianleNumPerThread, model, pbr_shader, renderer, uniform_buffer, scene] { ProcessThread(start, tragianleNumPerThread, model, pbr_shader, renderer, uniform_buffer, scene);});
+						//threads.push_back(std::thread(ProcessThread, start, tragianleNumPerThread, model, pbr_shaders[i], renderers[i], uniform_buffer, scene));
 						break;
 					default:
 						break;
 				}
 			}
-			for (auto& th : threads)
-			{
-				th.join();
-			}
-			threads.clear();
-			std::cout << "one model multi thread end time: ";
-			PrintTime();
+			pool.wait();
+			//loop = 0;
+
+
+			//for (auto& th : threads)
+			//{
+			//	th.join();
+			//}
+			//threads.clear();
+			//std::cout << "one model multi thread end time: ";
+			//PrintTime();
 		}
-		std::cout << "multi model end time: ";
-		PrintTime();
-		std::cout << "skybox start time: ";
-		PrintTime();
+		//std::cout << "multi model end time: ";
+		//PrintTime();
+		//std::cout << "skybox start time: ";
+		//PrintTime();
 #pragma region 渲染Skybox
 		scene->UpdateShaderInfo(skybox_shaders);
 		renderers[0]->SetVertexShader(skybox_shader->vertex_shader_);
@@ -445,8 +322,7 @@ void MultiMultiThreadedRender()
 
 			renderers[0]->DrawSkybox();
 		}
-		std::cout << "skybox end time: ";
-		PrintTime();
+
 #pragma endregion
 
 		window->WindowDisplay(color_buffer);
@@ -459,8 +335,7 @@ void MultiMultiThreadedRender()
 
 
 int main(){
-	std::cout << "program start time: ";
-	PrintTime();
+	std::cout << "program start time: " << GetNowTime() << std::endl;
 	MultiMultiThreadedRender();
 	return 0;
 }

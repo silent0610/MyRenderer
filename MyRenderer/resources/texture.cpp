@@ -151,10 +151,10 @@ Vec3f CubeMap::Sample(Vec3f& direction)const
 /// @brief  计算立方体贴图的uv坐标和要采样的面,auto进行结构化绑定, 可以得到值里面的值,那么类可以这么操作吗
 /// @param direction 用于采样的方向
 /// @return 返回结构体
-CubeMap::CubeMapUV& CubeMap::CalculateCubeMapUV(const Vec3f& direction)
+CubeMap::CubeMapUV CubeMap::CalculateCubeMapUV(const Vec3f& direction)
 {
 	//todo
-	CubeMapUV cubemap_uv;
+	CubeMap::CubeMapUV cubemap_uv;
 	float ma = 0, sc = 0, tc = 0;
 	//确定主轴
 	const Vec3f direction_abs = vector_abs(direction);
