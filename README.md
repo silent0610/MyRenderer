@@ -1,7 +1,7 @@
 # MyRenderer
 
 
-本人的构建方法，使用MSVC，并在根目录下构建，会出现本人不明白的错误（多线程库）
+下面是本人的构建方法。如果使用MSVC，并在根目录下构建，会出现本人不明白的错误（多线程库）
 1. 移动到MyRender/MyRender目录下
 2. 在该目录下使用 Cmake 调用 GCC 进行构建
 3. 复制asset文件夹，tool文件夹到 MyRender/MyRender 目录下 exe 能读取obj、纹理等
