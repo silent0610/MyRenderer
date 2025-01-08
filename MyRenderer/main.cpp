@@ -268,17 +268,12 @@ void MultiMultiThreadedRender()
 				Shader* blp_shader = blinn_phong_shaders[i];
 				Shader* pbr_shader = pbr_shaders[i];
 				Renderer* renderer = renderers[i];
-				//ProcessThread(start, tragianleNumPerThread, model, pbr_shaders[i], renderers[i], uniform_buffer, scene);
 				switch(scene->current_shader_type_){
 					case kBlinnPhongShader:
 						pool.detach_task([start, tragianleNumPerThread, model, blp_shader, renderer, uniform_buffer, scene] { ProcessThread(start, tragianleNumPerThread, model, blp_shader, renderer, uniform_buffer, scene); });
-						//pool.enqueue([i, start, tragianleNumPerThread, model, blp_shader, renderer, uniform_buffer, scene] { ProcessThread(start, tragianleNumPerThread, model, blp_shader, renderer, uniform_buffer, scene); });
-						//threads.push_back(std::thread(ProcessThread, start, tragianleNumPerThread, model, blinn_phong_shaders[i], renderers[i], uniform_buffer, scene));
 						break;
 					case kPbrShader:
 						pool.detach_task([start, tragianleNumPerThread, model, pbr_shader, renderer, uniform_buffer, scene] { ProcessThread(start, tragianleNumPerThread, model, pbr_shader, renderer, uniform_buffer, scene);});
-						//pool.enqueue([i, start, tragianleNumPerThread, model, pbr_shader, renderer, uniform_buffer, scene] { ProcessThread(start, tragianleNumPerThread, model, pbr_shader, renderer, uniform_buffer, scene);});
-						//threads.push_back(std::thread(ProcessThread, start, tragianleNumPerThread, model, pbr_shaders[i], renderers[i], uniform_buffer, scene));
 						break;
 					default:
 						break;
